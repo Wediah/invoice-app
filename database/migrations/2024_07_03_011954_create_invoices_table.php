@@ -11,13 +11,16 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('carts', function (Blueprint $table) {
+        Schema::create('invoices', function (Blueprint $table) {
             $table->id();
+            $table->string('invoice_number')->unique();
             $table->foreignId('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreignId('company_id')->references('id')->on('companies')->onDelete('cascade');
-            $table->foreignId('catalog_id')->references('id')->on('catalogs')->onDelete('cascade');
-            $table->integer('quantity')->default(1);
+//            $table->foreignId('catalog_id')->references('id')->on('catalogs')->onDelete('cascade');
+//            $table->integer('quantity')->default(1);
+            $table->string('customer_name');
             $table->timestamps();
+
         });
     }
 
@@ -26,6 +29,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('carts');
+        Schema::dropIfExists('invoices');
     }
 };

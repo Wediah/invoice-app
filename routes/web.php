@@ -32,9 +32,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/company/{company_id}/catalog/create', [CatalogController::class, 'create'])->name('catalog.create');
     Route::post('/company/{company_id}/catalog', [CatalogController::class, 'store'])->name('catalog.store');
 
-    Route::post('/{slug}/cart', [CartController::class, 'addToCart'])->name('cart.store');
+    Route::post('/{slug}/invoice', [invoiceController::class, 'store'])->name('invoice.store');
 
     Route::get('/{slug}/invoice', [invoiceController::class, 'create'])->name('invoice.create');
+
+    Route::get('/invoice/{id}', [invoiceController::class, 'show'])->name('invoice.show');
 });
 
 require __DIR__.'/auth.php';

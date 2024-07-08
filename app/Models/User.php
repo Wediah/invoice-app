@@ -52,8 +52,8 @@ class User extends Authenticatable
         return $this->hasMany(Company::class);
     }
 
-    public function cart(): HasOne
+    public function invoices(): HasMany
     {
-        return $this->hasOne(Cart::class);
+        return $this->hasMany(Invoice::class);
     }
 }

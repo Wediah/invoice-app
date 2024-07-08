@@ -35,4 +35,9 @@ class Company extends Model
     {
         return $this->hasMany(Catalog::class);
     }
+
+    public function invoices(): HasMany
+    {
+        return $this->hasMany(Invoice::class);
+    }
 }
