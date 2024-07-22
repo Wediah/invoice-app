@@ -26,4 +26,9 @@ class invoice extends Model
     {
         return $this->belongsToMany(catalog::class)->withPivot('quantity')->withTimestamps();
     }
+
+    public function taxes(): BelongsToMany
+    {
+        return $this->belongsToMany(tax::class)->withPivot('tax_id')->withTimestamps();
+    }
 }

@@ -11,11 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('taxes', function (Blueprint $table) {
-            $table->id();
-            $table->string('tax_name');
-            $table->integer('tax_percentage');
-            $table->timestamps();
+        Schema::table('taxes', function (Blueprint $table) {
+            $table->foreignId('company_id')->after('id')->references('id')->on('companies')->onDelete('cascade');
         });
     }
 
@@ -24,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('taxes');
+        Schema::table('taxes', function (Blueprint $table) {
+            $table->dropForeign('taxes_company_id');
+        });
     }
 };

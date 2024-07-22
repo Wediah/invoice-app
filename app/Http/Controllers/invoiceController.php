@@ -26,7 +26,8 @@ class invoiceController extends Controller
         $user = Auth::user();
         $company = Company::where('slug', $slug)->firstOrFail();
         $catalogs = $company->catalogs;
-        return view('invoice.create', compact('company', 'catalogs', 'user'));
+        $taxes = $company->taxes;
+        return view('invoice.create', compact('company', 'catalogs', 'user', 'taxes'));
     }
 
     /**
@@ -43,7 +44,9 @@ class invoiceController extends Controller
         $validatedData = request()->validate([
             'customer_name' => 'required|string|max:255',
             'catalog_id.*' => 'required|exists:catalogs,id',
-            'quantity.*' => 'required|integer|min:1'
+            'quantity.*' => 'required|integer|min:1',
+            'tax_id.*' => 'required|exists:taxes,id',
+            'discount' => 'integer|min:1',
         ]);
 
         $invoice = Invoice::create([
@@ -51,6 +54,7 @@ class invoiceController extends Controller
             'company_id' => $company_id,
             'invoice_number' => strtoupper(uniqid('INV-')),
             'customer_name' => $validatedData['customer_name'],
+            'discount' => $validatedData['discount'],
         ]);
 
         $catalogIds = $request->input('catalog_id');
@@ -66,6 +70,15 @@ class invoiceController extends Controller
 
         $invoice->catalogs()->attach($items);
 
+        $taxIds = $request->input('tax_id');
+
+        $taxes = [];
+        foreach ($taxIds as $taxId) {
+            $taxes[] = $taxId;
+        }
+
+        $invoice->taxes()->attach($taxes);
+
         return redirect()->route('invoice.show', $invoice->id)->with('success', 'Product added to cart successfully!');
 //        return redirect()->back();
     }
@@ -75,7 +88,7 @@ class invoiceController extends Controller
      */
     public function show($id)
     {
-        $invoice = invoice::with('catalogs')->findOrFail($id);
+        $invoice = invoice::with('catalogs', 'taxes')->findOrFail($id);
         return view('invoice.show', compact('invoice'));
     }
 

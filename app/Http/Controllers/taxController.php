@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Company;
 use App\Models\Tax;
 use Illuminate\Http\Request;
 
@@ -12,26 +13,32 @@ class taxController extends Controller
         return view('tax.index');
     }
 
-    public function create()
+    public function create($slug)
     {
-        return view('tax.create');
+        $company = Company::where('slug', $slug)->firstOrFail();
+
+        return view('tax.create', compact('company'));
     }
 
-    public function store()
+    public function store($slug)
     {
+        $company = Company::where('slug', $slug)->firstOrFail();
+
         $validatedData = request()->validate([
-            'tax_name' => 'required',
-            'tax_percentage' => 'required',
+            'tax_name' => 'required|string|max:255',
+            'tax_percentage' => 'required|numeric|between:0,100',
         ]);
 
         $taxData = array(
+            'company_id' => $company->id,
             'tax_name' => $validatedData['tax_name'],
             'tax_percentage' => $validatedData['tax_percentage'],
         );
 
-        tax::create($taxData);
+        Tax::create($taxData);
 
-        return redirect()->route('tax.index')->with('success', 'Tax created successfully.');
+        return redirect()->back()->with('success', 'Tax added successfully!');
+//        return redirect()->route('tax.index')->with('success', 'Tax created successfully.');
     }
 
     public function edit()

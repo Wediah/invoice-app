@@ -5,14 +5,14 @@
 
 
         <p class="text-sm font-md text-center">From {{ $invoice->company->name }}</p>
-        <p class="text-sm font-md text-center">From {{ $invoice->user->name }}</p>
+        <p class="text-sm font-md text-center">To {{ $invoice->customer_name }}</p>
         <h2 class="mt-6 text-lg font-bold">Items:</h2>
         <ul>
             @php
-                $taxRate = 0.10; // 10% tax rate (0.10)
+                $taxRate = 0; // Initialize total price variable
                  $totalPrice = 0; // Initialize total price variable
                  $totalTax = 0; // Initialize total tax variable
-                $discountRate = 0.05; // 5% discount rate (0.05)
+                $discountRate = $invoice->discount / 100;
 
             @endphp
             @foreach ($invoice->catalogs as $catalog)
@@ -20,28 +20,41 @@
                     // Calculate subtotal for this catalog item
                     $subtotal = $catalog->pivot->quantity * $catalog->price;
 
-                    // Calculate tax for this catalog item
-                    $tax = $subtotal * $taxRate;
-                    $totalTax += $tax; // Accumulate total tax
-
-                    $discountedAmount = $totalPrice * $discountRate; // Calculate discount amount
-                    $totalPriceAfterDiscount = $totalPrice - $discountedAmount; // Calculate total price after discount
-
                     // Add subtotal to total price
                     $totalPrice += $subtotal;
                 @endphp
                 <li>
                     {{ $catalog->name }} - Quantity: {{ $catalog->pivot->quantity }} - Unit Price: GH₵{{
-                    $catalog->price }} - Subtotal: GH₵{{ $subtotal }}
+                    number_format($catalog->price, 2) }} - Subtotal: GH₵{{ number_format($subtotal, 2 )}}
                 </li>
             @endforeach
+
+            @foreach($invoice->taxes as $tax)
+                @php
+                    //calculate the taxes
+                $taxAmount = $totalPrice * ($tax->tax_percentage / 100);
+                $totalTax += $taxAmount; //total tax
+                @endphp
+                <li>
+                    {{ $tax->tax_name }}({{ $tax->tax_percentage}}%): GH₵{{ number_format($taxAmount, 2) }}
+                </li>
+            @endforeach
+
+            @php
+                    // Calculate the discount amount
+                    $discountedAmount = $totalPrice * $discountRate;
+                    // Calculate the total price after applying the discount
+                    $totalPriceAfterDiscount = $totalPrice - $discountedAmount;
+                    // Calculate the final total price after adding the tax
+                    $finalTotalPrice = $totalPriceAfterDiscount + $totalTax;
+            @endphp
         </ul>
 
 
-        <h3>Total Invoice Amount: GH₵{{ $totalPrice }}</h3>
-        <h3>Tax (10%): GH₵{{ $totalTax }}</h3>
-        <h3>Total Invoice Amount (including tax): GH₵{{ $totalPrice + $totalTax }}</h3>
-        <h3>Discount (5%): GH₵{{ $discountedAmount }}</h3>
-        <h3>Total Invoice Amount (after discount): GH₵{{ $totalPriceAfterDiscount }}</h3>
+        <p>Total Price Before Discount: GH₵{{ number_format($totalPrice, 2) }}</p>
+        <p>Discount ({{ $discountRate * 100}}%): -GH₵{{ number_format($discountedAmount, 2) }}</p>
+        <p>Total Price After Discount: GH₵{{ number_format($totalPriceAfterDiscount, 2) }}</p>
+        <p>Total Tax: GH₵{{ number_format($totalTax, 2) }}</p>
+        <p>Final Total Price: GH₵{{ number_format($finalTotalPrice, 2) }}</p>
     </main>
 </x-layout>

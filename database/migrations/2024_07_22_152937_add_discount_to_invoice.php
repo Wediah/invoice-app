@@ -11,11 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('taxes', function (Blueprint $table) {
-            $table->id();
-            $table->string('tax_name');
-            $table->integer('tax_percentage');
-            $table->timestamps();
+        Schema::table('invoices', function (Blueprint $table) {
+            $table->decimal('discount', 8, 2)->default(0)->after('customer_name');
         });
     }
 
@@ -24,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('taxes');
+        Schema::table('invoices', function (Blueprint $table) {
+            $table->dropColumn('discount');
+        });
     }
 };
