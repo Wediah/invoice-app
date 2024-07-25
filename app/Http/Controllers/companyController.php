@@ -60,7 +60,7 @@ class companyController extends Controller
 
         Company::firstOrCreate($companyData);
 
-        return redirect()->intended(route('company.user', absolute: false));
+        return redirect()->intended(route('dashboard', absolute: false));
     }
 
     public function edit(string $id)
@@ -105,7 +105,7 @@ class companyController extends Controller
 
         $updateCompany->update($updateData);
 
-        return redirect()->intended(route('company.user', absolute: false));
+        return redirect()->intended(route('dashboard', absolute: false));
     }
 
     public function delete(string $id)
@@ -114,7 +114,7 @@ class companyController extends Controller
 
         $deleteCompany->delete();
 
-        return redirect()->intended(route('company.user', absolute: false));
+        return redirect()->intended(route('dashboard', absolute: false));
     }
 
     public function show($slug)

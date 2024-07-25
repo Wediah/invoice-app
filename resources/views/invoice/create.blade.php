@@ -6,10 +6,32 @@
               enctype="multipart/form-data">
             @csrf
 
-            <div>
-                <label for="customer_name" class="block text-sm font-medium leading-6 text-gray-900">Customer Name</label>
-                <input type="text" name="customer_name" id="customer_name" class="border border-gray-400 rounded-lg p-2 w-full" required>
+            <div class="flex flex-row gap-6">
+                <div>
+                    <h1>From</h1>
+                    <x-form.input name="name" disabled label="Name" placeholder="Enter customer name" value="{{
+                    $company->name
+                    }}"></x-form.input>
+                    <x-form.input name="email" disabled label="Email" placeholder="Enter email" value="{{ $company->email
+                    }}"></x-form.input>
+                    <x-form.input name="address" disabled label="Address" placeholder="Enter address" value="{{
+                    $company->address }}"></x-form.input>
+                    <x-form.input name="phone" disabled label="Phone" placeholder="Enter phone number" value="{{ $company->phone
+                    }}"></x-form.input>
+                    <x-form.input name="mobile" disabled label="Mobile" placeholder="Enter mobile number"></x-form.input>
+                    <x-form.input name="fax" disabled label="Fax" placeholder="Enter fax number"></x-form.input>
+                </div>
+                <div>
+                    <h1>To</h1>
+                    <x-form.input name="customer_name" label="Name" placeholder="Enter customer name"></x-form.input>
+                    <x-form.input name="email" label="Email" placeholder="Enter email"></x-form.input>
+                    <x-form.input name="address" label="Address" placeholder="Enter address"></x-form.input>
+                    <x-form.input name="phone" label="Phone" placeholder="Enter phone number"></x-form.input>
+                    <x-form.input name="mobile" label="Mobile" placeholder="Enter mobile number"></x-form.input>
+                    <x-form.input name="fax" label="Fax" placeholder="Enter fax number"></x-form.input>
+                </div>
             </div>
+
 
             <div id="itemContainer">
                 <div class="flex flex-row gap-3 items-center item-group">
@@ -106,14 +128,6 @@
         }
 
         itemContainer.appendChild(newItemGroup);
-
-    //     newItemGroup.querySelector('.remove-item').addEventListener('click', function () {
-    //         this.parentNode.remove();
-    //     });
-    //
-    //     itemContainer.appendChild(newItemGroup);
-    //
-    //
     });
 
     document.getElementById('addTax').addEventListener('click', function () {
@@ -139,8 +153,9 @@
             removeButton.type = 'button';
             removeButton.className = 'remove-tax bg-red-500 text-white rounded-lg px-2 py-1';
             removeButton.textContent = 'Remove';
-            removeButton.addEventListener('click', function() {
-                this.parentNode.remove();
+            removeButton.addEventListener('click',
+                function() {
+                    this.parentNode.remove();
             });
             newTaxGroup.appendChild(removeButton);
         }

@@ -1,7 +1,7 @@
-@props(['name'])
+@props(['name', 'label' => null])
 
 <x-form.field>
-    <x-form.label name="{{ $name }}" />
+    <x-form.label name="{{ $name }}" label="{{ $label }}" />
 
     <div class="mt-2">
         <input class="border border-gray-400 rounded-lg p-2 w-full"

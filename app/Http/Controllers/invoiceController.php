@@ -47,14 +47,27 @@ class invoiceController extends Controller
             'quantity.*' => 'required|integer|min:1',
             'tax_id.*' => 'required|exists:taxes,id',
             'discount' => 'integer|min:1',
+            'email' => 'string|email|nullable|max:255',
+            'phone' => 'string|nullable|max:255',
+            'address' => 'string|nullable|max:255',
+            'mobile' => 'string|nullable|max:255',
+            'fax' => 'string|nullable|max:255',
         ]);
+
+        $companyPrefix = strtoupper(substr($company->name, 0, 3));
+        $invoiceNumber = $companyPrefix . '-' . strtoupper(uniqid());
 
         $invoice = Invoice::create([
             'user_id' => $user_id,
             'company_id' => $company_id,
-            'invoice_number' => strtoupper(uniqid('INV-')),
+            'invoice_number' => $invoiceNumber,
             'customer_name' => $validatedData['customer_name'],
             'discount' => $validatedData['discount'],
+            'email' => $validatedData['email'],
+            'phone' => $validatedData['phone'],
+            'address' => $validatedData['address'],
+            'mobile' => $validatedData['mobile'],
+            'fax' => $validatedData['fax'],
         ]);
 
         $catalogIds = $request->input('catalog_id');
@@ -80,7 +93,6 @@ class invoiceController extends Controller
         $invoice->taxes()->attach($taxes);
 
         return redirect()->route('invoice.show', $invoice->id)->with('success', 'Product added to cart successfully!');
-//        return redirect()->back();
     }
 
     /**

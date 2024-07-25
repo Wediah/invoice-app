@@ -12,9 +12,9 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+//Route::get('/dashboard', function () {
+//    return view('dashboard');
+//})->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -26,7 +26,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/company', [CompanyController::class, 'store'])->name('company.store');
     Route::patch('/company', [CompanyController::class, 'update'])->name('company.update');
     Route::delete('/company', [CompanyController::class, 'destroy'])->name('company.destroy');
-    Route::get('/show/companies', [CompanyController::class, 'userAndCompany'])->name('company.user');
+    Route::get('/dashboard', [CompanyController::class, 'userAndCompany'])->name('dashboard');
     Route::get('/company/{slug}', [CompanyController::class, 'show'])->name('company.show');
 
     //catalog/items
