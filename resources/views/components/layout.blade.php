@@ -40,8 +40,11 @@
                     <x-dropdown-item href="{{ route('profile.edit') }}">
                         Profile
                     </x-dropdown-item>
-                    <x-dropdown-item href="{{ route('logout') }}">
-                        Logout
+                    <x-dropdown-item>
+                        <form action="{{ route('logout') }}" method="Post">
+                            @csrf
+                            <button type="submit" class="w-full">Logout</button>
+                        </form>
                     </x-dropdown-item>
                 </x-dropdown2>
             </div>
