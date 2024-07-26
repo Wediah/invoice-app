@@ -28,6 +28,7 @@ class companyController extends Controller
         return view('company.index', compact('companies'));
     }
 
+    //starting new company data
     public function store(Request $request): Application|Redirector|\Illuminate\Contracts\Foundation\Application|RedirectResponse
     {
         $validated = request()->validate([
@@ -60,8 +61,42 @@ class companyController extends Controller
 
         Company::firstOrCreate($companyData);
 
-        return redirect()->intended(route('company.user', absolute: false));
+        return redirect()->intended(route('dashboard', absolute: false));
     }
+
+    //financial data
+    public function financial()
+    {
+        $validated = request()->validate([
+            'bank_details' => 'string',
+            'currency' => 'string',
+            'tax_identification_number' => 'string'
+        ]);
+
+        $financialData = array(
+            'bank_details' => $validated['bank_details'],
+            'currency' => $validated['currency'],
+            'tax_identification_number' => $validated['tax_identification_number']
+        );
+
+        Company::update($financialData);
+
+        return redirect()->back();
+    }
+
+    //preference data
+    public function preference()
+    {
+        $validatedData = request()->validate([
+            'invoice_prefix' => 'string',
+            'invoice_numbering' => 'string|min:2'
+        ]);
+
+        Company::update($validatedData);
+
+        return redirect()->back();
+    }
+
 
     public function edit(string $id)
     {
@@ -105,7 +140,7 @@ class companyController extends Controller
 
         $updateCompany->update($updateData);
 
-        return redirect()->intended(route('company.user', absolute: false));
+        return redirect()->intended(route('dashboard', absolute: false));
     }
 
     public function delete(string $id)
@@ -114,7 +149,7 @@ class companyController extends Controller
 
         $deleteCompany->delete();
 
-        return redirect()->intended(route('company.user', absolute: false));
+        return redirect()->intended(route('dashboard', absolute: false));
     }
 
     public function show($slug)

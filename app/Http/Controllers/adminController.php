@@ -25,7 +25,7 @@ class adminController extends Controller
 
         Category::firstOrCreate($attributes);
 
-        return redirect('/');
+        return redirect(route('dashboard'));
     }
 
     public function edit(string $id)
@@ -43,7 +43,7 @@ class adminController extends Controller
             'name' => request('name'),
         ]));
 
-        return redirect('/');
+        return redirect(route('dashboard'));
     }
 
     public function delete(string $id)
@@ -52,6 +52,6 @@ class adminController extends Controller
 
         $delete->delete();
 
-        return redirect('/');
+        return redirect('dashboard');
     }
 }

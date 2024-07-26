@@ -1,7 +1,7 @@
-@props(['name'])
+@props(['name', 'label' => null])
 
 <label class="block text-sm font-medium leading-6 text-gray-900"
        for="{{ $name }}"
 >
-    {{ ucwords($name) }}
+    {{ $label ?? ucwords(str_replace('_', ' ', $name)) }}
 </label>

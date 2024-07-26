@@ -45,4 +45,9 @@ class Company extends Model
     {
         return $this->hasMany(Tax::class);
     }
+
+    public function paymentTerms(): HasMany
+    {
+        return $this->hasMany(PaymentTerms::class);
+    }
 }

@@ -4,6 +4,7 @@
         <a href="{{ route('catalog.create', ['company_id' => $company->id]) }}">Add an item to your catalog</a>
         <a href="{{ route('invoice.create', ['slug' => $company->slug]) }}">Create invoice</a>
         <a href="{{ route('tax.create', ['slug' => $company->slug]) }}">Create taxes</a>
+{{--        <a href="{{ route('tax.create', ['slug' => $company->slug]) }}">Create terms</a>--}}
         <div class="flex flex-row mx-auto flex-wrap gap-4">
             @foreach ( $companyCatalog as $catalog )
                 <div class="flex justify-center items-center bg-gray-100 border-2 rounded-xl p-5">

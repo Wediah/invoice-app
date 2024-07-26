@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\cart;
 use App\Models\Company;
 use App\Models\invoice;
+use App\Models\paymentTerms;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -47,14 +48,27 @@ class invoiceController extends Controller
             'quantity.*' => 'required|integer|min:1',
             'tax_id.*' => 'required|exists:taxes,id',
             'discount' => 'integer|min:1',
+            'email' => 'string|email|nullable|max:255',
+            'phone' => 'string|nullable|max:255',
+            'address' => 'string|nullable|max:255',
+            'mobile' => 'string|nullable|max:255',
+            'fax' => 'string|nullable|max:255',
         ]);
+
+        $companySuffix = $company->invoice_numbering += 1;
+        $invoiceNumber = strtoupper($company->invoice_prefix) . '-' . $companySuffix;
 
         $invoice = Invoice::create([
             'user_id' => $user_id,
             'company_id' => $company_id,
-            'invoice_number' => strtoupper(uniqid('INV-')),
+            'invoice_number' => $invoiceNumber,
             'customer_name' => $validatedData['customer_name'],
             'discount' => $validatedData['discount'],
+            'email' => $validatedData['email'],
+            'phone' => $validatedData['phone'],
+            'address' => $validatedData['address'],
+            'mobile' => $validatedData['mobile'],
+            'fax' => $validatedData['fax'],
         ]);
 
         $catalogIds = $request->input('catalog_id');
@@ -80,7 +94,6 @@ class invoiceController extends Controller
         $invoice->taxes()->attach($taxes);
 
         return redirect()->route('invoice.show', $invoice->id)->with('success', 'Product added to cart successfully!');
-//        return redirect()->back();
     }
 
     /**
@@ -90,6 +103,26 @@ class invoiceController extends Controller
     {
         $invoice = invoice::with('catalogs', 'taxes')->findOrFail($id);
         return view('invoice.show', compact('invoice'));
+    }
+
+    //terms of invoice
+    public function showTerms()
+    {
+        return view('invoice.terms');
+    }
+
+    public function terms($slug)
+    {
+        $company = Company::where('slug', $slug)->firstOrFail();
+
+        $validatedData = request()->validate([
+            'company_id' => $company->id,
+            'name' => 'required|string|max:255',
+        ]);
+
+        paymentTerms::firstOrCreate($validatedData);
+
+        return redirect()->back();
     }
 
     /**
