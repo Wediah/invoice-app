@@ -22,6 +22,28 @@ document.addEventListener('DOMContentLoaded', function (e) {
               }
             }
           },
+          fname: {
+            validators: {
+              notEmpty: {
+                message: 'Please enter your first name'
+              },
+              stringLength: {
+                min: 2,
+                message: 'First name must be more than 2 characters'
+              }
+            }
+          },
+          lname: {
+            validators: {
+              notEmpty: {
+                message: 'Please enter your last name'
+              },
+              stringLength: {
+                min: 2,
+                message: 'Last name must be more than 2 characters'
+              }
+            }
+          },
           email: {
             validators: {
               notEmpty: {
@@ -29,6 +51,23 @@ document.addEventListener('DOMContentLoaded', function (e) {
               },
               emailAddress: {
                 message: 'Please enter valid email address'
+              }
+            }
+          },
+          phone: {
+            validators: {
+              notEmpty: {
+                message: 'Please enter your phone number'
+              },
+              stringLength: {
+                message: 'Phone number should be between 7 and 10 digits',
+                min: 7,
+                max: 10,
+              },
+             
+              regexp: {
+                regexp: /^[0-9]+$/,
+                message: 'Do not include country code, Phone number should only contain digits'
               }
             }
           },
@@ -55,6 +94,23 @@ document.addEventListener('DOMContentLoaded', function (e) {
             }
           },
           'confirm-password': {
+            validators: {
+              notEmpty: {
+                message: 'Please confirm password'
+              },
+              identical: {
+                compare: function () {
+                  return formAuthentication.querySelector('[name="password"]').value;
+                },
+                message: 'The password and its confirm are not the same'
+              },
+              stringLength: {
+                min: 6,
+                message: 'Password must be more than 6 characters'
+              }
+            }
+          },
+          'password_confirmation': {
             validators: {
               notEmpty: {
                 message: 'Please confirm password'
