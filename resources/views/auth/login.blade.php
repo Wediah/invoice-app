@@ -1,6 +1,5 @@
 <x-guest-layout>
-    <x-auth-session-status class="mb-4" :status="session('status')" />
-    
+
 
     <div class="authentication-inner row m-0">
         <!-- /Left Text -->
@@ -12,7 +11,8 @@
                 <div class="mx-auto">
                     <h3>Streamline Your Invoicing, Simplify Your Business</h3>
                     <p>
-                        Effortless invoicing at your fingertips. <br> Save time and focus on growing your business with our
+                        Effortless invoicing at your fingertips. <br> Save time and focus on growing your business with
+                        our
                         easy-to-use invoicing solution. <br> Simplify your operations today!
                     </p>
                 </div>
@@ -24,9 +24,10 @@
         <div class="d-flex col-12 col-lg-5 col-xl-4 align-items-center authentication-bg p-sm-5 p-4">
             <div class="w-px-400 mx-auto">
                 <!-- Logo -->
-                <div class="app-brand mb-4">
+                <div class="app-brand mb-3">
                     <a href="index.html" class="app-brand-link gap-2 mb-2">
-                        <span class="app-brand-logo demo">
+
+                        {{-- <span class="app-brand-logo demo">
                             <svg width="26px" height="26px" viewBox="0 0 26 26" version="1.1"
                                 xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                                 <title>icon</title>
@@ -61,35 +62,46 @@
                                     </g>
                                 </g>
                             </svg>
-                        </span>
+                            <img src="{{ asset('assets/img/pages/logo.png') }}" alt="logo logo">
+
+                        </span> --}}
+                        <img src="{{ asset('assets/img/pages/logo.png') }}" alt="logo logo" width="20%">
+
                         <span class="app-brand-text demo h3 mb-0 fw-bold">Apollo Invoice</span>
                     </a>
                 </div>
                 <!-- /Logo -->
-                <h4 class="mb-2">Welcome to Apollo Invoice! 👋</h4>
-                <p class="mb-4">Sign-in to your account for the ultimate invoice experience</p>
+                {{-- <h4 class="mb-2">Welcome to Apollo Invoice! 👋</h4> --}}
+                <p class="mb-4">Sign-in to continue your ultimate invoice experience</p>
 
                 <form id="formAuthentication" class="mb-3" action="{{ route('login') }}" method="POST">
                     @csrf
+                    <x-input-error :messages="$errors->get('email')" class="mt-2" />
 
                     <div class="mb-3">
                         <label for="email" class="form-label">Email</label>
                         <input type="text" class="form-control" id="email" name="email"
-                            placeholder="Enter your email " autofocus />
+                            placeholder="Enter your email " autofocus value="{{ old('email') }}"  />
+
                     </div>
+
                     <div class="mb-3 form-password-toggle">
                         <div class="d-flex justify-content-between">
                             <label class="form-label" for="password">Password</label>
-                            <a href="auth-forgot-password-cover.html">
+                            @if (Route::has('password.request'))
+
+                            <a href="{{ route('password.request') }}">
                                 <small>Forgot Password?</small>
                             </a>
+                            @endif
                         </div>
                         <div class="input-group input-group-merge">
                             <input type="password" id="password" class="form-control" name="password"
                                 placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
-                                aria-describedby="password" />
+                                aria-describedby="password"  value="{{ old('password') }}"/>
                             <span class="input-group-text cursor-pointer"><i class="bx bx-hide"></i></span>
                         </div>
+
                     </div>
                     <div class="mb-3">
                         <div class="form-check">
@@ -101,8 +113,8 @@
                 </form>
 
                 <p class="">
-                    <span>New on our platform?</span>
-                    <a href="auth-register-cover.html">
+                    <span>New on Apollo Invoice?</span>
+                    <a href="{{ 'register' }}">
                         <span>Create an account</span>
                     </a>
                 </p>
