@@ -20,8 +20,6 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-    //logout
-    Route::get('/logout', [AuthenticatedSessionController::class, 'destroy'])->name('logout');
 
     //company
     Route::get('/company/create', [CompanyController::class, 'create'])->name('company.create');
