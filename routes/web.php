@@ -28,6 +28,8 @@ Route::middleware('auth')->group(function () {
     Route::delete('/company', [CompanyController::class, 'destroy'])->name('company.destroy');
     Route::get('/dashboard', [CompanyController::class, 'userAndCompany'])->name('dashboard');
     Route::get('/company/{slug}', [CompanyController::class, 'show'])->name('company.show');
+    Route::patch('/company', [CompanyController::class, 'financial'])->name('company.financial');
+    Route::patch('/company', [CompanyController::class, 'preference'])->name('company.preference');
 
     //catalog/items
     Route::get('/company/{company_id}/catalog/create', [CatalogController::class, 'create'])->name('catalog.create');
@@ -37,6 +39,10 @@ Route::middleware('auth')->group(function () {
     Route::post('/{slug}/invoice', [invoiceController::class, 'store'])->name('invoice.store');
     Route::get('/{slug}/invoice', [invoiceController::class, 'create'])->name('invoice.create');
     Route::get('/invoice/{id}', [invoiceController::class, 'show'])->name('invoice.show');
+
+    //terms of invoice .i.e. the duration of the invoice
+    Route::get('{slug}/invoice/terms', [invoiceController::class, 'showTerms'])->name('invoice.show_terms');
+    Route::post('/invoice/create_terms', [invoiceController::class, 'terms'])->name('invoice.store_terms');
 
     //tax
     Route::get('tax/index', [taxController::class, 'index'])->name('tax.index');

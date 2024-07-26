@@ -31,4 +31,9 @@ class invoice extends Model
     {
         return $this->belongsToMany(tax::class)->withPivot('tax_id')->withTimestamps();
     }
+
+    public function paymentTerms(): HasMany
+    {
+        return $this->hasMany(paymentTerms::class);
+    }
 }
