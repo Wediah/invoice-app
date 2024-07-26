@@ -40,7 +40,7 @@
                     <x-dropdown-item href="{{ route('profile.edit') }}">
                         Profile
                     </x-dropdown-item>
-                    <x-dropdown-item href="">
+                    <x-dropdown-item href="{{ route('logout') }}">
                         Logout
                     </x-dropdown-item>
                 </x-dropdown2>
