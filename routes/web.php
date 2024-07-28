@@ -24,12 +24,15 @@ Route::middleware('auth')->group(function () {
     //company
     Route::get('/company/create', [CompanyController::class, 'create'])->name('company.create');
     Route::post('/company', [CompanyController::class, 'store'])->name('company.store');
-    Route::patch('/company', [CompanyController::class, 'update'])->name('company.update');
+    Route::patch('/company/{slug}', [CompanyController::class, 'update'])->name('company.update');
     Route::delete('/company', [CompanyController::class, 'destroy'])->name('company.destroy');
     Route::get('/dashboard', [CompanyController::class, 'userAndCompany'])->name('dashboard');
     Route::get('/company/{slug}', [CompanyController::class, 'show'])->name('company.show');
-    Route::patch('/company', [CompanyController::class, 'financial'])->name('company.financial');
-    Route::patch('/company', [CompanyController::class, 'preference'])->name('company.preference');
+    Route::patch('/company/{slug}/finance', [CompanyController::class, 'financial'])->name('company.financial');
+    Route::patch('/company/{slug}/preference', [CompanyController::class, 'preference'])->name('company.preference');
+    //business profile
+    Route::get('/{slug}/profile', [CompanyController::class, 'profile'])->name('company.profile');
+    Route::patch('/{slug}/info', [CompanyController::class, 'info'])->name('company.info');
 
     //catalog/items
     Route::get('/company/{company_id}/catalog/create', [CatalogController::class, 'create'])->name('catalog.create');

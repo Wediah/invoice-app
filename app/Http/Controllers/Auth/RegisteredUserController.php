@@ -29,20 +29,25 @@ class RegisteredUserController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
-        $request->validate([
-            'fname' => ['required', 'string', 'min:255'],
-            'lname' => ['required', 'string', 'min:255'],
+        $validatedData = $request->validate([
+            'first_name' => ['required', 'string', 'max:255', 'min:2'],
+            'last_name' => ['required', 'string', 'max:255', 'min:2'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
-            'phone' => 'required|regex:/^([0-9\s\-\+\(\)]*)$/|digits_between:7,10|unique:users',
+            'phone_number' => 'required|regex:/^([0-9\s\-\+\(\)]*)$/|digits_between:7,10|unique:users',
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
 
-        dd($request->all());
+//        dd($request->all());
 
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
+        $user = User::firstOrCreate(
+            [
+                'email' => $validatedData['email'],
+            ],
+            [
+            'first_name' => $validatedData['first_name'],
+            'last_name' => $validatedData['last_name'],
+            'phone_number' => $validatedData['phone_number'],
+            'password' => Hash::make($validatedData['password']),
         ]);
 
         event(new Registered($user));

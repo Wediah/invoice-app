@@ -6,7 +6,8 @@
 <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
 <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.13.5/dist/cdn.min.js"></script>
 <script src="https://unpkg.com/boxicons@2.1.4/dist/boxicons.js"></script>
-
+<link href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.5/flowbite.min.css" rel="stylesheet" />
+<script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.5/flowbite.min.js"></script>
 
 <style>
     html {
@@ -34,7 +35,7 @@
                 <x-dropdown2>
                     <x-slot name="trigger">
                         <button class="bg-black rounded-md text-sm font-semibold text-white uppercase
-                        py-2 px-3">Welcome, {{ auth()->user()->name }}</button>
+                        py-2 px-3">Welcome, {{ auth()->user()->first_name }}</button>
                     </x-slot>
 
                     <x-dropdown-item href="{{ route('profile.edit') }}">
@@ -43,7 +44,7 @@
                     <x-dropdown-item>
                         <form action="{{ route('logout') }}" method="Post">
                             @csrf
-                            <button type="submit" class="w-full">Logout</button>
+                            <button type="submit" class="w-full text-left">Logout</button>
                         </form>
                     </x-dropdown-item>
                 </x-dropdown2>

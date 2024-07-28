@@ -78,32 +78,33 @@
                     @csrf
                     <x-input-error :messages="$errors->get('email')" class="mt-2" />
                     <div class="mb-3">
-                        <label for="fname" class="form-label">First Name</label>
-                        <input type="text" class="form-control" id="fname" name="fname"
-                            placeholder="Enter your First Name" autofocus value="{{ old('fname') }}" />
-                        @error('fname')
+                        <label for="first_name" class="form-label">First Name</label>
+                        <input type="text" class="form-control" id="first_name" name="first_name"
+                            placeholder="Enter your First Name" autofocus value="{{ old('first_name') }}" />
+                        @error('first_name')
                             <p class="error">{{ $message }}</p>
                         @enderror
                     </div>
                     <div class="mb-3">
-                        <label for="lname" class="form-label">Last Name</label>
-                        <input type="text" class="form-control" id="lname" name="lname"
-                            placeholder="Enter your Last Name" autofocus value="{{ old('lname') }}"  />
-                        @error('lname')
+                        <label for="last_name" class="form-label">Last Name</label>
+                        <input type="text" class="form-control" id="last_name" name="last_name"
+                            placeholder="Enter your Last Name" autofocus value="{{ old('last_name') }}"  />
+                        @error('last_name')
                             <p class="error">{{ $message }}</p>
                         @enderror
                     </div>
                     <div class="mb-3 ">
-                        <label class="phone" for="phone">Phone Number</label>
+                        <label class="phone" for="phone_number">Phone Number</label>
                         <div class="input-group input-group-merge ">
                             <span class="input-group-text">
                                 <i class="fi fi-gh fis rounded-circle fs-3 me-1"></i> &nbsp;
                                 (+233)</span>
-                            <input class="form-control mobile-number" type="number" id="phone" name="phone"
-                                placeholder="202 555 0111" min="9" max="10" value="{{ old('phone') }}"  required>
+                            <input class="form-control mobile-number" type="number" id="phone_number"
+                                   name="phone_number"
+                                placeholder="202 555 0111" min="9" max="10" value="{{ old('phone_number') }}"  required>
 
                         </div>
-                        @error('phone')
+                        @error('phone_number')
                             <p class="error">{{ $message }}</p>
                         @enderror
 

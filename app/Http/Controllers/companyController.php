@@ -37,7 +37,6 @@ class companyController extends Controller
             'phone' => 'required|string|unique:companies,phone',
             'address' => 'required|string',
             'logo' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'description' => 'required|string',
             'category' => 'required|string',
         ]);
 
@@ -48,7 +47,6 @@ class companyController extends Controller
             'email' => $validated['email'],
             'phone' => $validated['phone'],
             'address' => $validated['address'],
-            'description' => $validated['description'],
             'category' => $validated['category'],
         ];
 
@@ -64,9 +62,42 @@ class companyController extends Controller
         return redirect()->intended(route('dashboard', absolute: false));
     }
 
-    //financial data
-    public function financial()
+    //company info
+    public function info($slug)
     {
+        $company = Company::where('slug', $slug)->first();
+
+        $attributes = request()->validate([
+            'registration_number' => 'sometimes|nullable|string',
+            'description' => 'sometimes|nullable|string',
+            'website' => 'sometimes|nullable|string',
+            'instagram' => 'sometimes|nullable|string',
+            'facebook' => 'sometimes|nullable|string',
+            'twitter' => 'sometimes|nullable|string',
+            'tiktok' => 'sometimes|nullable|string',
+            'linkedin' => 'sometimes|nullable|string',
+        ]);
+
+        $validatedAttributes = [
+            'registration_number' => $attributes['registration_number'] ?? $company->registration_number,
+            'description' => $attributes['description'] ?? $company->description,
+            'website' => $attributes['website'] ?? $company->website,
+            'instagram' => $attributes['instagram'] ?? $company->instagram,
+            'facebook' => $attributes['facebook'] ?? $company->facebook,
+            'twitter' => $attributes['twitter'] ?? $company->twitter,
+            'tiktok' => $attributes['tiktok'] ?? $company->tiktok,
+            'linkedin' => $attributes['linkedin'] ?? $company->linkedin,
+        ];
+
+        $company->update($validatedAttributes);
+
+        return redirect()->back();
+    }
+
+    //financial data
+    public function financial($slug)
+    {
+        $company = Company::where('slug', $slug)->first();
         $validated = request()->validate([
             'bank_details' => 'string',
             'currency' => 'string',
@@ -74,60 +105,71 @@ class companyController extends Controller
         ]);
 
         $financialData = array(
-            'bank_details' => $validated['bank_details'],
-            'currency' => $validated['currency'],
-            'tax_identification_number' => $validated['tax_identification_number']
+            'bank_details' => $validated['bank_details'] ?? $company->bank_details,
+            'currency' => $validated['currency'] ?? $company->currency,
+            'tax_identification_number' => $validated['tax_identification_number'] ?? $company->tax_identification_number,
         );
 
-        Company::update($financialData);
+        $company->update($financialData);
 
         return redirect()->back();
     }
 
     //preference data
-    public function preference()
+    public function preference($slug)
     {
-        $validatedData = request()->validate([
+        $company = Company::where('slug', $slug)->first();
+
+        $Data = request()->validate([
             'invoice_prefix' => 'string',
             'invoice_numbering' => 'string|min:2'
         ]);
 
-        Company::update($validatedData);
+        $validatedData = [
+            'invoice_prefix' => $Data['invoice_prefix'] ?? $company->invoice_prefix,
+            'invoice_numbering' => $Data['invoice_numbering'] ?? $company->invoice_numbering,
+        ];
+
+        $company->update($validatedData);
 
         return redirect()->back();
     }
 
-
-    public function edit(string $id)
+    public function profile($slug)
     {
-        $company = Company::findOrFail($id);
-        return view('company.edit', compact('company'));
+        $company = Company::where('slug', $slug)->first();
+        return view('businessProfile.index', compact('company'));
     }
 
-    public function update(Request $request,string $id)
+
+//    public function edit(string $id)
+//    {
+//        $company = Company::findOrFail($id);
+//        return view('company.edit', compact('company'));
+//    }
+
+    public function update(Request $request,$slug)
     {
-        $updateCompany = Company::findOrFail($id);
+        $company = Company::where('slug', $slug)->first();
 
         $validatedData = request()->validate([
-            'name' => 'sometimes|nullable|string|unique:companies,name',
-            'email' => 'sometimes|nullable|string|unique:companies,email',
-            'phone' => 'sometimes|nullable|string|unique:companies,phone',
+            'name' => 'sometimes|nullable|string',
+            'email' => 'sometimes|nullable|string',
+            'phone' => 'sometimes|nullable|string',
             'address' => 'sometimes|nullable|string',
             'logo' => 'sometimes|nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'description' => 'sometimes|nullable|string',
             'category' => 'sometimes|nullable|string',
 //            'other_category' => 'sometimes|nullable|string'
         ]);
 
         $updateData = [
             'user_id' => Auth::id(),
-            'name' => $validatedData['name'] ?? $updateCompany->name,
+            'name' => $validatedData['name'] ?? $company->name,
             'slug' => SlugService::createSlug(Company::class, 'slug', $validatedData['name']),
-            'email' => $validatedData['email'] ?? $updateCompany->email,
-            'phone' => $validatedData['phone'] ?? $updateCompany->phone,
-            'address' => $validatedData['address'] ?? $updateCompany->address,
-            'description' => $validatedData['description'] ?? $updateCompany->description,
-            'category' => $validatedData['category'] ?? $updateCompany->category,
+            'email' => $validatedData['email'] ?? $company->email,
+            'phone' => $validatedData['phone'] ?? $company->phone,
+            'address' => $validatedData['address'] ?? $company->address,
+            'category' => $validatedData['category'] ?? $company->category,
 //            'other_category' => $validatedData['other_category'] ?? $updateCompany->other_category
         ];
 
@@ -138,7 +180,7 @@ class companyController extends Controller
             $updateData['logo'] = $filename;
         }
 
-        $updateCompany->update($updateData);
+        $company->update($updateData);
 
         return redirect()->intended(route('dashboard', absolute: false));
     }
