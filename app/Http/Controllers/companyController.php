@@ -182,7 +182,7 @@ class companyController extends Controller
 
         $company->update($updateData);
 
-        return redirect()->intended(route('dashboard', absolute: false));
+        return redirect()->back();
     }
 
     public function delete(string $id)
