@@ -33,6 +33,16 @@
             </div>
 
 
+            <div class="mt-6">
+                <label for="term_id" class="block text-sm font-medium leading-6 text-gray-900">Payment Term</label>
+                <div class="mt-2">
+                    <select name="term_id" class="border border-gray-400 rounded-lg p-2 w-full">
+                        @foreach($company->paymentTerms as $terms)
+                            <option value="{{ $terms->id }}">{{ $terms->name }}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div>
             <div id="itemContainer">
                 <div class="flex flex-row gap-3 items-center item-group">
                     <div class="mt-6">
