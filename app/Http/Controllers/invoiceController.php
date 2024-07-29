@@ -41,10 +41,10 @@ class invoiceController extends Controller
         $company = Company::where('slug', $slug)->firstOrFail();
         $company_id = $company->id;
 
-
         $validatedData = request()->validate([
             'customer_name' => 'required|string|max:255',
             'catalog_id.*' => 'required|exists:catalogs,id',
+            'term_id' => 'required|exists:payment_terms,id',
             'quantity.*' => 'required|integer|min:1',
             'tax_id.*' => 'required|exists:taxes,id',
             'discount' => 'integer|min:1',
@@ -55,13 +55,26 @@ class invoiceController extends Controller
             'fax' => 'string|nullable|max:255',
         ]);
 
-        $companySuffix = $company->invoice_numbering += 1;
-        $invoiceNumber = strtoupper($company->invoice_prefix) . '-' . $companySuffix;
+        $latestInvoice = invoice::where('company_id', $company_id)
+            ->orderBy('created_at', 'desc')
+            ->first();
+
+        if ($latestInvoice) {
+            $latestInvoiceNumber = $latestInvoice->invoice_number;
+            preg_match('/\d+$/', $latestInvoiceNumber, $matches);
+            $latestNumber = $matches ? intval($matches[0]) : 0;
+        } else {
+            $latestNumber = $company->invoice_numbering;
+        }
+
+        $invoiceSuffix = $latestNumber += 1;
+        $invoiceNumber = strtoupper($company->invoice_prefix) . '-' . $invoiceSuffix;
 
         $invoice = Invoice::create([
             'user_id' => $user_id,
             'company_id' => $company_id,
             'invoice_number' => $invoiceNumber,
+            'term_id' => $validatedData['term_id'],
             'customer_name' => $validatedData['customer_name'],
             'discount' => $validatedData['discount'],
             'email' => $validatedData['email'],
@@ -106,9 +119,11 @@ class invoiceController extends Controller
     }
 
     //terms of invoice
-    public function showTerms()
+    public function showTerms($slug)
     {
-        return view('invoice.terms');
+        $company = Company::where('slug', $slug)->firstOrFail();
+
+        return view('invoice.terms', compact('company'));
     }
 
     public function terms($slug)
@@ -116,11 +131,15 @@ class invoiceController extends Controller
         $company = Company::where('slug', $slug)->firstOrFail();
 
         $validatedData = request()->validate([
-            'company_id' => $company->id,
             'name' => 'required|string|max:255',
         ]);
 
-        paymentTerms::firstOrCreate($validatedData);
+        $terms = array(
+            'company_id' => $company->id,
+            'name' => $validatedData['name'],
+        );
+
+        paymentTerms::firstOrCreate($terms);
 
         return redirect()->back();
     }

@@ -99,13 +99,27 @@ class companyController extends Controller
     {
         $company = Company::where('slug', $slug)->first();
         $validated = request()->validate([
-            'bank_details' => 'string',
+            'account_number' => 'string',
+            'bank_name' => 'string',
+            'bank_branch' => 'string',
+            'swift_code' => 'string',
+            'merchant_network' => 'string',
+            'merchant_number' => 'string',
+            'merchant_id' => 'string',
+            'merchant_name' => 'string',
             'currency' => 'string',
             'tax_identification_number' => 'string'
         ]);
 
         $financialData = array(
-            'bank_details' => $validated['bank_details'] ?? $company->bank_details,
+            'account_number' => $validated['account_number'] ?? $company->account_numer,
+            'bank_name' => $validated['bank_name'] ?? $company->bank_details,
+            'bank_branch' => $validated['bank_branch'] ?? $company->bank_branch,
+            'swift_code' => $validated['swift_code'] ?? $company->swift_code,
+            'merchant_network' => $validated['merchant_network'] ?? $company->merchant_network,
+            'merchant_number' => $validated['merchant_number'] ?? $company->merchant_number,
+            'merchant_id' => $validated['merchant_id'] ?? $company->merchant_id,
+            'merchant_name' => $validated['merchant_name'] ?? $company->merchant_name,
             'currency' => $validated['currency'] ?? $company->currency,
             'tax_identification_number' => $validated['tax_identification_number'] ?? $company->tax_identification_number,
         );
@@ -182,7 +196,7 @@ class companyController extends Controller
 
         $company->update($updateData);
 
-        return redirect()->intended(route('dashboard', absolute: false));
+        return redirect()->back();
     }
 
     public function delete(string $id)
