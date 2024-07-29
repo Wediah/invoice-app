@@ -106,9 +106,11 @@ class invoiceController extends Controller
     }
 
     //terms of invoice
-    public function showTerms()
+    public function showTerms($slug)
     {
-        return view('invoice.terms');
+        $company = Company::where('slug', $slug)->firstOrFail();
+
+        return view('invoice.terms', compact('company'));
     }
 
     public function terms($slug)
@@ -116,11 +118,15 @@ class invoiceController extends Controller
         $company = Company::where('slug', $slug)->firstOrFail();
 
         $validatedData = request()->validate([
-            'company_id' => $company->id,
             'name' => 'required|string|max:255',
         ]);
 
-        paymentTerms::firstOrCreate($validatedData);
+        $terms = array(
+            'company_id' => $company->id,
+            'name' => $validatedData['name'],
+        );
+
+        paymentTerms::firstOrCreate($terms);
 
         return redirect()->back();
     }
