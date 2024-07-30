@@ -5,6 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class paymentTerms extends Model
 {
@@ -17,8 +19,8 @@ class paymentTerms extends Model
         return $this->belongsTo(company::class);
     }
 
-    public function invoice(): BelongsTo
+    public function invoice(): HasOne
     {
-        return $this->belongsTo(invoice::class);
+        return $this->hasOne(invoice::class);
     }
 }

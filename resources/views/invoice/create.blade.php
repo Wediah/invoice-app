@@ -18,8 +18,8 @@
                     $company->address }}"></x-form.input>
                     <x-form.input name="phone" disabled label="Phone" placeholder="Enter phone number" value="{{ $company->phone
                     }}"></x-form.input>
-                    <x-form.input name="mobile" disabled label="Mobile" placeholder="Enter mobile number"></x-form.input>
-                    <x-form.input name="fax" disabled label="Fax" placeholder="Enter fax number"></x-form.input>
+{{--                    <x-form.input name="mobile" disabled label="Mobile" placeholder="Enter mobile number"></x-form.input>--}}
+{{--                    <x-form.input name="fax" disabled label="Fax" placeholder="Enter fax number"></x-form.input>--}}
                 </div>
                 <div>
                     <h1>To</h1>
@@ -56,7 +56,6 @@
                         </div>
                     </div>
                     <x-form.input name="quantity[]" placeholder="Enter the quantity " class="quantity"/>
-{{--                    <button type="button" class="remove-item bg-red-500 text-white rounded-lg px-2 py-1">Remove</button>--}}
                 </div>
             </div>
 
@@ -64,7 +63,7 @@
                 <input
                     type="button"
                     id="addItem"
-                    class="bg-black text-white rounded-lg w-full py-2 px-4 hover:bg-blue-800 cursor-pointer"
+                    class="bg-blue-400 text-white rounded-lg w-full py-2 px-4 hover:bg-blue-800 cursor-pointer"
                     value="Add another item"
                 >
             </div>
@@ -89,17 +88,25 @@
                 <input
                     type="button"
                     id="addTax"
-                    class="bg-black text-white rounded-lg w-full py-2 px-4 hover:bg-blue-800 cursor-pointer"
+                    class="bg-blue-400 text-white rounded-lg w-full py-2 px-4 hover:bg-blue-800 cursor-pointer"
                     value="Add another tax"
                 >
             </div>
 
-            <x-form.input name="discount" placeholder="Enter discount" class="discount"/>
+            <x-form.input name="discount" placeholder="Enter discount" label="Discount" class="discount"/>
+            <x-form.input name="due_date" label="Due Date" type="date"></x-form.input>
+            <div class="flex flex-col gap-4">
+                <label for="notes">Note</label>
+                <textarea name="notes" id="notes" cols="30" rows="4" placeholder="Enter something worth noting."
+                          class="rounded-xl"
+                ></textarea>
+            </div>
+
 
             <div class="mb-6 mt-4">
                 <input
                     type="submit"
-                    class="bg-black text-white rounded-lg w-full py-2 px-4 hover:bg-blue-800 cursor-pointer"
+                    class="bg-blue-400 text-white rounded-lg w-full py-2 px-4 hover:bg-blue-800 cursor-pointer"
                     value="Submit"
                 >
             </div>
