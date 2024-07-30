@@ -53,6 +53,8 @@ class invoiceController extends Controller
             'address' => 'string|nullable|max:255',
             'mobile' => 'string|nullable|max:255',
             'fax' => 'string|nullable|max:255',
+            'due_date' => 'string|nullable|max:255',
+            'notes' => 'string|nullable|max:255',
         ]);
 
         $latestInvoice = invoice::where('company_id', $company_id)
@@ -82,6 +84,8 @@ class invoiceController extends Controller
             'address' => $validatedData['address'],
             'mobile' => $validatedData['mobile'],
             'fax' => $validatedData['fax'],
+            'due_date' => $validatedData['due_date'],
+            'notes' => $validatedData['notes'],
         ]);
 
         $catalogIds = $request->input('catalog_id');
@@ -114,7 +118,8 @@ class invoiceController extends Controller
      */
     public function show($id)
     {
-        $invoice = invoice::with('catalogs', 'taxes')->findOrFail($id);
+        $invoice = invoice::with('catalogs', 'taxes', 'paymentTerms')->findOrFail($id);
+
         return view('invoice.show', compact('invoice'));
     }
 
