@@ -125,4 +125,5 @@
             <p>Total Price To Paid: GH₵{{ number_format($finalTotalPrice, 2) }}</p>
         </div>
     </main>
+    <a href="{{ route('invoice.download_pdf', ['id' => $invoice->id]) }}">download</a>
 </x-layout>

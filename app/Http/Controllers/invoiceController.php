@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\cart;
 use App\Models\Company;
 use App\Models\invoice;
 use App\Models\paymentTerms;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Barryvdh\DomPDF\Facade\Pdf as PDF;
 
 class invoiceController extends Controller
 {
@@ -147,6 +147,16 @@ class invoiceController extends Controller
         paymentTerms::firstOrCreate($terms);
 
         return redirect()->back();
+    }
+
+    public function downloadPDF($id): \Illuminate\Http\Response
+    {
+        $invoice = invoice::where('id', $id)->firstOrFail();
+
+        PDF::setOptions(['dpi' => 150, 'defaultFont' => 'sans-serif']);
+        $pdf = PDF::loadView('invoice.show', compact('invoice'));
+
+        return $pdf->download('invoice.pdf');
     }
 
     /**

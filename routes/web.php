@@ -54,6 +54,9 @@ Route::middleware('auth')->group(function () {
     Route::get('tax/edit/{id}', [taxController::class, 'edit'])->name('tax.edit');
     Route::patch('/tax/update/{id}', [taxController::class, 'update'])->name('tax.update');
     Route::delete('/tax/delete/{id}', [taxController::class, 'destroy'])->name('tax.destroy');
+
+    //download Invoice
+    Route::get('/download-pdf/{id}', [invoiceController::class, 'downloadPDF'])->name('invoice.download_pdf');
 });
 
 require __DIR__.'/auth.php';
