@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Catalog;
 use App\Models\Company;
 use App\Models\invoice;
 use App\Models\paymentTerms;
@@ -26,10 +27,26 @@ class invoiceController extends Controller
     {
         $user = Auth::user();
         $company = Company::where('slug', $slug)->firstOrFail();
+        $company_id = $company->id;
         $catalogs = $company->catalogs;
         $taxes = $company->taxes;
-        return view('invoice.create', compact('company', 'catalogs', 'user', 'taxes'));
+        $latestInvoice = invoice::where('company_id', $company_id)
+            ->orderBy('created_at', 'desc')
+            ->first();
+
+        if ($latestInvoice) {
+            $latestInvoiceNumber = $latestInvoice->invoice_number;
+            preg_match('/\d+$/', $latestInvoiceNumber, $matches);
+            $latestNumber = $matches ? intval($matches[0]) : 0;
+        } else {
+            $latestNumber = $company->invoice_numbering;
+        }
+
+        $invoiceSuffix = $latestNumber += 1;
+        $invoiceNumber = strtoupper($company->invoice_prefix) . '-' . $invoiceSuffix;
+        return view('invoice.create', compact('company', 'catalogs', 'user', 'taxes', 'latestInvoice', 'invoiceNumber'));
     }
+
 
     /**
      * Store a newly created resource in storage.
