@@ -42,6 +42,7 @@ Route::middleware('auth')->group(function () {
     Route::post('/{slug}/invoice', [invoiceController::class, 'store'])->name('invoice.store');
     Route::get('/{slug}/invoice', [invoiceController::class, 'create'])->name('invoice.create');
     Route::get('/invoice/{id}', [invoiceController::class, 'show'])->name('invoice.show');
+    Route::get('/get-price', [invoiceController::class, 'getPrice'])->name('getPrice');
 
     //terms of invoice .i.e. the duration of the invoice
     Route::get('{slug}/invoice/terms', [invoiceController::class, 'showTerms'])->name('invoice.show_terms');

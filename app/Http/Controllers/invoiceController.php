@@ -47,6 +47,17 @@ class invoiceController extends Controller
         return view('invoice.create', compact('company', 'catalogs', 'user', 'taxes', 'latestInvoice', 'invoiceNumber'));
     }
 
+    public function getPrice(Request $request)
+    {
+        $catalog = Catalog::find($request->id);
+
+        if ($catalog) {
+            return response()->json(['price' => $catalog->price]);
+        } else {
+            return response()->json(['error' => 'Catalog not found'], 404);
+        }
+    }
+
 
     /**
      * Store a newly created resource in storage.

@@ -201,7 +201,7 @@
                                                 <input
                                                     type="text"
                                                     class="form-control"
-                                                    disabled
+                                                    readonly
                                                     value="{{ $invoiceNumber }}"
                                                     id="invoiceId"
                                                 />
@@ -212,7 +212,7 @@
                                         </dt>
                                         <dd class="col-sm-6 d-flex justify-content-md-end">
                                             <div class="w-px-150">
-                                                <input type="text" class="form-control date-picker"  disabled value="{{ date
+                                                <input type="text" class="form-control date-picker"  readonly value="{{ date
                                                 ('Y-m-d') }}" />
                                             </div>
                                         </dd>
@@ -263,15 +263,20 @@
                                                             @endforeach
                                                         </select>
                                                     </div>
-{{--                                                    <div class="col-md-2 col-12 mb-md-0 mb-3">--}}
-{{--                                                        <p class="mb-2 repeater-title">Unit</p>--}}
-{{--                                                        <input--}}
-{{--                                                            type="text"--}}
-{{--                                                            name="price"--}}
-{{--                                                            class="form-control invoice-item-qty quantity"--}}
-{{--                                                            value="{{ $catalog->price }}"--}}
-{{--                                                        />--}}
-{{--                                                    </div>--}}
+                                                    <div class="col-md-2 col-12 mb-md-0 mb-3">
+                                                        <p class="mb-2 repeater-title">Unit</p>
+                                                        <div class="d-flex gap-1 align-items-center border
+                                                        border-dark ">
+                                                            <span class="p-2">GH₵</span>
+                                                            <input
+                                                                type="text"
+                                                                name="price"
+                                                                class="form-control invoice-item-qty quantity border-0"
+                                                                value=""
+                                                                readonly
+                                                            />
+                                                        </div>
+                                                    </div>
                                                     <div class="col-md-2 col-12 mb-md-0 mb-3">
                                                         <p class="mb-2 repeater-title">Qty</p>
                                                         <input
@@ -281,15 +286,20 @@
                                                             placeholder="1"
                                                         />
                                                     </div>
-{{--                                                    <div class="col-md-2 col-12 mb-md-0 mb-3">--}}
-{{--                                                        <p class="mb-2 repeater-title">Price</p>--}}
-{{--                                                        <input--}}
-{{--                                                            type="text"--}}
-{{--                                                            name="price"--}}
-{{--                                                            class="form-control invoice-item-qty quantity"--}}
-{{--                                                            placeholder="$24.00"--}}
-{{--                                                        />--}}
-{{--                                                    </div>--}}
+                                                    <div class="col-md-2 col-12 mb-md-0 mb-3">
+                                                        <p class="mb-2 repeater-title">Total</p>
+                                                        <div class="d-flex gap-1 align-items-center border
+                                                        border-dark ">
+                                                            <span class="p-2">GH₵</span>
+                                                            <input
+                                                                type="text"
+                                                                name="total[]"
+                                                                class="form-control invoice-item-qty quantity border-0"
+                                                                value=""
+                                                                readonly
+                                                            />
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -357,17 +367,11 @@
                 <div class="col-lg-3 col-12 invoice-actions">
                     <div class="card mb-4">
                         <div class="card-body">
-                            <button
-                                class="btn btn-primary d-grid w-100 mb-3"
-                                data-bs-toggle="offcanvas"
-                                data-bs-target="#sendInvoiceOffcanvas"
+                            <input
+                                type="submit"
+                                class="bg-blue-400 text-white rounded-lg w-full py-2 px-4 hover:bg-blue-800 cursor-pointer"
+                                value="Submit"
                             >
-                            <span class="d-flex align-items-center justify-content-center text-nowrap"
-                            ><i class="bx bx-paper-plane bx-xs me-3"></i>Send Invoice</span
-                            >
-                            </button>
-                            <button type="submit" class="btn btn-label-secondary d-grid w-100">Save /
-                                Preview</button>
                         </div>
                     </div>
                     <div>
@@ -392,7 +396,6 @@
                                         </select>
                                     </div>
                                 </div>
-                                {{--                    <button type="button" class="remove-item bg-red-500 text-white rounded-lg px-2 py-1">Remove</button>--}}
                             </div>
                         </div>
 
@@ -408,80 +411,52 @@
                 </div>
                 <!-- /Invoice Actions -->
             </div>
-
-{{--            <!-- Offcanvas -->--}}
-{{--            <!-- Send Invoice Sidebar -->--}}
-{{--            <div class="offcanvas offcanvas-end" id="sendInvoiceOffcanvas" aria-hidden="true">--}}
-{{--                <div class="offcanvas-header border-bottom">--}}
-{{--                    <h6 class="offcanvas-title">Send Invoice</h6>--}}
-{{--                    <button--}}
-{{--                        type="button"--}}
-{{--                        class="btn-close text-reset"--}}
-{{--                        data-bs-dismiss="offcanvas"--}}
-{{--                        aria-label="Close"--}}
-{{--                    ></button>--}}
-{{--                </div>--}}
-{{--                <div class="offcanvas-body flex-grow-1">--}}
-{{--                    <form>--}}
-{{--                        <div class="mb-3">--}}
-{{--                            <label for="invoice-from" class="form-label">From</label>--}}
-{{--                            <input--}}
-{{--                                type="text"--}}
-{{--                                class="form-control"--}}
-{{--                                id="invoice-from"--}}
-{{--                                value="shelbyComapny@email.com"--}}
-{{--                                placeholder="company@email.com"--}}
-{{--                            />--}}
-{{--                        </div>--}}
-{{--                        <div class="mb-3">--}}
-{{--                            <label for="invoice-to" class="form-label">To</label>--}}
-{{--                            <input--}}
-{{--                                type="text"--}}
-{{--                                class="form-control"--}}
-{{--                                id="invoice-to"--}}
-{{--                                value="qConsolidated@email.com"--}}
-{{--                                placeholder="company@email.com"--}}
-{{--                            />--}}
-{{--                        </div>--}}
-{{--                        <div class="mb-3">--}}
-{{--                            <label for="invoice-subject" class="form-label">Subject</label>--}}
-{{--                            <input--}}
-{{--                                type="text"--}}
-{{--                                class="form-control"--}}
-{{--                                id="invoice-subject"--}}
-{{--                                value="Invoice of purchased Admin Templates"--}}
-{{--                                placeholder="Invoice regarding goods"--}}
-{{--                            />--}}
-{{--                        </div>--}}
-{{--                        <div class="mb-3">--}}
-{{--                            <label for="invoice-message" class="form-label">Message</label>--}}
-{{--                            <textarea class="form-control" name="invoice-message" id="invoice-message" cols="3" rows="8">--}}
-{{--                                Dear Queen Consolidated,--}}
-{{--                                  Thank you for your business, always a pleasure to work with you!--}}
-{{--                                  We have generated a new invoice in the amount of $95.59--}}
-{{--                                  We would appreciate payment of this invoice by 05/11/2021--}}
-{{--                            </textarea>--}}
-{{--                        </div>--}}
-{{--                        <div class="mb-4">--}}
-{{--                          <span class="badge bg-label-primary">--}}
-{{--                            <i class="bx bx-link bx-xs"></i>--}}
-{{--                            <span class="align-middle">Invoice Attached</span>--}}
-{{--                          </span>--}}
-{{--                        </div>--}}
-{{--                        <div class="mb-3 d-flex flex-wrap">--}}
-{{--                            <button type="button" class="btn btn-primary me-3" data-bs-dismiss="offcanvas">Send</button>--}}
-{{--                            <button type="button" class="btn btn-label-secondary" data-bs-dismiss="offcanvas">Cancel</button>--}}
-{{--                        </div>--}}
-{{--                    </form>--}}
-{{--                </div>--}}
-{{--            </div>--}}
-{{--        </form>--}}
-{{--        <!-- /Send Invoice Sidebar -->--}}
-{{--        <!-- /Offcanvas -->--}}
+        </form>
+        <!-- /Send Invoice Sidebar -->
+        <!-- /Offcanvas -->
     </div>
 </x-layout>
 
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
+    $(document).ready(function() {
+
+        // Function to update the total price based on the unit price and quantity
+        function updateTotal($itemGroup) {
+            var price = parseFloat($itemGroup.find('input[name="price"]').val()) || 0;
+            var quantity = parseFloat($itemGroup.find('input[name="quantity[]"]').val()) || 1;
+            var total = price * quantity;
+            $itemGroup.find('input[name="total[]"]').val(total.toFixed(2)); // Set the total value
+        }
+
+        // Event listener for when the item is selected from the dropdown
+        $(document).on('change', '.catalog_id', function() {
+            var catalogId = $(this).val(); // Get the selected catalog ID
+            var $itemGroup = $(this).closest('.item-group'); // Get the entire item group
+
+            $.ajax({
+                url: '/get-price', // route to fetch the price
+                method: 'GET',
+                data: { id: catalogId },
+                success: function(response) {
+                    $itemGroup.find('input[name="price"]').val(response.price); // Update the price input field
+                    updateTotal($itemGroup); // Calculate the total price
+                },
+                error: function() {
+                    alert('Failed to fetch the price. Please try again.');
+                }
+            });
+        });
+
+        // Event listener for when the quantity is changed
+        $(document).on('input', 'input[name="quantity[]"]', function() {
+            var $itemGroup = $(this).closest('.item-group'); // Get the entire item group
+            updateTotal($itemGroup); // Recalculate the total price
+        });
+    });
+
+
     document.getElementById('addItem').addEventListener('click', function () {
         var itemContainer = document.getElementById('itemContainer');
         var itemGroup = document.querySelector('.item-group');
