@@ -75,7 +75,7 @@ class invoiceController extends Controller
             'term_id' => 'required|exists:payment_terms,id',
             'quantity.*' => 'required|integer|min:1',
             'tax_id.*' => 'required|exists:taxes,id',
-            'discount' => 'integer|min:1',
+            'discount' => 'integer|min:0',
             'email' => 'string|email|nullable|max:255',
             'phone' => 'string|nullable|max:255',
             'address' => 'string|nullable|max:255',
