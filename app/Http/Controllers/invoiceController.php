@@ -146,9 +146,10 @@ class invoiceController extends Controller
      */
     public function show($id)
     {
+        $user = Auth::user();
         $invoice = invoice::with('catalogs', 'taxes', 'paymentTerms')->findOrFail($id);
 
-        return view('invoice.show', compact('invoice'));
+        return view('invoice.show', compact('invoice', 'user'));
     }
 
     //terms of invoice

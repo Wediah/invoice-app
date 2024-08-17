@@ -269,7 +269,7 @@
                                                         border-dark ">
                                                             <span class="p-2">GH₵</span>
                                                             <input
-                                                                type="text"
+                                                                type="number"
                                                                 name="price"
                                                                 class="form-control invoice-item-qty quantity border-0"
                                                                 value=""
@@ -280,7 +280,7 @@
                                                     <div class="col-md-2 col-12 mb-md-0 mb-3">
                                                         <p class="mb-2 repeater-title">Qty</p>
                                                         <input
-                                                            type="text"
+                                                            type="number"
                                                             name="quantity[]"
                                                             class="form-control invoice-item-qty quantity w-100"
                                                             placeholder="1"
@@ -288,9 +288,8 @@
                                                     </div>
                                                     <div class="col-md-2 col-12 mb-md-0 mb-3">
                                                         <p class="mb-2 repeater-title">Total</p>
-                                                        <div class="d-flex gap-1 align-items-center border
-                                                        border-dark ">
-                                                            <span class="p-2">GH₵</span>
+                                                        <div class="d-flex align-items-center  ">
+                                                            <span class="py-2">GH₵</span>
                                                             <input
                                                                 type="text"
                                                                 name="total[]"
@@ -325,27 +324,27 @@
                                         $user->first_name }}" />
                                     </div>
                                 </div>
-{{--                                <div class="col-md-6 d-flex justify-content-end">--}}
-{{--                                    <div class="invoice-calculations">--}}
-{{--                                        <div class="d-flex justify-content-between mb-2">--}}
-{{--                                            <span class="w-px-100">Subtotal:</span>--}}
-{{--                                            <span class="fw-semibold">$00.00</span>--}}
-{{--                                        </div>--}}
-{{--                                        <div class="d-flex justify-content-between mb-2">--}}
-{{--                                            <span class="w-px-100">Discount:</span>--}}
-{{--                                            <span class="fw-semibold">$00.00</span>--}}
-{{--                                        </div>--}}
-{{--                                        <div class="d-flex justify-content-between mb-2">--}}
-{{--                                            <span class="w-px-100">Tax:</span>--}}
-{{--                                            <span class="fw-semibold">$00.00</span>--}}
-{{--                                        </div>--}}
-{{--                                        <hr />--}}
-{{--                                        <div class="d-flex justify-content-between">--}}
-{{--                                            <span class="w-px-100">Total:</span>--}}
-{{--                                            <span class="fw-semibold">$00.00</span>--}}
-{{--                                        </div>--}}
-{{--                                    </div>--}}
-{{--                                </div>--}}
+                                <div class="col-md-6 d-flex justify-content-end">
+                                    <div class="invoice-calculations">
+                                        <div class="d-flex justify-content-between mb-2">
+                                            <span class="w-px-100">Subtotal:</span>
+                                            <span class="fw-semibold" id="subtotal">GH₵ 0.00</span>
+                                        </div>
+                                        <div class="d-flex justify-content-between mb-2">
+                                            <span class="w-px-100">Discount:</span>
+                                            <span class="fw-semibold" id="discount">GH₵ 0.00</span>
+                                        </div>
+                                        <div class="d-flex justify-content-between mb-2">
+                                            <span class="w-px-100">Tax:</span>
+                                            <span class="fw-semibold">Submit to see</span>
+                                        </div>
+                                        <hr />
+                                        <div class="d-flex justify-content-between">
+                                            <span class="w-px-100">Total:</span>
+                                            <span class="fw-semibold" id="total">GH₵ 0.00</span>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
 
                             <hr class="my-4" />
@@ -422,26 +421,48 @@
 <script>
     $(document).ready(function() {
 
-        // Function to update the total price based on the unit price and quantity
         function updateTotal($itemGroup) {
             var price = parseFloat($itemGroup.find('input[name="price"]').val()) || 0;
             var quantity = parseFloat($itemGroup.find('input[name="quantity[]"]').val()) || 1;
             var total = price * quantity;
             $itemGroup.find('input[name="total[]"]').val(total.toFixed(2)); // Set the total value
+            updateInvoiceCalculations(); // Update overall invoice calculations
         }
 
-        // Event listener for when the item is selected from the dropdown
+        function updateInvoiceCalculations() {
+            var subtotal = 0;
+
+            // Calculate the subtotal by summing all the item totals
+            $('input[name="total[]"]').each(function() {
+                subtotal += parseFloat($(this).val()) || 0;
+            });
+
+            var discount = calculateDiscount(subtotal); // Calculate the discount based on user input
+            var total = subtotal - discount;
+
+            // Update the UI with the calculated values
+            $('#subtotal').text('$' + subtotal.toFixed(2));
+            $('#discount').text('$' + discount.toFixed(2));
+            $('#total').text('$' + total.toFixed(2));
+        }
+
+        function calculateDiscount(subtotal) {
+            var discountPercentage = parseFloat($('input[name="discount"]').val()) || 0;
+            return subtotal * (discountPercentage / 100);
+        }
+
+        // Handle item selection and quantity input changes
         $(document).on('change', '.catalog_id', function() {
-            var catalogId = $(this).val(); // Get the selected catalog ID
-            var $itemGroup = $(this).closest('.item-group'); // Get the entire item group
+            var catalogId = $(this).val();
+            var $itemGroup = $(this).closest('.item-group');
 
             $.ajax({
-                url: '/get-price', // route to fetch the price
+                url: '/get-price',
                 method: 'GET',
                 data: { id: catalogId },
                 success: function(response) {
-                    $itemGroup.find('input[name="price"]').val(response.price); // Update the price input field
-                    updateTotal($itemGroup); // Calculate the total price
+                    $itemGroup.find('input[name="price"]').val(response.price);
+                    updateTotal($itemGroup);
                 },
                 error: function() {
                     alert('Failed to fetch the price. Please try again.');
@@ -449,11 +470,16 @@
             });
         });
 
-        // Event listener for when the quantity is changed
         $(document).on('input', 'input[name="quantity[]"]', function() {
-            var $itemGroup = $(this).closest('.item-group'); // Get the entire item group
-            updateTotal($itemGroup); // Recalculate the total price
+            var $itemGroup = $(this).closest('.item-group');
+            updateTotal($itemGroup);
         });
+
+        // Trigger update when the discount input changes
+        $(document).on('input', 'input[name="discount"]', function() {
+            updateInvoiceCalculations(); // Recalculate the total when discount changes
+        });
+
     });
 
 
