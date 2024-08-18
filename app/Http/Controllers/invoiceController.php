@@ -15,9 +15,12 @@ class invoiceController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index($slug)
     {
-        //
+        $company = Company::where('slug', $slug)->firstOrFail();
+        $allInvoices = $company->invoices->sortByDesc('created_at');
+
+        return view('invoice.index', compact('company', 'allInvoices'));
     }
 
     /**

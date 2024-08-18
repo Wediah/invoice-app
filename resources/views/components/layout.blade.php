@@ -31,7 +31,7 @@
 <section class="px-6 py-4 bg-zinc-200">
     <nav class="flex justify-between items-center ">
         @auth
-            <a href="" class="text-lg font-bold ">Invoice</a>
+            <a href="/" class="text-lg font-bold ">Invoice</a>
 
             <div class=" flex items-center gap-3">
                 <a href="{{ route('company.create') }}" class="text-sm font-bold uppercase">New Company</a>
