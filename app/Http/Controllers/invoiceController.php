@@ -86,6 +86,8 @@ class invoiceController extends Controller
             'fax' => 'string|nullable|max:255',
             'due_date' => 'string|nullable|max:255',
             'notes' => 'string|nullable|max:255',
+            'total' => 'required|integer|min:1',
+            'balance' => 'required|integer|min:1',
         ]);
 
         $latestInvoice = invoice::where('company_id', $company_id)
@@ -117,6 +119,8 @@ class invoiceController extends Controller
             'fax' => $validatedData['fax'],
             'due_date' => $validatedData['due_date'],
             'notes' => $validatedData['notes'],
+            'total' => $validatedData['total'],
+            'balance' => $validatedData['balance'],
         ]);
 
         $catalogIds = $request->input('catalog_id');

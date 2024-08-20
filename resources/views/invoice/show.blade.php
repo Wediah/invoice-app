@@ -225,15 +225,15 @@
                                     </p>
                                 </td>
                                 <td class="px-4 py-5">
-                                    <div class="d-flex gap-4">
+                                    <div class="d-flex justify-content-between">
                                         <p>Subtotal:</p>
                                         <p class="fw-semibold mb-2">GH₵{{ number_format($totalPrice, 2) }}</p>
                                     </div>
-                                    <div class="d-flex gap-4">
+                                    <div class="d-flex justify-content-between">
                                         <p>Discount:</p>
                                         <p class="fw-semibold mb-2">GH₵{{ number_format($discountedAmount, 2) }}</p>
                                     </div>
-                                    <div class="d-flex gap-4">
+                                    <div class="d-flex justify-content-between">
                                         <p>Tax(es)</p>
                                         <p class="fw-semibold mb-2"></p>
                                     </div>
@@ -255,13 +255,13 @@
                                             @endphp
                                             <div>
                                                 @if($tax->type == 'PRIMARY')
-                                                    <div class="d-flex gap-4">
+                                                    <div class="d-flex justify-content-between">
                                                         <p>{{ $tax->tax_name }}({{ $tax->tax_percentage}}%):</p>
                                                         <p class="fw-semibold mb-2">GH₵{{ number_format($primaryTax, 2) }}</p>
                                                     </div>
 {{--                                                    {{ $tax->tax_name }}({{ $tax->tax_percentage}}%): GH₵{{ number_format($primaryTax, 2) }}--}}
                                                 @else
-                                                    <div class="d-flex gap-4">
+                                                    <div class="d-flex justify-content-between">
                                                         <p>{{ $tax->tax_name }}({{ $tax->tax_percentage}}%):</p>
                                                         <p class="fw-semibold mb-2">GH₵{{ number_format($secondaryTax,
                                                          2) }}</p>
@@ -280,7 +280,7 @@
                                         // Calculate the final total price after adding the tax
                                         $finalTotalPrice = $totalPriceAfterDiscount + $totalTax;
                                     @endphp
-                                    <div class="d-flex gap-4">
+                                    <div class="d-flex justify-content-between">
                                         <p class="mb-0">Total:</p>
                                         <p class="fw-semibold mb-0">GH₵{{ number_format($finalTotalPrice, 2) }}</p>
                                     </div>

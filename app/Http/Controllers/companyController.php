@@ -162,7 +162,7 @@ class companyController extends Controller
 //        return view('company.edit', compact('company'));
 //    }
 
-    public function update(Request $request,$slug)
+    public function update(Request $request,$slug): RedirectResponse
     {
         $company = Company::where('slug', $slug)->first();
 

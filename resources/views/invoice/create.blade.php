@@ -326,28 +326,49 @@
                                 </div>
                                 <div class="col-md-6 d-flex justify-content-end">
                                     <div class="invoice-calculations">
-                                        <div class="d-flex justify-content-between mb-2">
+                                        <div class="d-flex justify-content-between mb-2 gap-4">
                                             <span class="w-px-100">Subtotal:</span>
                                             <span class="fw-semibold" id="subtotal">GH₵ 0.00</span>
                                         </div>
-                                        <div class="d-flex justify-content-between mb-2">
+                                        <div class="d-flex justify-content-between mb-2 gap-4">
                                             <span class="w-px-100">Discount:</span>
                                             <span class="fw-semibold" id="discount">GH₵ 0.00</span>
                                         </div>
-                                        <div class="d-flex justify-content-between mb-2">
-                                            <span class="w-px-100">Tax:</span>
-                                            <span class="fw-semibold">Submit to see</span>
-                                        </div>
+
+                                        <!-- Taxes Section -->
+                                        <div id="tax_display" class="mb-2"></div>
+
                                         <hr />
-                                        <div class="d-flex justify-content-between">
+
+                                        <div class="d-flex justify-content-between gap-4">
                                             <span class="w-px-100">Total:</span>
                                             <span class="fw-semibold" id="total">GH₵ 0.00</span>
                                         </div>
+
+                                        <input type="text" id="total-hidden-input" name="total" value="0.00">
                                     </div>
+
                                 </div>
                             </div>
 
                             <hr class="my-4" />
+
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="mb-3">
+                                        <label for="note" class="form-label fw-semibold">Balance:</label>
+                                        <div class="d-flex gap-1 align-items-center border border-dark ">
+                                            <span class="py-2 px-2">GH₵</span>
+                                            <input
+                                                type="number"
+                                                name="balance"
+                                                class="form-control  border-0"
+                                                placeholder="Balance to be paid"
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
 
                             <div class="row">
                                 <div class="col-12">
@@ -381,7 +402,8 @@
                             @endforeach
                         </select>
 
-                        <x-form.input name="discount" placeholder="Enter discount" label="Discount" class="discount"/>
+                        <x-form.input type="number" name="discount" placeholder="Enter discount" label="Discount"
+                                      class="discount"/>
 
                         <div id="taxContainer">
                             <div class="flex flex-row gap-3 items-center tax-group">
@@ -390,7 +412,9 @@
                                     <div class="mt-2">
                                         <select name="tax_id[]" class="tax_id border border-gray-400 rounded-lg p-2 w-full">
                                             @foreach($taxes as $tax)
-                                                <option value="{{ $tax->id }}">{{ $tax->tax_name }}</option>
+                                                <option value="{{ $tax->id }}" data-rate="{{ $tax->tax_percentage }}" data-type="{{ $tax->type }}">
+                                                    {{ $tax->tax_name }}
+                                                </option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -419,6 +443,111 @@
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
+    // $(document).ready(function() {
+    //
+    //     function updateTotal($itemGroup) {
+    //         var price = parseFloat($itemGroup.find('input[name="price"]').val()) || 0;
+    //         var quantity = parseFloat($itemGroup.find('input[name="quantity[]"]').val()) || 1;
+    //         var total = price * quantity;
+    //         $itemGroup.find('input[name="total[]"]').val(total.toFixed(2)); // Set the total value
+    //         updateInvoiceCalculations(); // Update overall invoice calculations
+    //     }
+    //
+    //     function updateInvoiceCalculations() {
+    //         var subtotal = 0;
+    //         var totalPrimaryTax = 0;
+    //         var totalSecondaryTax = 0;
+    //
+    //         // Calculate the subtotal by summing all the item totals
+    //         $('input[name="total[]"]').each(function() {
+    //             subtotal += parseFloat($(this).val()) || 0;
+    //         });
+    //
+    //         var discount = calculateDiscount(subtotal); // Calculate the discount based on user input
+    //         var totalAfterDiscount = subtotal - discount; // New total after discount
+    //
+    //         // Calculate the taxes
+    //         var totalAfterPrimaryTax = totalAfterDiscount;
+    //         $('select.tax_id option:selected').each(function() {
+    //             var taxRate = parseFloat($(this).data('rate')) || 0;
+    //             var taxType = $(this).data('type'); // Assuming the type is stored in a data attribute
+    //             var taxAmount = 0;
+    //
+    //             if (taxType === 'PRIMARY') {
+    //                 taxAmount = totalAfterDiscount * (taxRate / 100); // Calculate primary tax on discounted total
+    //                 totalPrimaryTax += taxAmount;
+    //                 totalAfterPrimaryTax += taxAmount; // Add primary tax to the total
+    //             } else if (taxType === 'SECONDARY') {
+    //                 taxAmount = totalAfterPrimaryTax * (taxRate / 100); // Calculate secondary tax on the new total
+    //                 totalSecondaryTax += taxAmount;
+    //             }
+    //         });
+    //
+    //         var finalTotal = totalAfterPrimaryTax + totalSecondaryTax; // Final total after adding all taxes
+    //
+    //         // Display all taxes combined in the UI
+    //         displayTax(totalPrimaryTax, totalSecondaryTax);
+    //
+    //         // Update the UI with the calculated values
+    //         $('#subtotal').text('GH₵' + subtotal.toFixed(2));
+    //         $('#discount').text('GH₵' + discount.toFixed(2));
+    //         $('#total').text('GH₵' + finalTotal.toFixed(2));
+    //         $('#total-hidden-input').val(finalTotal.toFixed(2));
+    //     }
+    //
+    //     function calculateDiscount(subtotal) {
+    //         var discountPercentage = parseFloat($('input[name="discount"]').val()) || 0;
+    //         return subtotal * (discountPercentage / 100);
+    //     }
+    //
+    //     function displayTax(totalPrimaryTax, totalSecondaryTax) {
+    //         var totalTax = totalPrimaryTax + totalSecondaryTax;
+    //         var taxDisplay = `
+    //         <div class="d-flex gap-4">
+    //             <p>Total Tax:</p>
+    //             <p class="fw-semibold mb-2">GH₵${totalTax.toFixed(2)}</p>
+    //         </div>
+    //     `;
+    //         $('#tax_display').html(taxDisplay); // Replace the content with the total tax
+    //     }
+    //
+    //     // Handle item selection and quantity input changes
+    //     $(document).on('change', '.catalog_id', function() {
+    //         var catalogId = $(this).val();
+    //         var $itemGroup = $(this).closest('.item-group');
+    //
+    //         $.ajax({
+    //             url: '/get-price',
+    //             method: 'GET',
+    //             data: { id: catalogId },
+    //             success: function(response) {
+    //                 $itemGroup.find('input[name="price"]').val(response.price);
+    //                 updateTotal($itemGroup);
+    //             },
+    //             error: function() {
+    //                 alert('Failed to fetch the price. Please try again.');
+    //             }
+    //         });
+    //     });
+    //
+    //     $(document).on('input', 'input[name="quantity[]"]', function() {
+    //         var $itemGroup = $(this).closest('.item-group');
+    //         updateTotal($itemGroup);
+    //     });
+    //
+    //     // Trigger update when the discount input changes
+    //     $(document).on('input', 'input[name="discount"]', function() {
+    //         updateInvoiceCalculations(); // Recalculate the total when discount changes
+    //     });
+    //
+    //     // Trigger update when tax selection changes
+    //     $(document).on('change', '.tax_id', function() {
+    //         $('#tax_display').empty(); // Clear previous tax display before recalculating
+    //         updateInvoiceCalculations(); // Recalculate the total when taxes are selected/changed
+    //     });
+    //
+    // });
+
     $(document).ready(function() {
 
         function updateTotal($itemGroup) {
@@ -431,6 +560,9 @@
 
         function updateInvoiceCalculations() {
             var subtotal = 0;
+            var totalPrimaryTax = 0;
+            var totalSecondaryTax = 0;
+            var allTaxes = []; // Array to hold all taxes
 
             // Calculate the subtotal by summing all the item totals
             $('input[name="total[]"]').each(function() {
@@ -438,17 +570,57 @@
             });
 
             var discount = calculateDiscount(subtotal); // Calculate the discount based on user input
-            var total = subtotal - discount;
+            var totalAfterDiscount = subtotal - discount; // New total after discount
+
+            // Loop through the selected taxes and apply them
+            $('select.tax_id option:selected').each(function() {
+                var taxRate = parseFloat($(this).data('rate')) || 0;
+                var taxType = $(this).data('type'); // Assuming the type is stored in a data attribute
+                var taxAmount = 0;
+
+                if (taxType === 'PRIMARY') {
+                    taxAmount = totalAfterDiscount * (taxRate / 100); // Calculate primary tax on discounted total
+                    totalPrimaryTax += taxAmount;
+                    allTaxes.push({ name: $(this).text(), rate: taxRate, amount: taxAmount });
+                } else if (taxType === 'SECONDARY') {
+                    var newTotal = totalAfterDiscount + totalPrimaryTax; // New total after adding primary tax
+                    taxAmount = newTotal * (taxRate / 100); // Calculate secondary tax on the new total
+                    totalSecondaryTax += taxAmount;
+                    allTaxes.push({ name: $(this).text(), rate: taxRate, amount: taxAmount });
+                }
+            });
+
+            var finalTotal = totalAfterDiscount + totalPrimaryTax + totalSecondaryTax; // Final total after adding taxes
+
+            // Display all taxes together
+            displayTax(allTaxes);
 
             // Update the UI with the calculated values
-            $('#subtotal').text('$' + subtotal.toFixed(2));
-            $('#discount').text('$' + discount.toFixed(2));
-            $('#total').text('$' + total.toFixed(2));
+            $('#subtotal').text('GH₵' + subtotal.toFixed(2));
+            $('#discount').text('GH₵' + discount.toFixed(2));
+            $('#total').text('GH₵' + finalTotal.toFixed(2));
+            $('#total-hidden-input').val(finalTotal.toFixed(2));
         }
 
         function calculateDiscount(subtotal) {
             var discountPercentage = parseFloat($('input[name="discount"]').val()) || 0;
             return subtotal * (discountPercentage / 100);
+        }
+
+        function displayTax(allTaxes) {
+            var taxDisplay = '';
+
+            // Display each tax individually
+            allTaxes.forEach(function(tax) {
+                taxDisplay += `
+                <div class="d-flex justify-content-between gap-4">
+                    <p>${tax.name} (${tax.rate}%):</p>
+                    <p class="fw-semibold mb-2">GH₵${tax.amount.toFixed(2)}</p>
+                </div>
+            `;
+            });
+
+            $('#tax_display').html(taxDisplay); // Replace the content with all the taxes
         }
 
         // Handle item selection and quantity input changes
@@ -478,6 +650,12 @@
         // Trigger update when the discount input changes
         $(document).on('input', 'input[name="discount"]', function() {
             updateInvoiceCalculations(); // Recalculate the total when discount changes
+        });
+
+        // Trigger update when tax selection changes
+        $(document).on('change', '.tax_id', function() {
+            $('#tax_display').empty(); // Clear previous tax display before recalculating
+            updateInvoiceCalculations(); // Recalculate the total when taxes are selected/changed
         });
 
     });
