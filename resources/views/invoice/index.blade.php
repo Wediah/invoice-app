@@ -26,11 +26,25 @@
                             <td>{{ $invoice->invoice_number }}</td>
                             <td></td>
                             <td>{{ $invoice->customer_name }}</td>
-                            <td></td>
+                            <td> GH¢{{ number_format((float)$invoice->total, 2) }}</td>
                             <td>{{ $invoice->created_at->format('d/m/Y') }}</td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
+                            <td> GH¢{{ number_format((float)$invoice->balance, 2) }}</td>
+                            <td>{{ $invoice->status }}</td>
+                            <td>
+                                <div class="d-flex gap-2 items-center">
+                                    <i class='bx bx-edit'></i>
+                                    <form action="{{ route('invoice.delete', ['id' => $invoice->id]) }}"
+                                          method="POST" onsubmit="return confirm('Are you sure you want to delete ' +
+                                           'this invoice?');">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn "><i class='bx
+                                        bx-trash'
+                                            ></i></button>
+                                    </form>
+                                    <i class='bx bx-dots-vertical-rounded' ></i>
+                                </div>
+                            </td>
                         </tr>
                         @endforeach
                     </tbody>

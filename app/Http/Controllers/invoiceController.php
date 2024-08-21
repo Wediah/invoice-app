@@ -6,6 +6,7 @@ use App\Models\Catalog;
 use App\Models\Company;
 use App\Models\invoice;
 use App\Models\paymentTerms;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Barryvdh\DomPDF\Facade\Pdf as PDF;
@@ -78,7 +79,7 @@ class invoiceController extends Controller
             'term_id' => 'required|exists:payment_terms,id',
             'quantity.*' => 'required|integer|min:1',
             'tax_id.*' => 'required|exists:taxes,id',
-            'discount' => 'integer|min:0',
+            'discount' => 'numeric|min:0',
             'email' => 'string|email|nullable|max:255',
             'phone' => 'string|nullable|max:255',
             'address' => 'string|nullable|max:255',
@@ -86,8 +87,8 @@ class invoiceController extends Controller
             'fax' => 'string|nullable|max:255',
             'due_date' => 'string|nullable|max:255',
             'notes' => 'string|nullable|max:255',
-            'total' => 'required|integer|min:1',
-            'balance' => 'required|integer|min:1',
+            'total' => 'required|numeric|regex:/^\d+(\.\d{1,2})?$/',
+            'balance' => 'required|numeric|regex:/^\d+(\.\d{1,2})?$/',
         ]);
 
         $latestInvoice = invoice::where('company_id', $company_id)
@@ -214,8 +215,12 @@ class invoiceController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(string $id): RedirectResponse
     {
-        //
+        $deleteInvoice = Invoice::findOrFail($id);
+
+        $deleteInvoice->delete();
+
+        return redirect()->intended(route('invoice.index', absolute: false));
     }
 }

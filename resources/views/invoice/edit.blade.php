@@ -9,10 +9,10 @@
                 </ul>
             </div>
         @endif
-        <form method="POST" action="{{ route('invoice.store', ['slug' => $company->slug]) }}" class="mt-10 space-y-6"
+        <form method="POST" action="{{ route('invoice.update', ['slug' => $company->slug]) }}" class="mt-10 space-y-6"
               enctype="multipart/form-data">
             @csrf
-
+            @method('PATCH')
             <div class="row invoice-add">
                 <!-- Invoice Add-->
                 <div class="col-lg-9 col-12 mb-lg-0 mb-4">
@@ -452,7 +452,7 @@
             removeButton.addEventListener('click',
                 function() {
                     this.parentNode.remove();
-            });
+                });
             newTaxGroup.appendChild(removeButton);
         }
 

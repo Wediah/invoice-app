@@ -1,5 +1,6 @@
 <div class="max-w-lg p-6 mx-auto">
-    <form action="{{ route('company.update', ['slug'=> $company->slug]) }}" method="POST" enctype="multipart/form-data">
+    <form action="{{ route('company.update', ['slug'=> $company->slug]) }}" method="POST"
+          enctype="multipart/form-data">
         @method('PATCH')
         @csrf
         <x-form.input name="name" label="Name" value="{{ $company->name }}"/>

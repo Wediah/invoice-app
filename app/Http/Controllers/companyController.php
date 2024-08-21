@@ -179,7 +179,10 @@ class companyController extends Controller
         $updateData = [
             'user_id' => Auth::id(),
             'name' => $validatedData['name'] ?? $company->name,
-            'slug' => SlugService::createSlug(Company::class, 'slug', $validatedData['name']),
+            'slug' => $company->name == $validatedData['name'] ? $company->slug : SlugService::createSlug
+            (Company::class,
+                'slug',
+                    $validatedData['name']),
             'email' => $validatedData['email'] ?? $company->email,
             'phone' => $validatedData['phone'] ?? $company->phone,
             'address' => $validatedData['address'] ?? $company->address,

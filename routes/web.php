@@ -24,7 +24,7 @@ Route::middleware('auth')->group(function () {
     //company
     Route::get('/company/create', [CompanyController::class, 'create'])->name('company.create');
     Route::post('/company', [CompanyController::class, 'store'])->name('company.store');
-    Route::patch('/company/{slug}', [CompanyController::class, 'update'])->name('company.update');
+    Route::patch('/company/{slug}/update', [CompanyController::class, 'update'])->name('company.update');
     Route::delete('/company', [CompanyController::class, 'destroy'])->name('company.destroy');
     Route::get('/dashboard', [CompanyController::class, 'userAndCompany'])->name('dashboard');
     Route::get('/company/{slug}', [CompanyController::class, 'show'])->name('company.show');
@@ -44,6 +44,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/{slug}/invoice', [invoiceController::class, 'create'])->name('invoice.create');
     Route::get('/invoice/{id}', [invoiceController::class, 'show'])->name('invoice.show');
     Route::get('/get-price', [invoiceController::class, 'getPrice'])->name('getPrice');
+    Route::delete('/invoice/{id}/delete', [invoiceController::class, 'destroy'])->name('invoice.delete');
 
     //terms of invoice .i.e. the duration of the invoice
     Route::get('{slug}/invoice/terms', [invoiceController::class, 'showTerms'])->name('invoice.show_terms');
