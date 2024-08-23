@@ -45,6 +45,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/invoice/{id}', [invoiceController::class, 'show'])->name('invoice.show');
     Route::get('/get-price', [invoiceController::class, 'getPrice'])->name('getPrice');
     Route::delete('/invoice/{id}/delete', [invoiceController::class, 'destroy'])->name('invoice.delete');
+    Route::get('/invoice/{id}/edit', [invoiceController::class, 'edit'])->name('invoice.edit');
+    Route::patch('/invoice/{id}/paid', [invoiceController::class, 'paidInvoice'])->name('invoice.paid');
+    Route::patch('/invoice/{id}/unpaid', [invoiceController::class, 'unpaidInvoice'])->name('invoice.unpaid');
 
     //terms of invoice .i.e. the duration of the invoice
     Route::get('{slug}/invoice/terms', [invoiceController::class, 'showTerms'])->name('invoice.show_terms');

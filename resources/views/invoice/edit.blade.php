@@ -9,7 +9,7 @@
                 </ul>
             </div>
         @endif
-        <form method="POST" action="{{ route('invoice.update', ['slug' => $company->slug]) }}" class="mt-10 space-y-6"
+        <form method="POST" action="" class="mt-10 space-y-6"
               enctype="multipart/form-data">
             @csrf
             @method('PATCH')
@@ -40,7 +40,7 @@
                                                     type="text"
                                                     class="form-control"
                                                     readonly
-                                                    value="{{ $invoiceNumber }}"
+                                                    value="{{ $invoice->invoice_number }}"
                                                     id="invoiceId"
                                                 />
                                             </div>
@@ -50,8 +50,8 @@
                                         </dt>
                                         <dd class="col-sm-6 d-flex justify-content-md-end">
                                             <div class="w-px-150">
-                                                <input type="text" class="form-control date-picker"  readonly value="{{ date
-                                                ('Y-m-d') }}" />
+                                                <input type="text" class="form-control date-picker"  readonly
+                                                       value="{{ $invoice->date }}" />
                                             </div>
                                         </dd>
                                         <dt class="col-sm-6 mb-2 mb-sm-0 text-md-end">
@@ -59,7 +59,8 @@
                                         </dt>
                                         <dd class="col-sm-6 d-flex justify-content-md-end">
                                             <div class="w-px-150">
-                                                <input type="date" name="due_date" class="form-control date-picker"/>
+                                                <input type="date" name="due_date" class="form-control date-picker"
+                                                       value="{{ $invoice->due_date }}"/>
                                             </div>
                                         </dd>
                                     </dl>
@@ -71,14 +72,20 @@
                             <div class="row p-sm-3 p-0">
                                 <h6 class="pb-2">Invoice To:</h6>
                                 <div class="col-md-6 col-sm-5 col-12 mb-sm-0 mb-4">
-                                    <x-form.input name="customer_name" label="Name" placeholder="Enter customer name"></x-form.input>
-                                    <x-form.input name="email" label="Email" placeholder="Enter email"></x-form.input>
-                                    <x-form.input name="address" label="Address" placeholder="Enter address"></x-form.input>
+                                    <x-form.input name="customer_name" label="Name" placeholder="Enter customer name"
+                                    value="{{ $invoice->customer_name }}"></x-form.input>
+                                    <x-form.input name="email" label="Email" placeholder="Enter email" value="{{ $invoice->email }}"></x-form.input>
+                                    <x-form.input name="address" label="Address" placeholder="Enter address" value="{{ $invoice->address }}"></x-form.input>
                                 </div>
                                 <div class="col-md-6 col-sm-7">
-                                    <x-form.input name="phone" label="Phone" placeholder="Enter phone number"></x-form.input>
-                                    <x-form.input name="mobile" label="Mobile" placeholder="Enter mobile number"></x-form.input>
-                                    <x-form.input name="fax" label="Fax" placeholder="Enter fax number"></x-form.input>
+                                    <x-form.input name="phone" label="Phone" placeholder="Enter phone number"
+                                                  value="{{ $invoice->phone }}"
+                                    ></x-form.input>
+                                    <x-form.input name="mobile" label="Mobile" placeholder="Enter mobile number"
+                                                  value="{{ $invoice->mobile }}"
+                                    ></x-form.input>
+                                    <x-form.input name="fax" label="Fax" placeholder="Enter fax number" value="{{
+                                    $invoice->fax }}"></x-form.input>
                                 </div>
                             </div>
 
@@ -92,14 +99,14 @@
                                                 <div class="row w-100 m-0 p-3 item-group">
                                                     <div class="col-md-6 col-12 mb-md-0 mb-3 ps-md-0">
                                                         <p class="mb-2 repeater-title">Item</p>
-                                                        <select name="catalog_id[]" class="catalog_id form-select
-                                                        item-details mb-2">
-                                                            @foreach($catalogs as $catalog)
-                                                                <option value="{{ $catalog->id }}">
-                                                                    {{ $catalog->name }}
-                                                                </option>
-                                                            @endforeach
-                                                        </select>
+{{--                                                        <select name="catalog_id[]" class="catalog_id form-select--}}
+{{--                                                        item-details mb-2">--}}
+{{--                                                            @foreach($catalogs as $catalog)--}}
+{{--                                                                <option value="{{ $catalog->id }}">--}}
+{{--                                                                    {{ $catalog->name }}--}}
+{{--                                                                </option>--}}
+{{--                                                            @endforeach--}}
+{{--                                                        </select>--}}
                                                     </div>
                                                     <div class="col-md-2 col-12 mb-md-0 mb-3">
                                                         <p class="mb-2 repeater-title">Unit</p>
@@ -158,8 +165,7 @@
                                 <div class="col-md-6 mb-md-0 mb-3">
                                     <div class="d-flex align-items-center mb-3">
                                         <label for="salesperson" class="form-label me-5 fw-semibold">Salesperson:</label>
-                                        <input type="text" class="form-control" disabled id="salesperson" value="{{
-                                        $user->first_name }}" />
+                                        <input type="text" class="form-control" disabled id="salesperson"  />
                                     </div>
                                 </div>
                                 <div class="col-md-6 d-flex justify-content-end">
@@ -233,32 +239,32 @@
                         </div>
                     </div>
                     <div>
-                        <p class="mb-2">Payments terms</p>
-                        <select name="term_id" class="form-select mb-4">
-                            @foreach($company->paymentTerms as $terms)
-                                <option value="{{ $terms->id }}">{{ $terms->name }}</option>
-                            @endforeach
-                        </select>
+{{--                        <p class="mb-2">Payments terms</p>--}}
+{{--                        <select name="term_id" class="form-select mb-4">--}}
+{{--                            @foreach($company->paymentTerms as $terms)--}}
+{{--                                <option value="{{ $terms->id }}">{{ $terms->name }}</option>--}}
+{{--                            @endforeach--}}
+{{--                        </select>--}}
 
-                        <x-form.input type="number" name="discount" placeholder="Enter discount" label="Discount"
-                                      class="discount"/>
+{{--                        <x-form.input type="number" name="discount" placeholder="Enter discount" label="Discount"--}}
+{{--                                      class="discount"/>--}}
 
-                        <div id="taxContainer">
-                            <div class="flex flex-row gap-3 items-center tax-group">
-                                <div class="mt-6">
-                                    <label for="tax_id" class="block text-sm font-medium leading-6 text-gray-900">Tax</label>
-                                    <div class="mt-2">
-                                        <select name="tax_id[]" class="tax_id border border-gray-400 rounded-lg p-2 w-full">
-                                            @foreach($taxes as $tax)
-                                                <option value="{{ $tax->id }}" data-rate="{{ $tax->tax_percentage }}" data-type="{{ $tax->type }}">
-                                                    {{ $tax->tax_name }}
-                                                </option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+{{--                        <div id="taxContainer">--}}
+{{--                            <div class="flex flex-row gap-3 items-center tax-group">--}}
+{{--                                <div class="mt-6">--}}
+{{--                                    <label for="tax_id" class="block text-sm font-medium leading-6 text-gray-900">Tax</label>--}}
+{{--                                    <div class="mt-2">--}}
+{{--                                        <select name="tax_id[]" class="tax_id border border-gray-400 rounded-lg p-2 w-full">--}}
+{{--                                            @foreach($taxes as $tax)--}}
+{{--                                                <option value="{{ $tax->id }}" data-rate="{{ $tax->tax_percentage }}" data-type="{{ $tax->type }}">--}}
+{{--                                                    {{ $tax->tax_name }}--}}
+{{--                                                </option>--}}
+{{--                                            @endforeach--}}
+{{--                                        </select>--}}
+{{--                                    </div>--}}
+{{--                                </div>--}}
+{{--                            </div>--}}
+{{--                        </div>--}}
 
                         <div class="mb-6 mt-4">
                             <input

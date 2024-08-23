@@ -158,8 +158,10 @@
                                 <div class="col-md-6 mb-md-0 mb-3">
                                     <div class="d-flex align-items-center mb-3">
                                         <label for="salesperson" class="form-label me-5 fw-semibold">Salesperson:</label>
-                                        <input type="text" class="form-control" disabled id="salesperson" value="{{
-                                        $user->first_name }}" />
+                                        <input name="salesperson" type="text" class="form-control" readonly
+                                               id="salesperson"
+                                               value="{{$user->first_name }}"
+                                        />
                                     </div>
                                 </div>
                                 <div class="col-md-6 d-flex justify-content-end">
@@ -183,9 +185,8 @@
                                             <span class="fw-semibold" id="total">GH₵ 0.00</span>
                                         </div>
 
-                                        <input type="number" id="total-hidden-input" name="total" value="0.00">
+                                        <input type="hidden" id="total-hidden-input" name="total" value="0.00">
                                     </div>
-
                                 </div>
                             </div>
 

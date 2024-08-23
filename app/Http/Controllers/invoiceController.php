@@ -2,8 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\directoryStatus;
+use App\Events\DirectoryApproved;
+use App\invoiceStatus;
 use App\Models\Catalog;
 use App\Models\Company;
+use App\Models\Directory;
 use App\Models\invoice;
 use App\Models\paymentTerms;
 use Illuminate\Http\RedirectResponse;
@@ -89,6 +93,7 @@ class invoiceController extends Controller
             'notes' => 'string|nullable|max:255',
             'total' => 'required|numeric|regex:/^\d+(\.\d{1,2})?$/',
             'balance' => 'required|numeric|regex:/^\d+(\.\d{1,2})?$/',
+            'salesperson' => 'required|string|max:255'
         ]);
 
         $latestInvoice = invoice::where('company_id', $company_id)
@@ -122,6 +127,7 @@ class invoiceController extends Controller
             'notes' => $validatedData['notes'],
             'total' => $validatedData['total'],
             'balance' => $validatedData['balance'],
+            'salesperson' => $validatedData['salesperson'],
         ]);
 
         $catalogIds = $request->input('catalog_id');
@@ -201,8 +207,30 @@ class invoiceController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $invoice = invoice::with('company')->where('id', $id)->firstOrFail();
+        $company = $invoice->company;
+
+        return view('invoice.edit', compact('invoice', 'company'));
     }
+
+    public function paidInvoice(string $id): RedirectResponse
+    {
+        $paidInvoice = invoice::findOrFail($id);
+        $paidInvoice->status = invoiceStatus::PAID->value;
+        $paidInvoice->save();
+
+        return redirect()->back();
+    }
+
+    public function unpaidInvoice(string $id): RedirectResponse
+    {
+        $unpaidInvoice = invoice::findOrFail($id);
+        $unpaidInvoice->status = invoiceStatus::UNPAID->value;
+        $unpaidInvoice->save();
+
+        return redirect()->back();
+    }
+
 
     /**
      * Update the specified resource in storage.
