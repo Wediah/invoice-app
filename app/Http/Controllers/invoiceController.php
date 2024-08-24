@@ -130,27 +130,7 @@ class invoiceController extends Controller
             'salesperson' => $validatedData['salesperson'],
         ]);
 
-        $catalogIds = $request->input('catalog_id');
-        $quantities = $request->input('quantity');
-
-        $items = [];
-        for ($i = 0; $i < count($catalogIds); $i++) {
-            $items[] = [
-                'catalog_id' => $catalogIds[$i],
-                'quantity' => $quantities[$i],
-            ];
-        }
-
-        $invoice->catalogs()->attach($items);
-
-        $taxIds = $request->input('tax_id');
-
-        $taxes = [];
-        foreach ($taxIds as $taxId) {
-            $taxes[] = $taxId;
-        }
-
-        $invoice->taxes()->attach($taxes);
+        $this->extracted($request, $invoice);
 
         return redirect()->route('invoice.show', $invoice->id)->with('success', 'Product added to cart successfully!');
     }
@@ -209,8 +189,10 @@ class invoiceController extends Controller
     {
         $invoice = invoice::with('company')->where('id', $id)->firstOrFail();
         $company = $invoice->company;
+        $catalogs = $company->catalogs;
+        $taxes = $company->taxes;
 
-        return view('invoice.edit', compact('invoice', 'company'));
+        return view('invoice.edit', compact('invoice', 'company', 'catalogs', 'taxes'));
     }
 
     public function paidInvoice(string $id): RedirectResponse
@@ -237,7 +219,57 @@ class invoiceController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $invoice = invoice::findOrFail($id);
+
+        $user_id = Auth::id();
+
+        $company_id = $invoice->company_id;
+
+        $validatedData = $request->validate([
+            'customer_name' => 'required|string|max:255',
+            'catalog_id.*' => 'required|exists:catalogs,id',
+            'term_id' => 'required|exists:payment_terms,id',
+            'quantity.*' => 'required|integer|min:1',
+            'tax_id.*' => 'required|exists:taxes,id',
+            'discount' => 'numeric|min:0',
+            'email' => 'string|email|nullable|max:255',
+            'phone' => 'string|nullable|max:255',
+            'address' => 'string|nullable|max:255',
+            'mobile' => 'string|nullable|max:255',
+            'fax' => 'string|nullable|max:255',
+            'due_date' => 'string|nullable|max:255',
+            'notes' => 'string|nullable|max:255',
+            'total' => 'required|numeric|regex:/^\d+(\.\d{1,2})?$/',
+            'balance' => 'required|numeric|regex:/^\d+(\.\d{1,2})?$/',
+            'salesperson' => 'required|string|max:255'
+        ]);
+
+        $latestInvoiceNumber = $invoice->invoice_number;
+
+        $updatedInvoiceNumber = $latestInvoiceNumber . 'UP';
+
+        $invoice = Invoice::create([
+            'user_id' => $user_id,
+            'company_id' => $company_id,
+            'invoice_number' => $updatedInvoiceNumber,
+            'term_id' => $validatedData['term_id'] ?? $invoice->term_id,
+            'customer_name' => $validatedData['customer_name'] ?? $invoice->customer_name,
+            'discount' => $validatedData['discount'] ?? $invoice->discount,
+            'email' => $validatedData['email'] ?? $invoice->email,
+            'phone' => $validatedData['phone'] ?? $invoice->phone,
+            'address' => $validatedData['address'] ?? $invoice->address,
+            'mobile' => $validatedData['mobile'] ?? $invoice->mobile,
+            'fax' => $validatedData['fax'] ?? $invoice->fax,
+            'due_date' => $validatedData['due_date'] ?? $invoice->due_date,
+            'notes' => $validatedData['notes'] ?? $invoice->notes,
+            'total' => $validatedData['total'] ?? $invoice->total,
+            'balance' => $validatedData['balance'] ?? $invoice->balance,
+            'salesperson' => $validatedData['salesperson'] ?? $invoice->salesperson,
+        ]);
+
+        $this->extracted($request, $invoice);
+
+        return redirect()->route('invoice.show', $invoice->id)->with('success', 'Invoice updated successfully!');
     }
 
     /**
@@ -250,5 +282,36 @@ class invoiceController extends Controller
         $deleteInvoice->delete();
 
         return redirect()->intended(route('invoice.index', absolute: false));
+    }
+
+    /**
+     * @param Request $request
+     * @param $invoice
+     * @return void
+     */
+    public function extracted(Request $request, $invoice): void
+    {
+        $catalogIds = $request->input('catalog_id');
+        $quantities = $request->input('quantity');
+
+
+        $items = [];
+        for ($i = 0; $i < count($catalogIds); $i++) {
+            $items[] = [
+                'catalog_id' => $catalogIds[$i],
+                'quantity' => $quantities[$i],
+            ];
+        }
+
+        $invoice->catalogs()->attach($items);
+
+        $taxIds = $request->input('tax_id');
+
+        $taxes = [];
+        foreach ($taxIds as $taxId) {
+            $taxes[] = $taxId;
+        }
+
+        $invoice->taxes()->attach($taxes);
     }
 }
