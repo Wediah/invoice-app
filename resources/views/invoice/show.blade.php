@@ -1,4 +1,4 @@
-<x-layout>
+<x-company-layout :company="$company">
     <div class="container-xxl flex-grow-1 container-p-y pt-4">
         <div class="row invoice-preview">
             <!-- Invoice -->
@@ -218,4 +218,4 @@
             <!-- /Invoice Actions -->
         </div>
     </div>
-</x-layout>
+</x-company-layout>

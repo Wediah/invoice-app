@@ -1,4 +1,4 @@
-<x-layout>
+<x-company-layout>
     <div class="container-xxl flex-grow-1 container-p-y">
         @if ($errors->any())
             <div class="alert alert-danger">
@@ -274,10 +274,11 @@
                 <!-- /Invoice Actions -->
             </div>
         </form>
-        <!-- /Send Invoice Sidebar -->
-        <!-- /Offcanvas -->
     </div>
-</x-layout>
+</x-company-layout>
+
+
+
 
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

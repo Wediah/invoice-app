@@ -1,25 +1,60 @@
-<x-layout>
+<x-company-layout :company="$company">
     <section class="p-12">
         <h1>{{ $company->name }}</h1>
-        <a href="{{ route('catalog.create', ['company_id' => $company->id]) }}">Add an item to your catalog</a>
-        <a href="{{ route('invoice.create', ['slug' => $company->slug]) }}">Create invoice</a>
+
         <a href="{{ route('tax.create', ['slug' => $company->slug]) }}">Create taxes</a>
-        <a href="{{ route('company.profile', ['slug' => $company->slug]) }}">Profile</a>
         <a href="{{ route('invoice.show_terms', ['slug' => $company->slug]) }}">Create terms</a>
-        <a href="{{ route('invoice.index', ['slug' => $company->slug]) }}">All Invoices</a>
-        <div class="flex flex-row mx-auto flex-wrap gap-4">
-            @foreach ( $companyCatalog as $catalog )
-                <div class="flex justify-center items-center bg-gray-100 border-2 rounded-xl p-5">
-                    <div class="max-w-sm  overflow-hidden ">
-                        <div class="px-6 py-4">
-                            <div class="font-bold text-xl mb-2">{{ $catalog->name }}</div>
-                            <div class="font-bold text-xl mb-2">GH₵{{ number_format($catalog->price, 2) }}</div>
-                            <div class="font-bold text-xl mb-2">{{ $catalog->status }}</div>
-                            <div class="font-bold text-xl mb-2">{{ $catalog->description }}</div>
-                        </div>
-                    </div>
-                </div>
-            @endforeach
+
+        <div class="d-flex justify-content-between">
+            <span>All Products</span>
+            <a href="{{ route('catalog.create', ['company_id' => $company->id]) }}">
+                <button type="button" class="btn btn-primary"><i class='bx bx-plus'></i>Add an item to your catalog</button>
+            </a>
+        </div>
+
+        <hr>
+
+        <div class="card">
+            <div class="table-responsive text-nowrap">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>Item/Service</th>
+                        <th>Price</th>
+                        <th>Description</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody class="table-border-bottom-0">
+                    @foreach ( $companyCatalog as $catalog )
+                        <tr>
+                            <td> <strong>{{ $catalog->name }}</strong></td>
+                            <td>GH₵{{ number_format($catalog->price, 2) }}</td>
+                            <td>
+                                {{ $catalog->description }}
+                            </td>
+                            <td><span class="badge bg-label-primary me-1">{{ $catalog->status }}</span></td>
+                            <td>
+                                <div class="dropdown">
+                                    <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
+                                        <i class="bx bx-dots-vertical-rounded"></i>
+                                    </button>
+                                    <div class="dropdown-menu">
+                                        <a class="dropdown-item" href="javascript:void(0);"
+                                        ><i class="bx bx-edit-alt me-1"></i> Edit</a
+                                        >
+                                        <a class="dropdown-item" href="javascript:void(0);"
+                                        ><i class="bx bx-trash me-1"></i> Delete</a
+                                        >
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    @endforeach
+                    </tbody>
+                </table>
+            </div>
         </div>
     </section>
-</x-layout>
+</x-company-layout>

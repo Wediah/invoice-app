@@ -31,7 +31,7 @@ Route::middleware('auth')->group(function () {
     Route::patch('/company/{slug}/finance', [CompanyController::class, 'financial'])->name('company.financial');
     Route::patch('/company/{slug}/preference', [CompanyController::class, 'preference'])->name('company.preference');
     //business profile
-    Route::get('/{slug}/profile', [CompanyController::class, 'profile'])->name('company.profile');
+    Route::get('company/{slug}/profile', [CompanyController::class, 'profile'])->name('company.profile');
     Route::patch('/{slug}/info', [CompanyController::class, 'info'])->name('company.info');
 
     //catalog/items

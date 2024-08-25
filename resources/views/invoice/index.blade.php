@@ -1,7 +1,13 @@
-<x-layout>
+<x-company-layout :company="$company">
     <div class="container-xxl flex-grow-1 container-p-y">
-        <h4 class="py-3 breadcrumb-wrapper mb-4"><span class="text-muted fw-light">Invoice /</span> List</h4>
+        <div class="d-flex justify-content-between">
+            <span>All Invoices</span>
+            <a href="{{ route('invoice.create', ['slug' => $company->slug]) }}">
+                <button type="button" class="btn btn-primary"><i class='bx bx-plus'></i>Add a new invoice</button>
+            </a>
+        </div>
 
+        <hr>
         <!-- Invoice List Table -->
         <div class="card">
             <div class="card-datatable table-responsive">
@@ -94,4 +100,4 @@
             </div>
         </div>
     </div>
-</x-layout>
+</x-company-layout>

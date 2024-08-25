@@ -1,4 +1,4 @@
-<x-layout>
+<x-company-layout :company="$company">
     <section class="container mx-auto">
         <div class="mb-4 border-b border-gray-200 dark:border-gray-700">
             <ul class="flex flex-wrap -mb-px text-sm font-medium text-center" id="default-tab" data-tabs-toggle="#default-tab-content" role="tablist">
@@ -36,9 +36,8 @@
                 @include('company.companyPref')
             </div>
         </div>
-
     </section>
-</x-layout>
+</x-company-layout>
 
 @section('scripts')
     <script src="https://unpkg.com/flowbite@1.5.1/dist/flowbite.js"></script>
