@@ -125,6 +125,30 @@
                     </a>
                 </li>
                 <li>
+                    <a href="{{ route('terms.index', ['slug' => $company->slug]) }}" class="flex items-center p-2
+                    text-gray-900 rounded-lg dark:text-white
+                    hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                        <svg class="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400
+                        group-hover:text-gray-900 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 18">
+                            <path d="M16 2H8C4.691 2 2 4.691 2 8v13a1 1 0 0 0 1 1h13c3.309 0 6-2.691 6-6V8c0-3.309-2.691-6-6-6zm-2 13H7v-2h7v2zm3-4H7V9h10v2z"/>
+                        </svg>
+                        <span class="flex-1 ms-3 whitespace-nowrap">Payment terms</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ route('tax.index', ['slug' => $company->slug]) }}" class="flex items-center p-2
+                    text-gray-900
+                    rounded-lg
+                    dark:text-white
+                    hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                        <svg class="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400
+                        group-hover:text-gray-900 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 18">
+                            <path d="M21 17h-2V9h2V7a.998.998 0 0 0-.594-.914l-9.432-4.191-8.421 4.21A1 1 0 0 0 2 7v2h2v8H2v4h19v-4zm-5-8v8h-3V9h3zM7 9h3v8H7V9z"/>
+                        </svg>
+                        <span class="flex-1 ms-3 whitespace-nowrap">Taxes</span>
+                    </a>
+                </li>
+                <li>
                     <a href="{{ route('company.profile', ['slug' => $company->slug]) }}" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
                         <svg class="flex-shrink-0 w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400
                         group-hover:text-gray-900 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 18">

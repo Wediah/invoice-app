@@ -1,14 +1,9 @@
 <x-company-layout :company="$company">
     <section class="p-12">
-        <h1>{{ $company->name }}</h1>
-
-{{--        <a href="{{ route('tax.create', ['slug' => $company->slug]) }}">Create taxes</a>--}}
-{{--        <a href="{{ route('invoice.show_terms', ['slug' => $company->slug]) }}">Create terms</a>--}}
-
         <div class="d-flex justify-content-between">
-            <span>All Products</span>
-            <a href="{{ route('catalog.create', ['company_id' => $company->id]) }}">
-                <button type="button" class="btn btn-primary"><i class='bx bx-plus'></i>Add an item to your catalog</button>
+            <span>All Taxes</span>
+            <a href="{{ route('tax.create', ['slug' => $company->slug]) }}">
+                <button type="button" class="btn btn-primary"><i class='bx bx-plus'></i>Add a new tax</button>
             </a>
         </div>
 
@@ -19,22 +14,18 @@
                 <table class="table">
                     <thead>
                     <tr>
-                        <th>Item/Service</th>
-                        <th>Price</th>
-                        <th>Description</th>
+                        <th>Tax</th>
+                        <th>Percentage</th>
                         <th>Status</th>
                         <th>Actions</th>
                     </tr>
                     </thead>
                     <tbody class="table-border-bottom-0">
-                    @foreach ( $companyCatalog as $catalog )
+                    @foreach ( $taxes as $tax )
                         <tr>
-                            <td> <strong>{{ $catalog->name }}</strong></td>
-                            <td>GH₵{{ number_format($catalog->price, 2) }}</td>
-                            <td>
-                                {{ $catalog->description }}
-                            </td>
-                            <td><span class="badge bg-label-primary me-1">{{ $catalog->status }}</span></td>
+                            <td> <strong>{{ $tax->tax_name }}</strong></td>
+                            <td>{{ $tax->tax_percentage }}%</td>
+                            <td><span class="badge bg-label-primary me-1">{{ $tax->type }}</span></td>
                             <td>
                                 <div class="dropdown">
                                     <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">

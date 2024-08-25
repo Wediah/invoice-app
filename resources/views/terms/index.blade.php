@@ -1,14 +1,9 @@
 <x-company-layout :company="$company">
     <section class="p-12">
-        <h1>{{ $company->name }}</h1>
-
-{{--        <a href="{{ route('tax.create', ['slug' => $company->slug]) }}">Create taxes</a>--}}
-{{--        <a href="{{ route('invoice.show_terms', ['slug' => $company->slug]) }}">Create terms</a>--}}
-
         <div class="d-flex justify-content-between">
-            <span>All Products</span>
-            <a href="{{ route('catalog.create', ['company_id' => $company->id]) }}">
-                <button type="button" class="btn btn-primary"><i class='bx bx-plus'></i>Add an item to your catalog</button>
+            <span>All Terms</span>
+            <a href="{{ route('invoice.show_terms', ['slug' => $company->slug]) }}">
+                <button type="button" class="btn btn-primary"><i class='bx bx-plus'></i>Add a new payment term</button>
             </a>
         </div>
 
@@ -19,22 +14,14 @@
                 <table class="table">
                     <thead>
                     <tr>
-                        <th>Item/Service</th>
-                        <th>Price</th>
-                        <th>Description</th>
-                        <th>Status</th>
+                        <th>Name</th>
                         <th>Actions</th>
                     </tr>
                     </thead>
                     <tbody class="table-border-bottom-0">
-                    @foreach ( $companyCatalog as $catalog )
+                    @foreach($allTerms as $term)
                         <tr>
-                            <td> <strong>{{ $catalog->name }}</strong></td>
-                            <td>GH₵{{ number_format($catalog->price, 2) }}</td>
-                            <td>
-                                {{ $catalog->description }}
-                            </td>
-                            <td><span class="badge bg-label-primary me-1">{{ $catalog->status }}</span></td>
+                            <td> <strong>{{ $term->name }}</strong></td>
                             <td>
                                 <div class="dropdown">
                                     <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">

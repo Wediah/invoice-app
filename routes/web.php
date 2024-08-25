@@ -53,9 +53,10 @@ Route::middleware('auth')->group(function () {
     //terms of invoice .i.e. the duration of the invoice
     Route::get('{slug}/invoice/terms', [invoiceController::class, 'showTerms'])->name('invoice.show_terms');
     Route::post('{slug}/invoice/create_terms', [invoiceController::class, 'terms'])->name('invoice.store_terms');
+    Route::get('terms/{slug}/index', [invoiceController::class, 'allTerms'])->name('terms.index');
 
     //tax
-    Route::get('tax/index', [taxController::class, 'index'])->name('tax.index');
+    Route::get('tax/{slug}/index', [taxController::class, 'index'])->name('tax.index');
     Route::get('/tax/{slug}/create', [taxController::class, 'create'])->name('tax.create');
     Route::post('/tax/{slug}/store', [taxController::class, 'store'])->name('tax.store');
     Route::get('tax/edit/{id}', [taxController::class, 'edit'])->name('tax.edit');

@@ -172,6 +172,14 @@ class invoiceController extends Controller
         return redirect()->back();
     }
 
+    public function allTerms($slug)
+    {
+        $company = Company::where('slug', $slug)->firstOrFail();
+        $allTerms = $company->paymentTerms;
+
+        return view('terms.index', compact('allTerms', 'company'));
+    }
+
     public function downloadPDF($id): \Illuminate\Http\Response
     {
         $invoice = invoice::where('id', $id)->firstOrFail();

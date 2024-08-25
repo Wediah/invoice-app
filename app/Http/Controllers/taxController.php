@@ -8,9 +8,12 @@ use Illuminate\Http\Request;
 
 class taxController extends Controller
 {
-    public function index()
+    public function index($slug)
     {
-        return view('tax.index');
+        $company = Company::where('slug', $slug)->firstOrFail();
+        $taxes = $company->taxes;
+
+        return view('tax.index', compact('taxes', 'company'));
     }
 
     public function create($slug)
