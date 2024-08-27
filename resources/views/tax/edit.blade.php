@@ -1,4 +1,4 @@
-<x-comapany-layout :company="$company">
+<x-company-layout :company="$company">
     <form method="POST" action="{{ route('tax.store', ['slug' => $company->slug]) }}" >
         @csrf
         @method('PATCH')
@@ -24,4 +24,4 @@
             >
         </div>
     </form>
-</x-comapany-layout>
+</x-company-layout>
