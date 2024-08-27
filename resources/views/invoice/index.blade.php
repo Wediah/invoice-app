@@ -71,7 +71,6 @@
                                                 </form>
                                             </li>
                                             <li><button class="dropdown-item" type="button">Download</button></li>
-                                            <li><button class="dropdown-item" type="button">Duplicate</button></li>
                                             <li>
                                                 <a class="dropdown-item" href="{{ route('invoice.edit', ['id' =>
                                                 $invoice->id]) }}">

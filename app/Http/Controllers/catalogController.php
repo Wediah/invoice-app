@@ -169,6 +169,7 @@ class catalogController extends Controller
             ->firstOrFail();
 
         $catalog->status = itemStatus::INSTOCK->value;
+        $catalog->save();
 
         return redirect()->back();
     }
@@ -181,6 +182,20 @@ class catalogController extends Controller
             ->firstOrFail();
 
         $catalog->status = itemStatus::OUTOFSTOCK->value;
+        $catalog->save();
+
+        return redirect()->back();
+    }
+
+    public function limitedstock($slug, $id): RedirectResponse
+    {
+        $company = Company::where('slug', $slug)->firstOrFail();
+        $catalog = Catalog::where('id', $id)
+                            ->where('company_id', $company->id)
+                            ->firstOrFail();
+
+        $catalog->status = itemStatus::LIMITED->value;
+        $catalog->save();
 
         return redirect()->back();
     }

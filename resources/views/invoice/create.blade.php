@@ -1,4 +1,4 @@
-<x-company-layout>
+<x-company-layout :company="$company">
     <div class="container-xxl flex-grow-1 container-p-y">
         @if ($errors->any())
             <div class="alert alert-danger">
