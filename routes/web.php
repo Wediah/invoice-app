@@ -27,7 +27,6 @@ Route::middleware('auth')->group(function () {
     Route::patch('/company/{slug}/update', [CompanyController::class, 'update'])->name('company.update');
     Route::delete('/company', [CompanyController::class, 'destroy'])->name('company.destroy');
     Route::get('/dashboard', [CompanyController::class, 'userAndCompany'])->name('dashboard');
-    Route::get('/company/{slug}', [CompanyController::class, 'show'])->name('company.show');
     Route::patch('/company/{slug}/finance', [CompanyController::class, 'financial'])->name('company.financial');
     Route::patch('/company/{slug}/preference', [CompanyController::class, 'preference'])->name('company.preference');
     //business profile
@@ -37,6 +36,12 @@ Route::middleware('auth')->group(function () {
     //catalog/items
     Route::get('/company/{company_id}/catalog/create', [CatalogController::class, 'create'])->name('catalog.create');
     Route::post('/company/{company_id}/catalog', [CatalogController::class, 'store'])->name('catalog.store');
+    Route::get('/company/{slug}', [catalogController::class, 'show'])->name('catalog.show');
+    Route::get('/catalog/{slug}/edit/{id}', [catalogController::class, 'edit'])->name('catalog.edit');
+    Route::patch('/catalog/{slug}/update/{id}', [catalogController::class, 'update'])->name('catalog.update');
+    Route::delete('/catalog/{slug}/delete/{id}', [catalogController::class, 'destroy'])->name('catalog.delete');
+    Route::patch('/catalog/{slug}/status/{id}', [catalogController::class, 'instock'])->name('catalog.instock');
+    Route::patch('/catalog/{slug}/status/{id}', [catalogController::class, 'outstock'])->name('catalog.outstock');
 
     //invoice
     Route::get('/{slug}/all-invoices', [InvoiceController::class, 'index'])->name('invoice.index');

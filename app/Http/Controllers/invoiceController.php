@@ -10,6 +10,9 @@ use App\Models\Company;
 use App\Models\Directory;
 use App\Models\invoice;
 use App\Models\paymentTerms;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
+use Illuminate\Foundation\Application;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -193,7 +196,7 @@ class invoiceController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(string $id): Factory|Application|View|\Illuminate\Contracts\Foundation\Application
     {
         $invoice = invoice::with('company')->where('id', $id)->firstOrFail();
         $company = $invoice->company;

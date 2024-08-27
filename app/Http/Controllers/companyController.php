@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Category;
 use App\Models\Company;
 use Cviebrock\EloquentSluggable\Services\SlugService;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
 use Illuminate\Foundation\Application;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -149,18 +151,11 @@ class companyController extends Controller
         return redirect()->back();
     }
 
-    public function profile($slug)
+    public function profile($slug): Factory|Application|View|\Illuminate\Contracts\Foundation\Application
     {
         $company = Company::where('slug', $slug)->first();
         return view('businessProfile.index', compact('company'));
     }
-
-
-//    public function edit(string $id)
-//    {
-//        $company = Company::findOrFail($id);
-//        return view('company.edit', compact('company'));
-//    }
 
     public function update(Request $request,$slug): RedirectResponse
     {
@@ -209,13 +204,5 @@ class companyController extends Controller
         $deleteCompany->delete();
 
         return redirect()->intended(route('dashboard', absolute: false));
-    }
-
-    public function show($slug)
-    {
-        $company = Company::where('slug', $slug)->firstOrFail();
-        $companyCatalog = $company->catalogs;
-        $user = Auth::user();
-        return view('company.show', compact('company', 'companyCatalog', 'user'));
     }
 }

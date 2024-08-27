@@ -1,7 +1,7 @@
 <x-layout>
     <section class="p-20 flex flex-row mx-auto flex-wrap gap-4">
         @foreach ($companies as $company)
-            <a href="{{ route('company.show', ['slug' => $company->slug])}}">
+            <a href="{{ route('catalog.show', ['slug' => $company->slug])}}">
                 <div class="flex justify-center items-center bg-gray-100 border-2 rounded-xl p-5">
                     <div class="max-w-sm  overflow-hidden ">
                         <img class="w-full"
