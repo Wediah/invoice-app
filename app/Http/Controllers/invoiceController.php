@@ -2,21 +2,33 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\cart;
+use App\Enums\directoryStatus;
+use App\Events\DirectoryApproved;
+use App\invoiceStatus;
+use App\Models\Catalog;
 use App\Models\Company;
+use App\Models\Directory;
 use App\Models\invoice;
 use App\Models\paymentTerms;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\View\View;
+use Illuminate\Foundation\Application;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Barryvdh\DomPDF\Facade\Pdf as PDF;
 
 class invoiceController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index($slug)
     {
-        //
+        $company = Company::where('slug', $slug)->firstOrFail();
+        $allInvoices = $company->invoices->sortByDesc('created_at');
+
+        return view('invoice.index', compact('company', 'allInvoices'));
     }
 
     /**
@@ -26,10 +38,37 @@ class invoiceController extends Controller
     {
         $user = Auth::user();
         $company = Company::where('slug', $slug)->firstOrFail();
+        $company_id = $company->id;
         $catalogs = $company->catalogs;
         $taxes = $company->taxes;
-        return view('invoice.create', compact('company', 'catalogs', 'user', 'taxes'));
+        $latestInvoice = invoice::where('company_id', $company_id)
+            ->orderBy('created_at', 'desc')
+            ->first();
+
+        if ($latestInvoice) {
+            $latestInvoiceNumber = $latestInvoice->invoice_number;
+            preg_match('/\d+$/', $latestInvoiceNumber, $matches);
+            $latestNumber = $matches ? intval($matches[0]) : 0;
+        } else {
+            $latestNumber = $company->invoice_numbering;
+        }
+
+        $invoiceSuffix = $latestNumber += 1;
+        $invoiceNumber = strtoupper($company->invoice_prefix) . '-' . $invoiceSuffix;
+        return view('invoice.create', compact('company', 'catalogs', 'user', 'taxes', 'latestInvoice', 'invoiceNumber'));
     }
+
+    public function getPrice(Request $request)
+    {
+        $catalog = Catalog::find($request->id);
+
+        if ($catalog) {
+            return response()->json(['price' => $catalog->price]);
+        } else {
+            return response()->json(['error' => 'Catalog not found'], 404);
+        }
+    }
+
 
     /**
      * Store a newly created resource in storage.
@@ -47,7 +86,7 @@ class invoiceController extends Controller
             'term_id' => 'required|exists:payment_terms,id',
             'quantity.*' => 'required|integer|min:1',
             'tax_id.*' => 'required|exists:taxes,id',
-            'discount' => 'integer|min:1',
+            'discount' => 'numeric|min:0',
             'email' => 'string|email|nullable|max:255',
             'phone' => 'string|nullable|max:255',
             'address' => 'string|nullable|max:255',
@@ -55,6 +94,9 @@ class invoiceController extends Controller
             'fax' => 'string|nullable|max:255',
             'due_date' => 'string|nullable|max:255',
             'notes' => 'string|nullable|max:255',
+            'total' => 'required|numeric|regex:/^\d+(\.\d{1,2})?$/',
+            'balance' => 'required|numeric|regex:/^\d+(\.\d{1,2})?$/',
+            'salesperson' => 'required|string|max:255'
         ]);
 
         $latestInvoice = invoice::where('company_id', $company_id)
@@ -86,29 +128,12 @@ class invoiceController extends Controller
             'fax' => $validatedData['fax'],
             'due_date' => $validatedData['due_date'],
             'notes' => $validatedData['notes'],
+            'total' => $validatedData['total'],
+            'balance' => $validatedData['balance'],
+            'salesperson' => $validatedData['salesperson'],
         ]);
 
-        $catalogIds = $request->input('catalog_id');
-        $quantities = $request->input('quantity');
-
-        $items = [];
-        for ($i = 0; $i < count($catalogIds); $i++) {
-            $items[] = [
-                'catalog_id' => $catalogIds[$i],
-                'quantity' => $quantities[$i],
-            ];
-        }
-
-        $invoice->catalogs()->attach($items);
-
-        $taxIds = $request->input('tax_id');
-
-        $taxes = [];
-        foreach ($taxIds as $taxId) {
-            $taxes[] = $taxId;
-        }
-
-        $invoice->taxes()->attach($taxes);
+        $this->extracted($request, $invoice);
 
         return redirect()->route('invoice.show', $invoice->id)->with('success', 'Product added to cart successfully!');
     }
@@ -118,9 +143,10 @@ class invoiceController extends Controller
      */
     public function show($id)
     {
+        $user = Auth::user();
         $invoice = invoice::with('catalogs', 'taxes', 'paymentTerms')->findOrFail($id);
 
-        return view('invoice.show', compact('invoice'));
+        return view('invoice.show', compact('invoice', 'user'));
     }
 
     //terms of invoice
@@ -149,27 +175,154 @@ class invoiceController extends Controller
         return redirect()->back();
     }
 
+    public function allTerms($slug)
+    {
+        $company = Company::where('slug', $slug)->firstOrFail();
+        $allTerms = $company->paymentTerms;
+
+        return view('terms.index', compact('allTerms', 'company'));
+    }
+
+    public function downloadPDF($id): \Illuminate\Http\Response
+    {
+        $invoice = invoice::where('id', $id)->firstOrFail();
+
+        PDF::setOptions(['dpi' => 150, 'defaultFont' => 'sans-serif']);
+        $pdf = PDF::loadView('invoice.show', compact('invoice'));
+
+        return $pdf->download('invoice.pdf');
+    }
+
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(string $id): Factory|Application|View|\Illuminate\Contracts\Foundation\Application
     {
-        //
+        $invoice = invoice::with('company')->where('id', $id)->firstOrFail();
+        $company = $invoice->company;
+        $catalogs = $company->catalogs;
+        $taxes = $company->taxes;
+
+        return view('invoice.edit', compact('invoice', 'company', 'catalogs', 'taxes'));
     }
+
+    public function paidInvoice(string $id): RedirectResponse
+    {
+        $paidInvoice = invoice::findOrFail($id);
+        $paidInvoice->status = invoiceStatus::PAID->value;
+        $paidInvoice->save();
+
+        return redirect()->back();
+    }
+
+    public function unpaidInvoice(string $id): RedirectResponse
+    {
+        $unpaidInvoice = invoice::findOrFail($id);
+        $unpaidInvoice->status = invoiceStatus::UNPAID->value;
+        $unpaidInvoice->save();
+
+        return redirect()->back();
+    }
+
 
     /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, string $id)
     {
-        //
+        $invoice = invoice::findOrFail($id);
+
+        $user_id = Auth::id();
+
+        $company_id = $invoice->company_id;
+
+        $validatedData = $request->validate([
+            'customer_name' => 'required|string|max:255',
+            'catalog_id.*' => 'required|exists:catalogs,id',
+            'term_id' => 'required|exists:payment_terms,id',
+            'quantity.*' => 'required|integer|min:1',
+            'tax_id.*' => 'required|exists:taxes,id',
+            'discount' => 'numeric|min:0',
+            'email' => 'string|email|nullable|max:255',
+            'phone' => 'string|nullable|max:255',
+            'address' => 'string|nullable|max:255',
+            'mobile' => 'string|nullable|max:255',
+            'fax' => 'string|nullable|max:255',
+            'due_date' => 'string|nullable|max:255',
+            'notes' => 'string|nullable|max:255',
+            'total' => 'required|numeric|regex:/^\d+(\.\d{1,2})?$/',
+            'balance' => 'required|numeric|regex:/^\d+(\.\d{1,2})?$/',
+            'salesperson' => 'required|string|max:255'
+        ]);
+
+        $latestInvoiceNumber = $invoice->invoice_number;
+
+        $updatedInvoiceNumber = $latestInvoiceNumber . 'UP';
+
+        $invoice = Invoice::create([
+            'user_id' => $user_id,
+            'company_id' => $company_id,
+            'invoice_number' => $updatedInvoiceNumber,
+            'term_id' => $validatedData['term_id'] ?? $invoice->term_id,
+            'customer_name' => $validatedData['customer_name'] ?? $invoice->customer_name,
+            'discount' => $validatedData['discount'] ?? $invoice->discount,
+            'email' => $validatedData['email'] ?? $invoice->email,
+            'phone' => $validatedData['phone'] ?? $invoice->phone,
+            'address' => $validatedData['address'] ?? $invoice->address,
+            'mobile' => $validatedData['mobile'] ?? $invoice->mobile,
+            'fax' => $validatedData['fax'] ?? $invoice->fax,
+            'due_date' => $validatedData['due_date'] ?? $invoice->due_date,
+            'notes' => $validatedData['notes'] ?? $invoice->notes,
+            'total' => $validatedData['total'] ?? $invoice->total,
+            'balance' => $validatedData['balance'] ?? $invoice->balance,
+            'salesperson' => $validatedData['salesperson'] ?? $invoice->salesperson,
+        ]);
+
+        $this->extracted($request, $invoice);
+
+        return redirect()->route('invoice.show', $invoice->id)->with('success', 'Invoice updated successfully!');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(string $id): RedirectResponse
     {
-        //
+        $deleteInvoice = Invoice::findOrFail($id);
+
+        $deleteInvoice->delete();
+
+        return redirect()->intended(route('invoice.index', absolute: false));
+    }
+
+    /**
+     * @param Request $request
+     * @param $invoice
+     * @return void
+     */
+    public function extracted(Request $request, $invoice): void
+    {
+        $catalogIds = $request->input('catalog_id');
+        $quantities = $request->input('quantity');
+
+
+        $items = [];
+        for ($i = 0; $i < count($catalogIds); $i++) {
+            $items[] = [
+                'catalog_id' => $catalogIds[$i],
+                'quantity' => $quantities[$i],
+            ];
+        }
+
+        $invoice->catalogs()->attach($items);
+
+        $taxIds = $request->input('tax_id');
+
+        $taxes = [];
+        foreach ($taxIds as $taxId) {
+            $taxes[] = $taxId;
+        }
+
+        $invoice->taxes()->attach($taxes);
     }
 }

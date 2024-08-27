@@ -1,4 +1,4 @@
-<x-company-layout>
+<x-company-layout :company="$company">
     <div class="container-xxl flex-grow-1 container-p-y">
         @if ($errors->any())
             <div class="alert alert-danger">
@@ -9,10 +9,10 @@
                 </ul>
             </div>
         @endif
-        <form method="POST" action="{{ route('invoice.store', ['slug' => $company->slug]) }}" class="mt-10 space-y-6"
+        <form method="POST" action="{{ route('invoice.update', ['id' => $invoice->id]) }}" class="mt-10 space-y-6"
               enctype="multipart/form-data">
             @csrf
-
+            @method('PATCH')
             <div class="row invoice-add">
                 <!-- Invoice Add-->
                 <div class="col-lg-9 col-12 mb-lg-0 mb-4">
@@ -40,7 +40,7 @@
                                                     type="text"
                                                     class="form-control"
                                                     readonly
-                                                    value="{{ $invoiceNumber }}"
+                                                    value="{{ $invoice->invoice_number }}"
                                                     id="invoiceId"
                                                 />
                                             </div>
@@ -50,8 +50,12 @@
                                         </dt>
                                         <dd class="col-sm-6 d-flex justify-content-md-end">
                                             <div class="w-px-150">
-                                                <input type="text" class="form-control date-picker"  readonly value="{{ date
-                                                ('Y-m-d') }}" />
+                                                <input
+                                                    type="text"
+                                                    class="form-control date-picker"
+                                                    readonly
+                                                    value="{{ $invoice->created_at->format('d-m-Y') }}"
+                                                />
                                             </div>
                                         </dd>
                                         <dt class="col-sm-6 mb-2 mb-sm-0 text-md-end">
@@ -59,7 +63,12 @@
                                         </dt>
                                         <dd class="col-sm-6 d-flex justify-content-md-end">
                                             <div class="w-px-150">
-                                                <input type="date" name="due_date" class="form-control date-picker"/>
+                                                <input
+                                                    type="date"
+                                                    name="due_date"
+                                                    class="form-control date-picker"
+                                                    value="{{ $invoice->due_date }}"
+                                                />
                                             </div>
                                         </dd>
                                     </dl>
@@ -71,14 +80,26 @@
                             <div class="row p-sm-3 p-0">
                                 <h6 class="pb-2">Invoice To:</h6>
                                 <div class="col-md-6 col-sm-5 col-12 mb-sm-0 mb-4">
-                                    <x-form.input name="customer_name" label="Name" placeholder="Enter customer name"></x-form.input>
-                                    <x-form.input name="email" label="Email" placeholder="Enter email"></x-form.input>
-                                    <x-form.input name="address" label="Address" placeholder="Enter address"></x-form.input>
+                                    <x-form.input name="customer_name" label="Name" placeholder="Enter customer name"
+                                    value="{{ $invoice->customer_name }}"></x-form.input>
+                                    <x-form.input
+                                        name="email"
+                                        label="Email"
+                                        placeholder="Enter email"
+                                        value="{{ $invoice->email }}"
+                                    >
+                                    </x-form.input>
+                                    <x-form.input name="address" label="Address" placeholder="Enter address" value="{{ $invoice->address }}"></x-form.input>
                                 </div>
                                 <div class="col-md-6 col-sm-7">
-                                    <x-form.input name="phone" label="Phone" placeholder="Enter phone number"></x-form.input>
-                                    <x-form.input name="mobile" label="Mobile" placeholder="Enter mobile number"></x-form.input>
-                                    <x-form.input name="fax" label="Fax" placeholder="Enter fax number"></x-form.input>
+                                    <x-form.input name="phone" label="Phone" placeholder="Enter phone number"
+                                                  value="{{ $invoice->phone }}"
+                                    ></x-form.input>
+                                    <x-form.input name="mobile" label="Mobile" placeholder="Enter mobile number"
+                                                  value="{{ $invoice->mobile }}"
+                                    ></x-form.input>
+                                    <x-form.input name="fax" label="Fax" placeholder="Enter fax number" value="{{
+                                    $invoice->fax }}"></x-form.input>
                                 </div>
                             </div>
 
@@ -160,8 +181,7 @@
                                         <label for="salesperson" class="form-label me-5 fw-semibold">Salesperson:</label>
                                         <input name="salesperson" type="text" class="form-control" readonly
                                                id="salesperson"
-                                               value="{{$user->first_name }}"
-                                        />
+                                               value="{{ $invoice->salesperson }}" />
                                     </div>
                                 </div>
                                 <div class="col-md-6 d-flex justify-content-end">
@@ -187,6 +207,7 @@
 
                                         <input type="hidden" id="total-hidden-input" name="total" value="0.00">
                                     </div>
+
                                 </div>
                             </div>
 
@@ -203,6 +224,7 @@
                                                 name="balance"
                                                 class="form-control  border-0"
                                                 placeholder="Balance to be paid"
+                                                value="{{ $invoice->balance }}"
                                             />
                                         </div>
                                     </div>
@@ -213,7 +235,8 @@
                                 <div class="col-12">
                                     <div class="mb-3">
                                         <label for="note" class="form-label fw-semibold">Note:</label>
-                                        <textarea class="form-control" rows="2" name="notes" id="notes" placeholder="Invoice note"></textarea>
+                                        <textarea class="form-control" rows="2" name="notes" id="notes"
+                                                  placeholder="Invoice note" value="{{ $invoice->notes }}"></textarea>
                                     </div>
                                 </div>
                             </div>
@@ -274,11 +297,10 @@
                 <!-- /Invoice Actions -->
             </div>
         </form>
+        <!-- /Send Invoice Sidebar -->
+        <!-- /Offcanvas -->
     </div>
 </x-company-layout>
-
-
-
 
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -454,7 +476,7 @@
             removeButton.addEventListener('click',
                 function() {
                     this.parentNode.remove();
-            });
+                });
             newTaxGroup.appendChild(removeButton);
         }
 
