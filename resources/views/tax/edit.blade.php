@@ -1,8 +1,9 @@
 <x-comapany-layout :company="$company">
     <form method="POST" action="{{ route('tax.store', ['slug' => $company->slug]) }}" >
         @csrf
-        <x-form.input name="tax_name" placeholder="Enter Tax Name"/>
-        <x-form.input name="tax_percentage" placeholder="Enter tax percentage"/>
+        @method('PATCH')
+        <x-form.input name="tax_name" value="{{ $tax->tax_name }}"/>
+        <x-form.input name="tax_percentage" value="{{ $tax->tax_percentage }}"/>
         <div>
             <label>Type:</label>
             <div>

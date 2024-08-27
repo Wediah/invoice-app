@@ -41,28 +41,39 @@
                                         <i class="bx bx-dots-vertical-rounded"></i>
                                     </button>
                                     <div class="dropdown-menu">
-{{--                                        <form--}}
-{{--                                            action="{{ route('catalog.instock', ['slug' => $company->slug, 'id'--}}
-{{--                                            =>$catalog->id]) }}" method="POST" class="dropdown-item"--}}
-{{--                                        >--}}
-{{--                                            @csrf--}}
-{{--                                            @method('PATCH')--}}
-{{--                                            <button type="submit">--}}
-{{--                                                <i class="bx bx-trash me-1"></i>--}}
-{{--                                                Delete--}}
-{{--                                            </button>--}}
-{{--                                        </form>--}}
-{{--                                        <form--}}
-{{--                                            action="{{ route('catalog.outstock', ['slug' => $company->slug, 'id'--}}
-{{--                                            =>$catalog->id]) }}" method="POST" class="dropdown-item"--}}
-{{--                                        >--}}
-{{--                                            @csrf--}}
-{{--                                            @method('PATCH')--}}
-{{--                                            <button type="submit">--}}
-{{--                                                <i class="bx bx-trash me-1"></i>--}}
-{{--                                                Delete--}}
-{{--                                            </button>--}}
-{{--                                        </form>--}}
+                                        <form
+                                            action="{{ route('catalog.instock', ['slug' => $company->slug, 'id'
+                                            =>$catalog->id]) }}" method="POST" class="dropdown-item"
+                                        >
+                                            @csrf
+                                            @method('PATCH')
+                                            <button type="submit">
+                                                <i class="bx bx-trash me-1"></i>
+                                                In Stock
+                                            </button>
+                                        </form>
+                                        <form
+                                            action="{{ route('catalog.outstock', ['slug' => $company->slug, 'id'
+                                            =>$catalog->id]) }}" method="POST" class="dropdown-item"
+                                        >
+                                            @csrf
+                                            @method('PATCH')
+                                            <button type="submit">
+                                                <i class="bx bx-trash me-1"></i>
+                                                Out of Stock
+                                            </button>
+                                        </form>
+                                        <form
+                                            action="{{ route('catalog.limited', ['slug' => $company->slug, 'id'
+                                            =>$catalog->id]) }}" method="POST" class="dropdown-item"
+                                        >
+                                            @csrf
+                                            @method('PATCH')
+                                            <button type="submit">
+                                                <i class="bx bx-trash me-1"></i>
+                                                Limited
+                                            </button>
+                                        </form>
                                         <a class="dropdown-item" href="{{ route('catalog.edit', ['slug' =>
                                             $company->slug, 'id' => $catalog->id]) }}"
                                         >

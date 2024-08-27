@@ -51,9 +51,12 @@ class taxController extends Controller
         return view('tax.edit');
     }
 
-    public function update(string $id)
+    public function update($slug, $id)
     {
-        $tax = Tax::findOrFail($id);
+        $company = Company::where('slug', $slug)->firstOrFail();
+        $tax = Tax::where('id', $id)
+                    ->where('company_id', $company->id)
+                    ->firstOrFail();
 
         $validated = request()->validate([
             'tax_name' => 'sometimes',
