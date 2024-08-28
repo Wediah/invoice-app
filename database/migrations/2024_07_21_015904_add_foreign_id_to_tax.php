@@ -12,7 +12,11 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('taxes', function (Blueprint $table) {
-            $table->foreignId('company_id')->after('id')->references('id')->on('companies')->onDelete('cascade');
+            $table->foreignId('company_id')
+                ->after('id')
+                ->references('id')
+                ->on('companies')
+                ->onDelete('cascade');
         });
     }
 

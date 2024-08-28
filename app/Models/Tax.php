@@ -12,8 +12,8 @@ class Tax extends Model
 {
     use HasFactory;
 
-//    protected $guarded = [];
-    protected $fillable = ['tax_name', 'tax_percentage', 'type'];
+    protected $guarded = [];
+//    protected $fillable = ['tax_name', 'tax_percentage', 'type'];
 
     protected function type(): Attribute
     {

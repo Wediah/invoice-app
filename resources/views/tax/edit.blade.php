@@ -1,5 +1,5 @@
 <x-company-layout :company="$company">
-    <form method="POST" action="{{ route('tax.store', ['slug' => $company->slug]) }}" >
+    <form method="POST" action="{{ route('tax.update', ['slug' => $company->slug, 'id' => $tax->id]) }}" >
         @csrf
         @method('PATCH')
         <x-form.input name="tax_name" value="{{ $tax->tax_name }}"/>

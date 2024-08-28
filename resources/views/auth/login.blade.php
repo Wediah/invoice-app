@@ -25,7 +25,7 @@
             <div class="w-px-400 mx-auto">
                 <!-- Logo -->
                 <div class="app-brand mb-3">
-                    <a href="index.html" class="app-brand-link gap-2 mb-2">
+                    <a href="#" class="app-brand-link gap-2 mb-2">
 
                         {{-- <span class="app-brand-logo demo">
                             <svg width="26px" height="26px" viewBox="0 0 26 26" version="1.1"

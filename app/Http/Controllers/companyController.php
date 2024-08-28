@@ -25,7 +25,7 @@ class companyController extends Controller
     public function userAndCompany()
     {
         $user = Auth::user();
-        $companies = $user->companies;
+        $companies = $user->companies()->withCount('invoices')->withCount('catalogs')->get();
 
         return view('company.index', compact('companies'));
     }
