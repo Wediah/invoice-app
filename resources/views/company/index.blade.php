@@ -29,7 +29,7 @@
 
                             <div class="mx-auto mb-3 d-flex justify-content-center">
                                 <img src="{{ asset('storage/company_logo') }}/{{ $company->logo }}" alt="Avatar Image"
-                                    class=" w-px-100 object-fit-cover" style="height:120px; width:auto" />
+                                     class=" w-px-100 object-fit-cover" style="height:120px; width:auto" />
                             </div>
 
                             <h5 class="mb-1 card-title">{{ $company->name }}</h5>
@@ -56,7 +56,7 @@
                             </div>
                             <div class="d-flex align-items-center justify-content-center mt-auto">
                                 <a href="{{ route('catalog.show', ['slug' => $company->slug]) }} "
-                                    class="btn btn-primary d-flex align-items-center me-3"><i
+                                   class="btn btn-primary d-flex align-items-center me-3"><i
                                         class="bx bx-view me-1"></i>View Company</a>
                                 {{-- <a href="javascript:;" class="btn btn-label-secondary btn-icon"><i
                                 class="bx bx-envelope"></i></a> --}}
