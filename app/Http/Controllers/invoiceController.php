@@ -183,6 +183,49 @@ class invoiceController extends Controller
         return view('terms.index', compact('allTerms', 'company'));
     }
 
+    public function editTerms($slug, $id)
+    {
+        $company = Company::where('slug', $slug)->firstOrFail();
+        $term  = paymentTerms::where('id', $id)
+                                ->where('company_id', $company->id)
+                                ->firstOrFail();
+
+        return view('terms.edit', compact('term', 'company'));
+    }
+
+    public function updateTerms($slug, $id, Request $request)
+    {
+        $company = Company::where('slug', $slug)->firstOrFail();
+        $term  = paymentTerms::where('id', $id)
+            ->where('company_id', $company->id)
+            ->firstOrFail();
+
+        $validatedData = request()->validate([
+            'name' => 'sometimes|string|max:255',
+        ]);
+
+        $terms = array(
+            'company_id' => $company->id,
+            'name' => $validatedData['name'],
+        );
+
+        $term->update($terms);
+
+        return redirect()->back();
+    }
+
+    public function deleteTerms($slug, $id)
+    {
+        $company = Company::where('slug', $slug)->firstOrFail();
+        $term  = paymentTerms::where('id', $id)
+            ->where('company_id', $company->id)
+            ->firstOrFail();
+
+        $term->delete();
+
+        return redirect()->back();
+    }
+
     public function downloadPDF($id): \Illuminate\Http\Response
     {
         $invoice = invoice::where('id', $id)->firstOrFail();
