@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Company;
 use App\Models\Tax;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
 class taxController extends Controller
@@ -26,6 +27,7 @@ class taxController extends Controller
     public function store($slug)
     {
         $company = Company::where('slug', $slug)->firstOrFail();
+        $company_id = $company->id;
 
         $validatedData = request()->validate([
             'tax_name' => 'required|string|max:255',
@@ -34,7 +36,7 @@ class taxController extends Controller
         ]);
 
         $taxData = array(
-            'company_id' => $company->id,
+            'company_id' => $company_id,
             'tax_name' => $validatedData['tax_name'],
             'tax_percentage' => $validatedData['tax_percentage'],
             'type' => $validatedData['type'],
@@ -43,12 +45,16 @@ class taxController extends Controller
         Tax::create($taxData);
 
         return redirect()->back()->with('success', 'Tax added successfully!');
-//        return redirect()->route('tax.index')->with('success', 'Tax created successfully.');
     }
 
-    public function edit()
+    public function edit($slug, $id)
     {
-        return view('tax.edit');
+        $company = Company::where('slug', $slug)->firstOrFail();
+        $tax = Tax::where('id', $id)
+            ->where('company_id', $company->id)
+            ->firstOrFail();
+
+        return view('tax.edit', compact('tax', 'company'));
     }
 
     public function update($slug, $id)
@@ -72,15 +78,18 @@ class taxController extends Controller
 
         $tax->update($editTax);
 
-        return redirect()->route('tax.index')->with('success', 'Tax updated successfully.');
+        return redirect()->back()->with('success', 'Tax updated successfully.');
     }
 
-    public function destroy(String $id)
+    public function destroy($slug, $id): RedirectResponse
     {
-        $tax = Tax::findOrFail($id);
+        $company = Company::where('slug', $slug)->firstOrFail();
+        $tax = Tax::where('id', $id)
+            ->where('company_id', $company->id)
+            ->firstOrFail();
 
         $tax->delete();
 
-        return redirect()->route('tax.index')->with('success', 'Tax deleted successfully.');
+        return redirect()->back()->with('success', 'Tax deleted successfully.');
     }
 }

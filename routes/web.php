@@ -60,14 +60,17 @@ Route::middleware('auth')->group(function () {
     Route::get('{slug}/invoice/terms', [invoiceController::class, 'showTerms'])->name('invoice.show_terms');
     Route::post('{slug}/invoice/create_terms', [invoiceController::class, 'terms'])->name('invoice.store_terms');
     Route::get('terms/{slug}/index', [invoiceController::class, 'allTerms'])->name('terms.index');
+    Route::get('terms/{slug}/edit/{id}', [invoiceController::class, 'editTerms'])->name('terms.edit');
+    Route::patch('terms/{slug}/update/{id}', [invoiceController::class, 'updateTerms'])->name('terms.update');
+    Route::delete('terms/{slug}/delete/{id}', [invoiceController::class, 'deleteTerms'])->name('terms.delete');
 
     //tax
     Route::get('tax/{slug}/index', [taxController::class, 'index'])->name('tax.index');
     Route::get('/tax/{slug}/create', [taxController::class, 'create'])->name('tax.create');
     Route::post('/tax/{slug}/store', [taxController::class, 'store'])->name('tax.store');
-    Route::get('tax/edit/{id}', [taxController::class, 'edit'])->name('tax.edit');
-    Route::patch('/tax/update/{id}', [taxController::class, 'update'])->name('tax.update');
-    Route::delete('/tax/delete/{id}', [taxController::class, 'destroy'])->name('tax.destroy');
+    Route::get('tax/{slug}/edit/{id}', [taxController::class, 'edit'])->name('tax.edit');
+    Route::patch('/tax/{slug}/update/{id}', [taxController::class, 'update'])->name('tax.update');
+    Route::delete('/tax/{slug}/delete/{id}', [taxController::class, 'destroy'])->name('tax.delete');
 
     //download Invoice
     Route::get('/download-pdf/{id}', [invoiceController::class, 'downloadPDF'])->name('invoice.download_pdf');
