@@ -38,12 +38,12 @@
             </a>
             <ul class="menu-sub">
                 <li class="menu-item">
-                    <a href="app-invoice-list.html" class="menu-link">
+                    <a href="#" class="menu-link">
                         <div data-i18n="List">List</div>
                     </a>
                 </li>
                 <li class="menu-item">
-                    <a href="app-invoice-preview.html" class="menu-link">
+                    <a href="#" class="menu-link">
                         <div data-i18n="Create New">Create New</div>
                     </a>
                 </li>
@@ -129,7 +129,7 @@
                         <div data-i18n="User Management">User Management</div>
                     </a>
                 </li>
-             
+
             </ul>
         </li>
         <li class="menu-item">
@@ -180,9 +180,9 @@
         </li>
 
 
-     
 
-      
+
+
 
 
 

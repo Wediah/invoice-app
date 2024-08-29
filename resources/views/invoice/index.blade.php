@@ -1,4 +1,4 @@
-<x-company-layout :company="$company">
+<x-masterLayout :company="$company">
     <div class="container-xxl flex-grow-1 container-p-y">
         <div class="d-flex justify-content-between">
             <span>All Invoices</span>
@@ -99,4 +99,4 @@
             </div>
         </div>
     </div>
-</x-company-layout>
+</x-masterLayout>

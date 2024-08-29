@@ -1,9 +1,7 @@
-<x-company-layout :company="$company">
+<x-masterLayout :company="$company">
     <section class="p-12">
         <h1>{{ $company->name }}</h1>
 
-{{--        <a href="{{ route('tax.create', ['slug' => $company->slug]) }}">Create taxes</a>--}}
-{{--        <a href="{{ route('invoice.show_terms', ['slug' => $company->slug]) }}">Create terms</a>--}}
 
         <div class="d-flex justify-content-between">
             <span>All Products</span>
@@ -101,4 +99,4 @@
             </div>
         </div>
     </section>
-</x-company-layout>
+</x-masterLayout>

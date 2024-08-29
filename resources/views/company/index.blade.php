@@ -1,6 +1,4 @@
-
-
-<x-layout>
+<x-masterLayout>
     @section('title', 'Your Companies')
 
     <div class="container-xxl flex-grow-1 container-p-y">
@@ -28,7 +26,7 @@
         <div class="row g-4">
             @forelse  ($companies as $company)
                 <div class="col-xl-4 col-lg-6 col-md-6">
-                    <a href="{{ route('catalog.show', ['slug' => $company->slug]) }} " class="">
+                    <a href="{{ route('catalog.index', ['slug' => $company->slug]) }} " class="">
 
                         <div class="card h-100">
                             <div class="card-body text-center d-flex flex-column">
@@ -62,7 +60,7 @@
                                     </div>
                                 </div>
                                 <div class="d-flex align-items-center justify-content-center mt-auto">
-                                    <a href="{{ route('catalog.show', ['slug' => $company->slug]) }} "
+                                    <a href="{{ route('catalog.index', ['slug' => $company->slug]) }} "
                                         class="btn btn-primary d-flex align-items-center me-3"><i
                                             class="bx bx-view me-1"></i>View Company</a>
                                     {{-- <a href="javascript:;" class="btn btn-label-secondary btn-icon"><i
@@ -81,4 +79,4 @@
 
 
         <!--/ Connection Cards -->
-</x-layout>
+</x-masterLayout>

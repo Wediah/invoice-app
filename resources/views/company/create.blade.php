@@ -1,4 +1,4 @@
-<x-layout>
+<x-masterLayout>
 
   <style>
       .blabel {
@@ -45,7 +45,7 @@
                                   accept="image/png, image/jpeg" name="co_logo_path" value="" />
                           </label>
 
-                          {{-- <button type="button" class="btn btn-label-secondary account-image-reset mb-4" 
+                          {{-- <button type="button" class="btn btn-label-secondary account-image-reset mb-4"
                               onclick="document.getElementById('upload').value = null; return false;">
                                   <i class="bx bx-reset d-block d-sm-none"></i>
                                   <span class="d-none d-sm-block">Reset</span>
@@ -204,7 +204,7 @@
                                       description</label>
                                   <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" maxlength="150"
                                       name="lab_description">
-                                         
+
                                       </textarea>
                                   @error('lab_description')
                                       <p class="error">{{ $message }}</p>
@@ -245,4 +245,4 @@
           };
       }
   </script>
-</x-layout>
+</x-masterLayout>

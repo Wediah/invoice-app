@@ -1,4 +1,4 @@
-<x-company-layout :company="$company">
+<x-masterLayout :company="$company">
     <main class="max-w-lg p-6 mx-auto">
         <h1 class="text-center font-bold text-xl">Catalog</h1>
         <p class="text-sm font-md text-center">Add a new catalog</p>
@@ -21,4 +21,4 @@
 
         </form>
     </main>
-</x-company-layout>
+</x-masterLayout>
