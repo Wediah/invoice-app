@@ -1,14 +1,16 @@
-<x-company-layout :company="$company">
+<x-masterLayout :company="$company">
     <section class="container mx-auto">
         <div class="mb-4 border-b border-gray-200 dark:border-gray-700">
             <ul class="flex flex-wrap -mb-px text-sm font-medium text-center" id="default-tab" data-tabs-toggle="#default-tab-content" role="tablist">
                 <li class="me-2" role="presentation">
-                    <button class="inline-block p-4 border-b-2 rounded-t-lg" id="profile-tab" data-tabs-target="#profile" type="button" role="tab" aria-controls="profile" aria-selected="false">Profile</button>
+                    <button class="inline-block p-4 border-b-2 rounded-t-lg" id="profile-tab"
+                            data-tabs-target="#profile" type="button" role="tab" aria-controls="profile"
+                            aria-selected="false">Basic Information</button>
                 </li>
                 <li class="me-2" role="presentation">
                     <button class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300
                      dark:hover:text-gray-300" id="dashboard-tab" data-tabs-target="#dashboard" type="button"
-                            role="tab" aria-controls="dashboard" aria-selected="false">Company Information</button>
+                            role="tab" aria-controls="dashboard" aria-selected="false">Advance Information</button>
                 </li>
                 <li class="me-2" role="presentation">
                     <button class="inline-block p-4 border-b-2 rounded-t-lg hover:text-gray-600 hover:border-gray-300
@@ -24,20 +26,20 @@
         </div>
         <div id="default-tab-content">
             <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="profile" role="tabpanel" aria-labelledby="profile-tab">
-                @include('company.companyProfile')
+                @include('company.companyProfileForms.basicInfoForm')
             </div>
             <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="dashboard" role="tabpanel" aria-labelledby="dashboard-tab">
-                @include('company.companyInfo')
+                @include('company.companyProfileForms.advanceInfoForm')
             </div>
             <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="settings" role="tabpanel" aria-labelledby="settings-tab">
-                @include('company.financialInfo')
+                @include('company.companyProfileForms.financialInfoForm')
             </div>
             <div class="hidden p-4 rounded-lg bg-gray-50 dark:bg-gray-800" id="contacts" role="tabpanel" aria-labelledby="contacts-tab">
-                @include('company.companyPref')
+                @include('company.companyProfileForms.preferencesForm')
             </div>
         </div>
     </section>
-</x-company-layout>
+</x-masterLayout>
 
 @section('scripts')
     <script src="https://unpkg.com/flowbite@1.5.1/dist/flowbite.js"></script>

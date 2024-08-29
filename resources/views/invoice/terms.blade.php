@@ -1,4 +1,4 @@
-<x-company-layout :company="$company">
+<x-masterLayout :company="$company">
     <div class="max-w-lg p-6 mx-auto">
         <form action="{{ route('invoice.store_terms', ['slug' => $company->slug]) }}" method="POST">
             @csrf
@@ -13,4 +13,4 @@
             </div>
         </form>
     </div>
-</x-company-layout>
+</x-masterLayout>

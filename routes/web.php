@@ -36,7 +36,7 @@ Route::middleware('auth')->group(function () {
     //catalog/items
     Route::get('/company/{company_id}/catalog/create', [CatalogController::class, 'create'])->name('catalog.create');
     Route::post('/company/{company_id}/catalog', [CatalogController::class, 'store'])->name('catalog.store');
-    Route::get('/company/{slug}', [catalogController::class, 'show'])->name('catalog.show');
+    Route::get('/{slug}/all-catalogs/', [catalogController::class, 'index'])->name('catalog.index');
     Route::get('/catalog/{slug}/edit/{id}', [catalogController::class, 'edit'])->name('catalog.edit');
     Route::patch('/catalog/{slug}/update/{id}', [catalogController::class, 'update'])->name('catalog.update');
     Route::delete('/catalog/{slug}/delete/{id}', [catalogController::class, 'destroy'])->name('catalog.delete');

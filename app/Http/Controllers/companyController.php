@@ -154,7 +154,7 @@ class companyController extends Controller
     public function profile($slug): Factory|Application|View|\Illuminate\Contracts\Foundation\Application
     {
         $company = Company::where('slug', $slug)->first();
-        return view('businessProfile.index', compact('company'));
+        return view('company.companyProfileForms.index', compact('company'));
     }
 
     public function update(Request $request,$slug): RedirectResponse

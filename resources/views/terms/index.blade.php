@@ -1,4 +1,4 @@
-<x-company-layout :company="$company">
+<x-masterLayout :company="$company">
     <section class="p-12">
         <div class="d-flex justify-content-between">
             <span>All Terms</span>
@@ -44,4 +44,4 @@
             </div>
         </div>
     </section>
-</x-company-layout>
+</x-masterLayout>
