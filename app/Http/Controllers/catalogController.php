@@ -19,9 +19,12 @@ class catalogController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index($slug)
     {
-        //
+        $company = Company::where('slug', $slug)->firstOrFail();
+        $companyCatalog = $company->catalogs;
+        $user = Auth::user();
+        return view('company.catalog.index', compact('company', 'companyCatalog', 'user'));
     }
 
     /**
@@ -30,7 +33,7 @@ class catalogController extends Controller
     public function create($id)
     {
         $company = Company::findOrFail($id);
-        return view('catalog.create', compact('company'));
+        return view('company.catalog.create', compact('company'));
     }
 
     /**
@@ -81,10 +84,7 @@ class catalogController extends Controller
 
     public function show($slug)
     {
-        $company = Company::where('slug', $slug)->firstOrFail();
-        $companyCatalog = $company->catalogs;
-        $user = Auth::user();
-        return view('catalog.show', compact('company', 'companyCatalog', 'user'));
+
     }
 
     /**
@@ -99,7 +99,7 @@ class catalogController extends Controller
                             ->firstOrFail();
 
 
-        return view('catalog.edit', compact('catalog', 'company'));
+        return view('company.catalog.edit', compact('catalog', 'company'));
     }
 
     /**

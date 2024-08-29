@@ -1,4 +1,4 @@
-<x-company-layout :company="$company">
+<x-masterLayout :company="$company">
     <div class="container-xxl flex-grow-1 container-p-y">
         @if ($errors->any())
             <div class="alert alert-danger">
@@ -300,7 +300,7 @@
         <!-- /Send Invoice Sidebar -->
         <!-- /Offcanvas -->
     </div>
-</x-company-layout>
+</x-masterLayout>
 
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

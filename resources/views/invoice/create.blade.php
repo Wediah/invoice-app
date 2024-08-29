@@ -1,4 +1,4 @@
-<x-company-layout :company="$company">
+<x-masterLayout :company="$company">
     <div class="container-xxl flex-grow-1 container-p-y">
         @if ($errors->any())
             <div class="alert alert-danger">
@@ -22,7 +22,7 @@
                                 <div class="col-md-6 mb-md-0 mb-4">
                                     <div class="d-flex svg-illustration mb-4 gap-2 align-items-baseline">
                                         <img src="{{ asset('storage/company_logo') }}/{{$company->logo}}" alt="company logo"
-                                             class="h-12 w-12 rounded-circle shadow-lg"
+                                             class="h-12 w-12 rounded shadow-lg"
                                         >
                                         <span class="app-brand-text h3 mb-0 fw-bold">{{ $company->name }}</span>
                                     </div>
@@ -275,7 +275,7 @@
             </div>
         </form>
     </div>
-</x-company-layout>
+</x-masterLayout>
 
 
 

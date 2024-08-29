@@ -1,4 +1,4 @@
-<x-company-layout :company="$company">
+<x-masterLayout :company="$company">
     <form method="POST" action="{{ route('tax.update', ['slug' => $company->slug, 'id' => $tax->id]) }}" >
         @csrf
         @method('PATCH')
@@ -24,4 +24,4 @@
             >
         </div>
     </form>
-</x-company-layout>
+</x-masterLayout>
