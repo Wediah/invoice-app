@@ -1,49 +1,50 @@
 <x-masterLayout>
 
-  <style>
-      .blabel {
-          font-weight: 700;
-      }
+    <style>
+        .blabel {
+            font-weight: 700;
+        }
 
-      .error {
-          color: red;
-          font-size: 5px;
-      }
+        .error {
+            color: red;
+            font-size: 5px;
+        }
 
-      .mb-3 {
-          margin-bottom: 1.18rem !important;
-      }
-  </style>
-
-
+        .mb-3 {
+            margin-bottom: 1.18rem !important;
+        }
+    </style>
 
 
 
-  <div class="container-xxl flex-grow-1 container-p-y">
-      <h4 class="py-3 breadcrumb-wrapper mb-4">
-          <span class="text-muted fw-light"><a href="{{ route('dashboard') }}" style="color: #A8B1BB">All Companies</a> /</span>
-          Create Company
-      </h4>
-      <div class="card mb-4 px-0">
-          <h5 class="card-header">Add a new company</h5>
-          <!-- Account -->
 
-          <form method="POST" action="{{ route('company.store') }}" enctype="multipart/form-data">
-              @csrf
 
-              <div class="card-body">
-                  <div class="d-flex align-items-start align-items-sm-center gap-4">
-                      <img src="" alt="user-avatar"
-                          class="d-block  h-auto ms-0 ms-sm-4 rounded-3 user-profile-img" height="100"
-                          width="100" id="uploadedAvatar" name="lab_logo_path"
-                          onerror="this.onerror=null; this.src='{{ asset('assets/img/avatars/logo-placeholder.png') }}';" />
-                      <div class="button-wrapper">
-                          <label for="logo" class="btn btn-primary me-2 mb-4" tabindex="0">
-                              <span class="d-none d-sm-block">Upload Logo</span>
-                              <i class="bx bx-upload d-block d-sm-none"></i>
-                              <input type="file" id="logo" class="account-file-input" hidden
-                                  accept="image/png, image/jpeg" name="logo" value="" />
-                          </label>
+    <div class="container-xxl flex-grow-1 container-p-y">
+        <h4 class="py-3 breadcrumb-wrapper mb-4">
+            <span class="text-muted fw-light"><a href="{{ route('dashboard') }}" style="color: #A8B1BB">All Companies</a>
+                /</span>
+            Create Company
+        </h4>
+        <div class="card mb-4 px-0">
+            <h5 class="card-header">Add a new company</h5>
+            <!-- Account -->
+
+            <form method="POST" action="{{ route('company.store') }}" enctype="multipart/form-data">
+                @csrf
+
+                <div class="card-body">
+                    <div class="d-flex align-items-start align-items-sm-center gap-4">
+                        <img src="" alt="user-avatar"
+                            class="d-block  h-auto ms-0 ms-sm-4 rounded-3 user-profile-img" height="100"
+                            width="100" id="uploadedAvatar" name="company_logo_path"
+                            onerror="this.onerror=null; this.src='{{ asset('assets/img/avatars/logo-placeholder.png') }}';" />
+                        <div class="button-wrapper">
+                            <label for="upload" class="btn btn-primary me-2 mb-4" tabindex="0">
+                                <span class="d-none d-sm-block">Upload Logo</span>
+                                <i class="bx bx-upload d-block d-sm-none"></i>
+                                <input type="file" id="upload" class="account-file-input" hidden
+                                    accept="image/png, image/jpeg" name="co_logo_path" value="" />
+                            </label>
 
                           {{-- <button type="button" class="btn btn-label-secondary account-image-reset mb-4"
                               onclick="document.getElementById('upload').value = null; return false;">
@@ -51,16 +52,16 @@
                                   <span class="d-none d-sm-block">Reset</span>
                               </button> --}}
 
-                          {{-- <p class="mb-0">{{ $laboratories->lab_logo_path }}</p> --}}
-                          <p class="mb-0">Allowed JPG, GIF or PNG. Max size of 800K</p>
-                          @error('lab_logo_path')
-                              <p class="error">{{ $message }}</p>
-                          @enderror
-                      </div>
-                  </div>
-              </div>
+                            {{-- <p class="mb-0">{{ $laboratories->company_logo_path }}</p> --}}
+                            <p class="mb-0">Allowed JPG, GIF or PNG. Max size of 800K</p>
+                            @error('company_logo_path')
+                                <p class="error">{{ $message }}</p>
+                            @enderror
+                        </div>
+                    </div>
+                </div>
 
-              <div id="company-info" class="content">
+                <div id="company-info" class="content">
 
                   <div class="row g-4" style="margin: 0rem 1rem">
                       <div class="card-body">
@@ -105,8 +106,8 @@
                                           <label for="gps_address" class="form-label blabel">Google Map
                                               address</label>
 
-                                          <div class="input-group input-group-merge">
-                                              {{-- <span class="input-group-text">
+                                            <div class="input-group input-group-merge">
+                                                {{-- <span class="input-group-text">
                                                       Address
                                                   </span> --}}
                                               <input type="text" id="gps_address" name="gps_address"
@@ -130,8 +131,8 @@
                                       <div class=" col-sm-6">
                                           <label for="website" class="form-label blabel">Website URL</label>
 
-                                          <div class="input-group input-group-merge">
-                                              {{-- <span class="input-group-text">
+                                            <div class="input-group input-group-merge">
+                                                {{-- <span class="input-group-text">
                                                       Website
                                                   </span> --}}
                                               <input type="text" id="website" name="website"
@@ -148,8 +149,8 @@
                                       <div class="mb-4 col-sm-6">
                                           <label for="address" class="form-label blabel">Box Address</label>
 
-                                          <div class="input-group input-group-merge">
-                                              {{-- <span class="input-group-text">
+                                            <div class="input-group input-group-merge">
+                                                {{-- <span class="input-group-text">
                                                       Address
                                                   </span> --}}
                                               <input type="text" id="address" name=address"
@@ -205,23 +206,23 @@
 
 
 
-  <script>
-      // Update/reset user image of account page
-      let accountUserImage = document.getElementById('uploadedAvatar');
-      const fileInput = document.querySelector('.account-file-input'),
-          resetFileInput = document.querySelector('.account-image-reset');
+    <script>
+        // Update/reset user image of account page
+        let accountUserImage = document.getElementById('uploadedAvatar');
+        const fileInput = document.querySelector('.account-file-input'),
+            resetFileInput = document.querySelector('.account-image-reset');
 
-      if (accountUserImage) {
-          const resetImage = accountUserImage.src;
-          fileInput.onchange = () => {
-              if (fileInput.files[0]) {
-                  accountUserImage.src = window.URL.createObjectURL(fileInput.files[0]);
-              }
-          };
-          resetFileInput.onclick = () => {
-              fileInput.value = '';
-              accountUserImage.src = resetImage;
-          };
-      }
-  </script>
+        if (accountUserImage) {
+            const resetImage = accountUserImage.src;
+            fileInput.onchange = () => {
+                if (fileInput.files[0]) {
+                    accountUserImage.src = window.URL.createObjectURL(fileInput.files[0]);
+                }
+            };
+            resetFileInput.onclick = () => {
+                fileInput.value = '';
+                accountUserImage.src = resetImage;
+            };
+        }
+    </script>
 </x-masterLayout>
