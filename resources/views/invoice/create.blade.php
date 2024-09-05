@@ -250,7 +250,7 @@
                                                     <span class="input-group-text">₵</span>
                                                     <input type="number" name="total[]"
                                                         class="form-control invoice-item-sub_total  "
-                                                        aria-label="Amount (to the nearest dollar)" 
+                                                        aria-label="Amount (to the nearest dollar)"
                                                         required />
                                                 </div>
                                                 <div>
@@ -373,10 +373,10 @@
             <!-- Invoice Actions -->
             <div class="col-lg-3 col-12 invoice-actions">
 
-              
+
                 <div class="card mb-4">
                     <div class="card-body">
-                     
+
                       <div class="d-flex my-3">
                         <a href="./app-invoice-preview.html" class="btn btn-label-secondary w-100 me-3">Preview</a>
                         <button type="button" class="btn btn-label-secondary w-100">Save</button>
@@ -384,7 +384,7 @@
                       <button class="btn btn-primary d-grid w-100" data-bs-toggle="offcanvas" data-bs-target="#sendInvoiceOffcanvas">
                         <span class="d-flex align-items-center justify-content-center text-nowrap"><i class="bx bx-paper-plane bx-xs me-3"></i>Send Invoice</span>
                       </button>
-                   
+
                     </div>
                   </div>
 
@@ -393,11 +393,15 @@
                         <div class="card-body">
                             <h6 class="mb-2 ">Taxes</h6>
                             @foreach ($taxes as $tax)
-                            <div class="d-flex justify-content-between mb-2">
+                            <div class="d-flex justify-content-between mb-2 align-items-center gap-2">
                                 @if ($tax->type === 'SECONDARY')
-                                <label for="tax-{{ $tax->id }}" class="badge bg-label-warning mb-0">{{ $tax->tax_name }} {{ $tax->tax_percentage }}%</label>
+                                <label for="tax-{{ $tax->id }}" class="badge bg-label-warning mb-0 text-wrap">
+                                    {{$tax->tax_name }} {{ $tax->tax_percentage }}%
+                                </label>
                                 @else
-                                <label for="tax-{{ $tax->id }}" class="badge bg-label-primary mb-0">{{ $tax->tax_name }} {{ $tax->tax_percentage }}%</label>
+                                <label for="tax-{{ $tax->id }}" class="badge bg-label-primary mb-0 text-wrap">
+                                    {{$tax->tax_name }} {{ $tax->tax_percentage }}%
+                                </label>
                                 @endif
                                 <label class="switch switch-primary">
                                     <input type="checkbox" class="switch-input" id="tax-{{ $tax->id }}" name="tax_ids[]" value="{{ $tax->id }}" />
@@ -427,14 +431,14 @@
                                     <label class="form-check-label" for="payment-term-{{ $terms->id }}">{{ $terms->name }}</label>
                                 </div>
                                 @endforeach
-        
-                              
-                               
+
+
+
                             </div>
                         </div>
                     </div>
 
-                    
+
 
 
                     {{-- <div class="d-flex justify-content-between mb-2">
