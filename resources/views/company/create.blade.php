@@ -39,10 +39,10 @@
                             width="100" id="uploadedAvatar" name="company_logo_path"
                             onerror="this.onerror=null; this.src='{{ asset('assets/img/avatars/logo-placeholder.png') }}';" />
                         <div class="button-wrapper">
-                            <label for="upload" class="btn btn-primary me-2 mb-4" tabindex="0">
+                            <label for="logo" class="btn btn-primary me-2 mb-4" tabindex="0">
                                 <span class="d-none d-sm-block">Upload Logo</span>
                                 <i class="bx bx-upload d-block d-sm-none"></i>
-                                <input type="file" id="upload" class="account-file-input" hidden
+                                <input type="file" id="logo" class="account-file-input" hidden
                                     accept="image/png, image/jpeg" name="co_logo_path" value="" />
                             </label>
 
@@ -67,7 +67,7 @@
                       <div class="card-body">
                           <div class="row">
                               <div class="mb-4 col-md-6">
-                                  <label for="co_name" class="form-label blabel ">Company Name</label>
+                                  <label for="name" class="form-label blabel ">Company Name</label>
                                   <input type="text" id="name" name="name" class="form-control"
                                       value="" placeholder="Enter Company Name"/>
                                   @error('name')
@@ -95,7 +95,7 @@
                                               <input class="form-control mobile-number" type="text" id="phone"
                                                   name="phone" placeholder="202 555 0111" value="" />
                                           </div>
-                                          @error('co_phone')
+                                          @error('phone')
                                               <p class="error">{{ $message }}</p>
                                           @enderror
                                       </div>
@@ -111,7 +111,7 @@
                                                       Address
                                                   </span> --}}
                                               <input type="text" id="gps_address" name="gps_address"
-                                                  class="form-control" placeholder=" Enter longitude Cordinates"
+                                                  class="form-control" placeholder=" Enter longitude Coordinates"
                                                   value="" />
                                           </div>
                                           @error('gps_address')
@@ -154,7 +154,7 @@
                                                       Address
                                                   </span> --}}
                                               <input type="text" id="address" name=address"
-                                                  class="form-control" placeholder=" Enter Company Address"
+                                                  class="form-control" placeholder="Enter Company Address"
                                                   value="" />
                                           </div>
                                           @error('address')
