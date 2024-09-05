@@ -387,42 +387,55 @@
                    
                     </div>
                   </div>
-                    <h6 class="my-2">Payment Terms</h6>
-                    <div class="mb-4">
-                        @foreach ($company->paymentTerms as $terms)
-                        <div class="form-check mb-2">
-                            <input type="radio"  id="payment-term-{{ $terms->id }}" name="payment_terms_ids[]" class="form-check-input"
-                                 value="success" />
-                            <label class="form-check-label" for="payment-term-{{ $terms->id }}">{{ $terms->name }}</label>
-                        </div>
-                        @endforeach
 
-                      
-                       
-                    </div>
                     {{-- List all taxes here and let users toggle to apply tax --}}
-                    <h6 class="my-2">Taxes</h6>
-                    @foreach ($taxes as $tax)
-                    <div class="d-flex justify-content-between mb-2">
-                        @if ($tax->type === 'SECONDARY')
-                        <label for="tax-{{ $tax->id }}" class="badge bg-label-warning mb-0">{{ $tax->tax_name }} {{ $tax->tax_percentage }}%</label>
-                        @else
-                        <label for="tax-{{ $tax->id }}" class="badge bg-label-primary mb-0">{{ $tax->tax_name }} {{ $tax->tax_percentage }}%</label>
-                        @endif
-                        <label class="switch switch-primary">
-                            <input type="checkbox" class="switch-input" id="tax-{{ $tax->id }}" name="tax_ids[]" value="{{ $tax->id }}" />
-                            <span class="switch-toggle-slider">
-                                <span class="switch-on">
-                                    <i class="bx bx-check"></i>
-                                </span>
-                                <span class="switch-off">
-                                    <i class="bx bx-x"></i>
-                                </span>
-                            </span>
-                            <span class="switch-label"></span>
-                        </label>
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <h6 class="mb-2 ">Taxes</h6>
+                            @foreach ($taxes as $tax)
+                            <div class="d-flex justify-content-between mb-2">
+                                @if ($tax->type === 'SECONDARY')
+                                <label for="tax-{{ $tax->id }}" class="badge bg-label-warning mb-0">{{ $tax->tax_name }} {{ $tax->tax_percentage }}%</label>
+                                @else
+                                <label for="tax-{{ $tax->id }}" class="badge bg-label-primary mb-0">{{ $tax->tax_name }} {{ $tax->tax_percentage }}%</label>
+                                @endif
+                                <label class="switch switch-primary">
+                                    <input type="checkbox" class="switch-input" id="tax-{{ $tax->id }}" name="tax_ids[]" value="{{ $tax->id }}" />
+                                    <span class="switch-toggle-slider">
+                                        <span class="switch-on">
+                                            <i class="bx bx-check"></i>
+                                        </span>
+                                        <span class="switch-off">
+                                            <i class="bx bx-x"></i>
+                                        </span>
+                                    </span>
+                                    <span class="switch-label"></span>
+                                </label>
+                            </div>
+                            @endforeach
+                        </div>
                     </div>
-                    @endforeach
+
+                    <div class="card mb-4">
+                        <div class="card-body">
+                            <h6 class="my-2 ">Payment Terms</h6>
+                            <div class="mb-4">
+                                @foreach ($company->paymentTerms as $terms)
+                                <div class="form-check mb-2">
+                                    <input type="radio"  id="payment-term-{{ $terms->id }}" name="payment_terms_ids[]" class="form-check-input"
+                                         value="success" />
+                                    <label class="form-check-label" for="payment-term-{{ $terms->id }}">{{ $terms->name }}</label>
+                                </div>
+                                @endforeach
+        
+                              
+                               
+                            </div>
+                        </div>
+                    </div>
+
+                    
+
 
                     {{-- <div class="d-flex justify-content-between mb-2">
                         <label for="client-notes" class="mb-0">Tax 2</label>
