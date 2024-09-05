@@ -39,14 +39,14 @@
                             width="100" id="uploadedAvatar" name="company_logo_path"
                             onerror="this.onerror=null; this.src='{{ asset('assets/img/avatars/logo-placeholder.png') }}';" />
                         <div class="button-wrapper">
-                            <label for="upload" class="btn btn-primary me-2 mb-4" tabindex="0">
+                            <label for="logo" class="btn btn-primary me-2 mb-4" tabindex="0">
                                 <span class="d-none d-sm-block">Upload Logo</span>
                                 <i class="bx bx-upload d-block d-sm-none"></i>
-                                <input type="file" id="upload" class="account-file-input" hidden
+                                <input type="file" id="logo" class="account-file-input" hidden
                                     accept="image/png, image/jpeg" name="co_logo_path" value="" />
                             </label>
 
-                            {{-- <button type="button" class="btn btn-label-secondary account-image-reset mb-4"
+                          {{-- <button type="button" class="btn btn-label-secondary account-image-reset mb-4"
                               onclick="document.getElementById('upload').value = null; return false;">
                                   <i class="bx bx-reset d-block d-sm-none"></i>
                                   <span class="d-none d-sm-block">Reset</span>
@@ -63,172 +63,146 @@
 
                 <div id="company-info" class="content">
 
-                    <div class="row g-4" style="margin: 0rem 1rem">
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="mb-4 col-md-6">
-                                    <label for="co_name" class="form-label blabel ">Company Name</label>
-                                    <input type="text" id="co_name" name="co_name" class="form-control"
-                                        value="" />
-                                    @error('co_name')
-                                        <p class="error">{{ $message }}</p>
-                                    @enderror
-                                </div>
-                                <div class="mb-4 col-md-6">
-                                    <label for="co_email" class="form-label blabel">Company Email</label>
-                                    <input class="form-control" type="email" id="co_email" name="co_email"
-                                        value="" />
-                                    @error('co_email')
-                                        <p class="error ">{{ $message }}</p>
-                                    @enderror
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="row">
+                  <div class="row g-4" style="margin: 0rem 1rem">
+                      <div class="card-body">
+                          <div class="row">
+                              <div class="mb-4 col-md-6">
+                                  <label for="name" class="form-label blabel ">Company Name</label>
+                                  <input type="text" id="name" name="name" class="form-control"
+                                      value="" placeholder="Enter Company Name"/>
+                                  @error('name')
+                                      <p class="error">{{ $message }}</p>
+                                  @enderror
+                              </div>
+                              <div class="mb-4 col-md-6">
+                                  <label for="email" class="form-label blabel">Company Email</label>
+                                  <input class="form-control" type="email" id="email" name="email"
+                                      value="" placeholder="Enter Company Email"/>
+                                  @error('email')
+                                      <p class="error ">{{ $message }}</p>
+                                  @enderror
+                              </div>
+                              <div class="col-md-6">
+                                  <div class="row">
 
 
-                                        <div class="mb-2 col-sm-6">
-                                            <label for="co_phone" class="form-label blabel">Company Phone</label>
-                                            <div class="input-group input-group-merge">
-                                                <span class="input-group-text">
-                                                    <i class="fi fi-gh fis rounded-circle fs-3 me-1"></i> &nbsp
-                                                    (+233)</span>
-                                                <input class="form-control mobile-number" type="text" id="co_phone"
-                                                    name="co_phone" placeholder="202 555 0111" value="" />
-                                            </div>
-                                            @error('co_phone')
-                                                <p class="error">{{ $message }}</p>
-                                            @enderror
-                                        </div>
+                                      <div class="mb-2 col-sm-6">
+                                          <label for="phone" class="form-label blabel">Company Phone</label>
+                                          <div class="input-group input-group-merge">
+                                              <span class="input-group-text">
+                                                  <i class="fi fi-gh fis rounded-circle fs-3 me-1"></i> &nbsp
+                                                  (+233)</span>
+                                              <input class="form-control mobile-number" type="text" id="phone"
+                                                  name="phone" placeholder="202 555 0111" value="" />
+                                          </div>
+                                          @error('phone')
+                                              <p class="error">{{ $message }}</p>
+                                          @enderror
+                                      </div>
 
 
 
-                                        <div class="mb-4 col-sm-6">
-                                            <label for="GPS" class="form-label blabel">Google Map
-                                                address</label>
+                                      <div class="mb-4 col-sm-6">
+                                          <label for="gps_address" class="form-label blabel">Google Map
+                                              address</label>
 
                                             <div class="input-group input-group-merge">
                                                 {{-- <span class="input-group-text">
                                                       Address
                                                   </span> --}}
-                                                <input type="text" id="longitude" name="longitude"
-                                                    class="form-control" placeholder=" Enter longitude Cordinates"
-                                                    value="" />
-                                            </div>
-                                            @error('longitude')
-                                                <p class="error">{{ $message }}</p>
-                                            @enderror
-                                        </div>
+                                              <input type="text" id="gps_address" name="gps_address"
+                                                  class="form-control" placeholder=" Enter longitude Coordinates"
+                                                  value="" />
+                                          </div>
+                                          @error('gps_address')
+                                              <p class="error">{{ $message }}</p>
+                                          @enderror
+                                      </div>
 
 
 
-                                    </div>
-                                </div>
+                                  </div>
+                              </div>
 
-                                <div class=" col-md-6">
-                                    <div class="row">
+                              <div class=" col-md-6">
+                                  <div class="row">
 
 
-                                        <div class=" col-sm-6">
-                                            <label for="GPS" class="form-label blabel">Website URL</label>
+                                      <div class=" col-sm-6">
+                                          <label for="website" class="form-label blabel">Website URL</label>
 
                                             <div class="input-group input-group-merge">
                                                 {{-- <span class="input-group-text">
                                                       Website
                                                   </span> --}}
-                                                <input type="text" id="latitude" name="latitude"
-                                                    class="form-control" placeholder="Enter Logitude Cordinates"
-                                                    value="" />
-                                            </div>
-                                            @error('latitude')
-                                                <p class="error">{{ $message }}</p>
-                                            @enderror
-                                        </div>
+                                              <input type="text" id="website" name="website"
+                                                  class="form-control" placeholder="Enter Company Website"
+                                                  value="" />
+                                          </div>
+                                          @error('website')
+                                              <p class="error">{{ $message }}</p>
+                                          @enderror
+                                      </div>
 
 
 
-                                        <div class="mb-4 col-sm-6">
-                                            <label for="GPS" class="form-label blabel">Box Address</label>
+                                      <div class="mb-4 col-sm-6">
+                                          <label for="address" class="form-label blabel">Box Address</label>
 
                                             <div class="input-group input-group-merge">
                                                 {{-- <span class="input-group-text">
                                                       Address
                                                   </span> --}}
-                                                <input type="text" id="longitude" name="longitude"
-                                                    class="form-control" placeholder=" Enter longitude Cordinates"
-                                                    value="" />
-                                            </div>
-                                            @error('longitude')
-                                                <p class="error">{{ $message }}</p>
-                                            @enderror
-                                        </div>
+                                              <input type="text" id="address" name=address"
+                                                  class="form-control" placeholder="Enter Company Address"
+                                                  value="" />
+                                          </div>
+                                          @error('address')
+                                              <p class="error">{{ $message }}</p>
+                                          @enderror
+                                      </div>
 
 
-                                    </div>
-                                </div>
-                                <div class="mb-4 col-md-6">
-                                    <label for="co_phone" class="form-label blabel">Company Category</label>
+                                  </div>
+                              </div>
+                              <div class="mb-4 col-md-6">
+                                  <label for="category" class="form-label blabel">Company Category</label>
 
-                                    <select id="multicol-country" class="select2 form-select"
-                                        data-allow-clear="true">
-                                        <option value="">Select</option>
-                                        <option value="Australia">Australia</option>
-                                        <option value="Bangladesh">Bangladesh</option>
-                                        <option value="Belarus">Belarus</option>
-                                        <option value="Brazil">Brazil</option>
-                                        <option value="Canada">Canada</option>
-                                        <option value="China">China</option>
-                                        <option value="France">France</option>
-                                        <option value="Germany">Germany</option>
-                                        <option value="India">India</option>
-                                        <option value="Indonesia">Indonesia</option>
-                                        <option value="Israel">Israel</option>
-                                        <option value="Italy">Italy</option>
-                                        <option value="Japan">Japan</option>
-                                        <option value="Korea">Korea, Republic of</option>
-                                        <option value="Mexico">Mexico</option>
-                                        <option value="Philippines">Philippines</option>
-                                        <option value="Russia">Russian Federation</option>
-                                        <option value="South Africa">South Africa</option>
-                                        <option value="Thailand">Thailand</option>
-                                        <option value="Turkey">Turkey</option>
-                                        <option value="Ukraine">Ukraine</option>
-                                        <option value="United Arab Emirates">United Arab Emirates</option>
-                                        <option value="United Kingdom">United Kingdom</option>
-                                        <option value="United States">United States</option>
-                                    </select>
-                                    @error('co_phone')
-                                        <p class="error">{{ $message }}</p>
-                                    @enderror
-                                </div>
-                                <div class="mb-4 col-md-6">
-                                    <label for="exampleFormControlTextarea1" class="form-label blabel">company description</label>
-            
+                                  <div class="input-group input-group-merge">
+                                      <input type="text" id="category" name=category"
+                                             class="form-control" placeholder=" Enter Company Category"
+                                             value="" />
+                                  </div>
+                                  @error('category')
+                                      <p class="error">{{ $message }}</p>
+                                  @enderror
+                              </div>
+                              <div class="mb-4 col-md-6">
+                                  <label for="description" class="form-label blabel">company
+                                      description</label>
+                                  <textarea class="form-control" id="description" rows="3" maxlength="150"
+                                      name="description">
+
+                                      </textarea>
+                                  @error('description')
+                                      <p class="error">{{ $message }}</p>
+                                  @enderror
+                              </div>
 
 
-
-                                    <div class="input-group">
-                                        <span class="input-group-text">Brief Description</span>
-                                        <textarea class="form-control" aria-label="With textarea" placeholder="Comment" name="company_description"></textarea>
-                                    </div>
-
-
-                                    @error('company_description')
-                                        <p class="error">{{ $message }}</p>
-                                    @enderror
-                                </div>
-
-
-                            </div>
-                            <br>
-                            <div class="mt-1" style="float: right">
-                                <button type="submit" class="btn btn-primary me-sm-3 me-1">Save
-                                    Changes</button>
-                                <a href="" class="btn btn-label-secondary">Cancel Edit</a>
-                            </div>
-            </form>
-
-        </div>
-    </div>
+                          </div>
+                          <br>
+                          <div class="mt-1" style="float: right">
+                              <button type="submit" class="btn btn-primary me-sm-3 me-1">Save
+                                  Changes</button>
+                              <a href="" class="btn btn-label-secondary">Cancel Edit</a>
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </form>
+      </div>
+  </div>
 
 
 

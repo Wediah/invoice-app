@@ -40,6 +40,8 @@ class companyController extends Controller
             'address' => 'required|string',
             'logo' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'category' => 'required|string',
+            'description' => 'required|string|max:255',
+            'website' => 'required|string',
         ]);
 
         $companyData = [
