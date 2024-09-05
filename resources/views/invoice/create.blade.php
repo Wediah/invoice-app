@@ -1,463 +1,515 @@
 <x-masterLayout :company="$company">
+    <!-- Content -->
+    @push('styles')
+        <style>
+            .input-group-text {
+                padding: 0.269rem 0.285rem;
+                font-size: 0.8375rem;
+
+            }
+
+            input::-webkit-outer-spin-button,
+            input::-webkit-inner-spin-button {
+                -webkit-appearance: none;
+                margin: 0;
+            }
+
+            input[type="number"] {
+                -moz-appearance: textfield;
+            }
+
+            .form-control[readonly] {
+                background-color: #fff;
+                opacity: 1;
+            }
+        </style>
+    @endpush
+
     <div class="container-xxl flex-grow-1 container-p-y">
-        @if ($errors->any())
-            <div class="alert alert-danger">
-                <ul>
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
-        @endif
-        <form method="POST" action="{{ route('invoice.store', ['slug' => $company->slug]) }}" class="mt-10 space-y-6"
-              enctype="multipart/form-data">
-            @csrf
+        <div class="row invoice-add">
+            <!-- Invoice Add-->
+            <div class="col-lg-9 col-12 mb-lg-0 mb-4">
+                <div class="card invoice-preview-card">
+                    <div class="card-body">
+                        <div class="row p-sm-3 p-0">
+                            <div class="col-md-6 mb-md-0 mb-4">
+                                <div class="d-flex svg-illustration mb-4 gap-2">
+                                    <img src="{{ asset('storage/company_logo') }}/{{ $company->logo }}"
+                                        alt="company logo" class="h-12 w-12 rounded shadow-lg "
+                                        style="width: auot; height: 50px;">
 
-            <div class="row invoice-add">
-                <!-- Invoice Add-->
-                <div class="col-lg-9 col-12 mb-lg-0 mb-4">
-                    <div class="card invoice-preview-card">
-                        <div class="card-body">
-                            <div class="row p-sm-3 p-0">
-                                <div class="col-md-6 mb-md-0 mb-4">
-                                    <div class="d-flex svg-illustration mb-4 gap-2 align-items-baseline">
-                                        <img src="{{ asset('storage/company_logo') }}/{{$company->logo}}" alt="company logo"
-                                             class="h-12 w-12 rounded shadow-lg"
-                                        >
-                                        <span class="app-brand-text h3 mb-0 fw-bold">{{ $company->name }}</span>
+                                </div>
+                                <span class="app-brand-text h5 mb-2 fw-bold">{{ $company->name }}</span>
+
+                                <p class="mb-1">Company Box number</p>
+                                <p class="mb-1">{{ $company->address }}</p>
+                                <p class="mb-0">{{ $company->phone }}</p>
+                            </div>
+                            <div class="col-md-6">
+                                <dl class="row mb-2">
+                                    <dt class="col-sm-6 mb-2 mb-sm-0 text-md-end">
+                                        <span class="h4 text-capitalize mb-0 text-nowrap">Invoice #</span>
+                                    </dt>
+                                    <dd class="col-sm-6 d-flex justify-content-md-end">
+                                        <div class="w-px-150">
+                                            <input type="text" class="form-control" disabled placeholder="3905"
+                                                value="3905" id="invoiceId" />
+                                        </div>
+                                    </dd>
+                                    <dt class="col-sm-6 mb-2 mb-sm-0 text-md-end">
+                                        <span class="fw-normal">Date:</span>
+                                    </dt>
+                                    <dd class="col-sm-6 d-flex justify-content-md-end">
+                                        <div class="w-px-150">
+                                            <input type="text" class="form-control date-picker"
+                                                placeholder="YYYY-MM-DD" />
+                                        </div>
+                                    </dd>
+                                    <dt class="col-sm-6 mb-2 mb-sm-0 text-md-end">
+                                        <span class="fw-normal">Due Date:</span>
+                                    </dt>
+                                    <dd class="col-sm-6 d-flex justify-content-md-end">
+                                        <div class="w-px-150">
+                                            <input type="text" class="form-control date-picker"
+                                                placeholder="YYYY-MM-DD" />
+                                        </div>
+                                    </dd>
+                                </dl>
+                            </div>
+                        </div>
+
+                        <hr class="my-4 mx-n4" />
+
+                        <div class="col-lg-12 col-md-6 ">
+                            <div class="mt-3" style="float: right;">
+                                <!-- Button trigger modal -->
+
+                                <div data-bs-toggle="modal" data-bs-target="#modalCenter">
+                                    <span class="badge bg-label-secondary p-2 rounded"><i
+                                            class="bx bx-edit-alt"></i>EDIT</span>
+                                </div>
+
+                                <!-- Modal -->
+                                <div class="modal fade" id="modalCenter" tabindex="-1" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="modalCenterTitle">Invoice TO</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+
+                                                <div class="row g-4 mb-3">
+                                                    <div class="col mb-0">
+                                                        <label for="contact_person" class="form-label">Contact
+                                                            Person</label>
+                                                        <input type="text" class="form-control no-border"
+                                                            name="contact_person" placeholder="Contact Rep"
+                                                            aria-label="Enter Contact Person"
+                                                            aria-describedby="basic-addon11" value="" />
+                                                    </div>
+                                                    <div class="col mb-0">
+                                                        <label for="company_name" class="form-label">Company
+                                                            Name</label>
+                                                        <input type="text" class="form-control no-border"
+                                                            name="company_name" placeholder="Company Name"
+                                                            aria-label="Enter Company Name"
+                                                            aria-describedby="basic-addon11" value="" />
+                                                    </div>
+                                                </div>
+                                                <div class="row g-4 mb-3">
+                                                    <div class="col mb-0">
+                                                        <label for="company_address" class="form-label">Company
+                                                            Address</label>
+                                                        <input type="text" class="form-control no-border"
+                                                            name="company_address" placeholder="Company Address"
+                                                            aria-label="Enter Company Address"
+                                                            aria-describedby="basic-addon11" value="" />
+                                                    </div>
+                                                    <div class="col mb-0">
+                                                        <label for="company_email" class="form-label">Company Email</label>
+                                                        <input type="text" class="form-control no-border"
+                                                            placeholder="Company Email"
+                                                            aria-label="Enter Company Email" name="company_email"
+                                                            aria-describedby="basic-addon11" value="" />
+                                                    </div>
+                                                </div>
+                                                <div class="row g-4 mb-3">
+                                                    <div class="col mb-0">
+                                                        <label for="company_phone" class="form-label">Company Phone</label>
+                                                        <input type="text" class="form-control no-border" name="company_phone"
+                                                        placeholder="Company Phone" aria-label="Enter Company Phone"
+                                                        aria-describedby="basic-addon11" value="" />
+                                                    </div>
+                                                    <div class="col mb-0">
+                                                        <label for="fax_number" class="form-label">Fax Number</label>
+                                                        <input type="text" class="form-control no-border" name="fax_number"
+                                                        placeholder="Enter fax number" aria-label="Enter fax number"
+                                                        aria-describedby="basic-addon11" value="" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer d-flex justify-content-between">
+                                                <button type="button" class="btn btn-label-secondary"
+                                                    data-bs-dismiss="modal">
+                                                    Close
+                                                </button>
+                                                <button type="button" id="invoiceTo" class="btn btn-primary">Apply changes</button>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <p class="mb-1">{{ $company->address }}</p>
-                                    <p class="mb-0">{{ $company->phone }}</p>
-                                </div>
-                                <div class="col-md-6">
-                                    <dl class="row mb-2">
-                                        <dt class="col-sm-6 mb-2 mb-sm-0 text-md-end">
-                                            <span class="h4 text-capitalize mb-0 text-nowrap">Invoice #</span>
-                                        </dt>
-                                        <dd class="col-sm-6 d-flex justify-content-md-end">
-                                            <div class="w-px-150">
-                                                <input
-                                                    type="text"
-                                                    class="form-control"
-                                                    readonly
-                                                    value="{{ $invoiceNumber }}"
-                                                    id="invoiceId"
-                                                />
-                                            </div>
-                                        </dd>
-                                        <dt class="col-sm-6 mb-2 mb-sm-0 text-md-end">
-                                            <span class="fw-normal">Date:</span>
-                                        </dt>
-                                        <dd class="col-sm-6 d-flex justify-content-md-end">
-                                            <div class="w-px-150">
-                                                <input type="text" class="form-control date-picker"  readonly value="{{ date
-                                                ('Y-m-d') }}" />
-                                            </div>
-                                        </dd>
-                                        <dt class="col-sm-6 mb-2 mb-sm-0 text-md-end">
-                                            <span class="fw-normal">Due Date:</span>
-                                        </dt>
-                                        <dd class="col-sm-6 d-flex justify-content-md-end">
-                                            <div class="w-px-150">
-                                                <input type="date" name="due_date" class="form-control date-picker"/>
-                                            </div>
-                                        </dd>
-                                    </dl>
                                 </div>
                             </div>
+                        </div>
+                        <div  class="p-3 mt-3 ">
+                            <!-- Information will be displayed here -->
+                        </div>
+                        <div class="row p-sm-3 p-0">
+                            <h5 class="pb-2">Invoice To:</h5>
 
-                            <hr class="my-4 mx-n4" />
-
-                            <div class="row p-sm-3 p-0">
-                                <h6 class="pb-2">Invoice To:</h6>
-                                <div class="col-md-6 col-sm-5 col-12 mb-sm-0 mb-4">
-                                    <x-form.input name="customer_name" label="Name" placeholder="Enter customer name"></x-form.input>
-                                    <x-form.input name="email" label="Email" placeholder="Enter email"></x-form.input>
-                                    <x-form.input name="address" label="Address" placeholder="Enter address"></x-form.input>
-                                </div>
-                                <div class="col-md-6 col-sm-7">
-                                    <x-form.input name="phone" label="Phone" placeholder="Enter phone number"></x-form.input>
-                                    <x-form.input name="mobile" label="Mobile" placeholder="Enter mobile number"></x-form.input>
-                                    <x-form.input name="fax" label="Fax" placeholder="Enter fax number"></x-form.input>
-                                </div>
+                            <div  id="displayArea" class="col-md-12 col-sm-5 col-12 mb-sm-0 mb-4 ">
+                                <p class="mb-1"> Contact Person:</p>
+                                <p class="mb-1">Company Name:</p>
+                                <p class="mb-1">Company Address:</p>
+                                <p class="mb-1">Company Email:</p>
+                                <p class="mb-1">Company Phone:</p>
+                                <p class="mb-0">Fax Number:</p>
                             </div>
+                            {{-- <div class="col-md-6 col-sm-7">
+                                <h6 class="pb-2">Bill To:</h6>
+                                <table>
+                                    <tbody>
+                                        <tr>
+                                            <td class="pe-3">Total Due:</td>
+                                            <td>$12,110.55</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="pe-3">Bank name:</td>
+                                            <td>American Bank</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="pe-3">Country:</td>
+                                            <td>United States</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="pe-3">IBAN:</td>
+                                            <td>ETD95476213874685</td>
+                                        </tr>
+                                        <tr>
+                                            <td class="pe-3">SWIFT code:</td>
+                                            <td>BR91905</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div> --}}
+                        </div>
 
-                            <hr class="mx-n4" />
+                        <hr class="mx-n4" />
 
-                            <div class="source-item py-sm-3">
-                                <div class="mb-3" data-repeater-list="group-a">
-                                    <div class="repeater-wrapper pt-0 pt-md-4" data-repeater-item>
-                                        <div class="d-flex border rounded position-relative pe-0">
-                                            <div id="itemContainer">
-                                                <div class="row w-100 m-0 p-3 item-group">
-                                                    <div class="col-md-6 col-12 mb-md-0 mb-3 ps-md-0">
-                                                        <p class="mb-2 repeater-title">Item</p>
-                                                        <select name="catalog_id[]" class="catalog_id form-select
-                                                        item-details mb-2">
-                                                            @foreach($catalogs as $catalog)
-                                                                <option value="{{ $catalog->id }}">
-                                                                    {{ $catalog->name }}
-                                                                </option>
-                                                            @endforeach
-                                                        </select>
-                                                    </div>
-                                                    <div class="col-md-2 col-12 mb-md-0 mb-3">
-                                                        <p class="mb-2 repeater-title">Unit</p>
-                                                        <div class="d-flex gap-1 align-items-center border
-                                                        border-dark ">
-                                                            <span class="p-2">GH₵</span>
-                                                            <input
-                                                                type="number"
-                                                                name="price"
-                                                                class="form-control invoice-item-qty quantity border-0"
-                                                                value=""
-                                                                readonly
-                                                            />
+                        <form class="source-item py-sm-3">
+                            <div class="mb-3" data-repeater-list="group-a">
+                                <div class="repeater-wrapper pt-0 pt-md-4" data-repeater-item>
+                                    <div class="d-flex border rounded position-relative pe-0">
+                                        <div class="row w-100 m-0 p-3">
+                                            <div class="col-md-4 col-12 mb-md-0 mb-3 ps-md-0">
+                                                <p class="mb-2 repeater-title">Item</p>
+                                                <select name="catalog_id[]"
+                                                    class="catalog_id form-select item-detailsX mb-2">
+                                                    <option selected disabled>Select Item</option>
+                                                    @foreach ($catalogs as $catalog)
+                                                        <option value="{{ $catalog->id }}">
+                                                            {{ $catalog->name }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                            <div class="col-md-3 col-12 mb-md-0 mb-3">
+                                                <p class="mb-2 repeater-title">Unit Cost</p>
+                                                <input type="number" name="price"
+                                                    class="form-control invoice-item-price mb-2" placeholder="00"
+                                                    min="12" />
+                                                {{-- <div>
+                                                    <span>Discount:</span>
+                                                    <span class="discount me-2">0%</span>
+                                                    <span class="tax-1 me-2" data-bs-toggle="tooltip"
+                                                        data-bs-placement="top" title="Tax 1">0%</span>
+                                                    <span class="tax-2" data-bs-toggle="tooltip"
+                                                        data-bs-placement="top" title="Tax 2">0%</span>
+                                                </div> --}}
+                                            </div>
+                                            <div class="col-md-2 col-12 mb-md-0 mb-3">
+                                                <p class="mb-2 repeater-title">Qty</p>
+                                                <input type="number" name="quantity[]"
+                                                    class="form-control quantity invoice-item-qty"
+                                                     min="1"  />
+                                            </div>
+                                            <div class="col-md-3 col-12 pe-0">
+                                                <p class="mb-2 repeater-title">Sub Total</p>
+                                                <div class="input-group">
+                                                    <span class="input-group-text">₵</span>
+                                                    <input type="number" name="total[]"
+                                                        class="form-control invoice-item-sub_total  "
+                                                        aria-label="Amount (to the nearest dollar)" 
+                                                        required />
+                                                </div>
+                                                <div>
+                                                    <span>Discount:</span>
+                                                    <span class="discount me-2">0%</span>
+                                                    {{-- <span class="tax-1 me-2" data-bs-toggle="tooltip"
+                                                        data-bs-placement="top" title="Tax 1">0%</span> --}}
+                                                    {{-- <span class="tax-2" data-bs-toggle="tooltip"
+                                                        data-bs-placement="top" title="Tax 2">0%</span> --}}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div
+                                            class="d-flex flex-column align-items-center justify-content-between border-start p-2">
+                                            <i class="bx bx-x fs-4 text-muted cursor-pointer" data-repeater-delete></i>
+                                            <div class="dropdown">
+                                                <i class="bx bx-cog bx-xs text-muted cursor-pointer more-options-dropdown"
+                                                    role="button" id="dropdownMenuButton" data-bs-toggle="dropdown"
+                                                    data-bs-auto-close="outside" aria-expanded="false">
+                                                </i>
+                                                <div class="dropdown-menu dropdown-menu-end w-px-300 p-3"
+                                                    aria-labelledby="dropdownMenuButton">
+                                                    <div class="row g-3">
+                                                        <div class="col-12">
+                                                            <label for="discountInput"
+                                                                class="form-label">Discount(%)</label>
+                                                            <input type="number" class="form-control"
+                                                                id="discountInput" min="0" max="100" />
                                                         </div>
-                                                    </div>
-                                                    <div class="col-md-2 col-12 mb-md-0 mb-3">
-                                                        <p class="mb-2 repeater-title">Qty</p>
-                                                        <input
-                                                            type="number"
-                                                            name="quantity[]"
-                                                            class="form-control invoice-item-qty quantity w-100"
-                                                            placeholder="1"
-                                                        />
-                                                    </div>
-                                                    <div class="col-md-2 col-12 mb-md-0 mb-3">
-                                                        <p class="mb-2 repeater-title">Total</p>
-                                                        <div class="d-flex align-items-center  ">
-                                                            <span class="py-2">GH₵</span>
-                                                            <input
-                                                                type="text"
-                                                                name="total[]"
-                                                                class="form-control invoice-item-qty quantity border-0"
-                                                                value=""
-                                                                readonly
-                                                            />
+                                                        {{-- <div class="col-md-6">
+                                                            <label for="taxInput1" class="form-label">Tax 1</label>
+                                                            <select name="tax-1-input" id="taxInput1"
+                                                                class="form-select tax-select">
+                                                                <option value="0%" selected>0%</option>
+                                                                <option value="1%">1%</option>
+                                                                <option value="10%">10%</option>
+                                                                <option value="18%">18%</option>
+                                                                <option value="40%">40%</option>
+                                                            </select>
                                                         </div>
+                                                        <div class="col-md-6">
+                                                            <label for="taxInput2" class="form-label">Tax 2</label>
+                                                            <select name="tax-2-input" id="taxInput2"
+                                                                class="form-select tax-select">
+                                                                <option value="0%" selected>0%</option>
+                                                                <option value="1%">1%</option>
+                                                                <option value="10%">10%</option>
+                                                                <option value="18%">18%</option>
+                                                                <option value="40%">40%</option>
+                                                            </select>
+                                                        </div> --}}
                                                     </div>
+                                                    <div class="dropdown-divider my-3"></div>
+                                                    <button type="button"
+                                                        class="btn btn-label-primary btn-apply-changes">Apply</button>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="row">
-                                    <div class="col-12">
-                                        <button id="addItem" type="button" class="btn btn-primary text-black
-                                        hover:text-white"
-                                                data-repeater-create>Add
-                                            Item</button>
-                                    </div>
-                                </div>
                             </div>
-
-                            <hr class="my-4 mx-n4" />
-
-                            <div class="row py-sm-3">
-                                <div class="col-md-6 mb-md-0 mb-3">
-                                    <div class="d-flex align-items-center mb-3">
-                                        <label for="salesperson" class="form-label me-5 fw-semibold">Salesperson:</label>
-                                        <input name="salesperson" type="text" class="form-control" readonly
-                                               id="salesperson"
-                                               value="{{$user->first_name }}"
-                                        />
-                                    </div>
-                                </div>
-                                <div class="col-md-6 d-flex justify-content-end">
-                                    <div class="invoice-calculations">
-                                        <div class="d-flex justify-content-between mb-2 gap-4">
-                                            <span class="w-px-100">Subtotal:</span>
-                                            <span class="fw-semibold" id="subtotal">GH₵ 0.00</span>
-                                        </div>
-                                        <div class="d-flex justify-content-between mb-2 gap-4">
-                                            <span class="w-px-100">Discount:</span>
-                                            <span class="fw-semibold" id="discount">GH₵ 0.00</span>
-                                        </div>
-
-                                        <!-- Taxes Section -->
-                                        <div id="tax_display" class="mb-2"></div>
-
-                                        <hr />
-
-                                        <div class="d-flex justify-content-between gap-4">
-                                            <span class="w-px-100">Total:</span>
-                                            <span class="fw-semibold" id="total">GH₵ 0.00</span>
-                                        </div>
-
-                                        <input type="hidden" id="total-hidden-input" name="total" value="0.00">
-                                    </div>
-                                </div>
-                            </div>
-
-                            <hr class="my-4" />
-
                             <div class="row">
                                 <div class="col-12">
-                                    <div class="mb-3">
-                                        <label for="note" class="form-label fw-semibold">Balance:</label>
-                                        <div class="d-flex gap-1 align-items-center border border-dark ">
-                                            <span class="py-2 px-2">GH₵</span>
-                                            <input
-                                                type="number"
-                                                name="balance"
-                                                class="form-control  border-0"
-                                                placeholder="Balance to be paid"
-                                            />
-                                        </div>
+                                    <button type="button" class="btn btn-primary" data-repeater-create>Add
+                                        Item</button>
+                                </div>
+                            </div>
+                        </form>
+
+                        <hr class="my-4 mx-n4" />
+
+                        <div class="row py-sm-3">
+                            <div class="col-md-6 mb-md-0 mb-3">
+                                <div class="d-flex align-items-center mb-3">
+                                    <label for="salesperson" class="form-label me-1 fw-semibold">Salesperson:</label>
+                                    <p class="mb-1">{{ $user->first_name }}</p>
+
+                                </div>
+                                <input type="text" class="form-control" id="invoiceMsg"
+                                    placeholder="Thanks for your business" />
+                            </div>
+                            <div class="col-md-6 d-flex justify-content-end">
+                                <div class="invoice-calculations">
+                                    <div class="d-flex justify-content-between mb-2">
+                                        <span class="w-px-100">Subtotal:</span>
+                                        <span class="fw-semibold subtotal">$00.00</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between mb-2">
+                                        <span class="w-px-100">Discount:</span>
+                                        <span class="fw-semibold discount">$00.00</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between mb-2">
+                                        <span class="w-px-100">Tax:</span>
+                                        <span class="fw-semibold tax">$00.00</span>
+                                    </div>
+                                    <hr />
+                                    <div class="d-flex justify-content-between">
+                                        <span class="w-px-100">Total:</span>
+                                        <span class="fw-semibold total">$00.00</span>
                                     </div>
                                 </div>
                             </div>
+                        </div>
 
-                            <div class="row">
-                                <div class="col-12">
-                                    <div class="mb-3">
-                                        <label for="note" class="form-label fw-semibold">Note:</label>
-                                        <textarea class="form-control" rows="2" name="notes" id="notes" placeholder="Invoice note"></textarea>
-                                    </div>
+                        <hr class="my-4" />
+
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="mb-3">
+                                    <label for="note" class="form-label fw-semibold">Note:</label>
+                                    <textarea class="form-control" rows="2" id="note" placeholder="Invoice note"></textarea>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <!-- /Invoice Add-->
-
-                <!-- Invoice Actions -->
-                <div class="col-lg-3 col-12 invoice-actions">
-                    <div class="card mb-4">
-                        <div class="card-body">
-                            <input
-                                type="submit"
-                                class="bg-blue-400 text-white rounded-lg w-full py-2 px-4 hover:bg-blue-800 cursor-pointer"
-                                value="Submit"
-                            >
-                        </div>
-                    </div>
-                    <div>
-                        <p class="mb-2">Payments terms</p>
-                        <select name="term_id" class="form-select mb-4">
-                            @foreach($company->paymentTerms as $terms)
-                                <option value="{{ $terms->id }}">{{ $terms->name }}</option>
-                            @endforeach
-                        </select>
-
-                        <x-form.input type="number" name="discount" placeholder="Enter discount" label="Discount"
-                                      class="discount"/>
-
-                        <div id="taxContainer">
-                            <div class="flex flex-row gap-3 items-center tax-group">
-                                <div class="mt-6">
-                                    <label for="tax_id" class="block text-sm font-medium leading-6 text-gray-900">Tax</label>
-                                    <div class="mt-2">
-                                        <select name="tax_id[]" class="tax_id border border-gray-400 rounded-lg p-2 w-full">
-                                            @foreach($taxes as $tax)
-                                                <option value="{{ $tax->id }}" data-rate="{{ $tax->tax_percentage }}" data-type="{{ $tax->type }}">
-                                                    {{ $tax->tax_name }}
-                                                </option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="mb-6 mt-4">
-                            <input
-                                type="button"
-                                id="addTax"
-                                class="bg-blue-400 text-white rounded-lg w-full py-2 px-4 hover:bg-blue-800 cursor-pointer"
-                                value="Add another tax"
-                            >
-                        </div>
-                    </div>
-                </div>
-                <!-- /Invoice Actions -->
             </div>
-        </form>
-    </div>
-</x-masterLayout>
+            <!-- /Invoice Add-->
 
+            <!-- Invoice Actions -->
+            <div class="col-lg-3 col-12 invoice-actions">
 
+              
+                <div class="card mb-4">
+                    <div class="card-body">
+                     
+                      <div class="d-flex my-3">
+                        <a href="./app-invoice-preview.html" class="btn btn-label-secondary w-100 me-3">Preview</a>
+                        <button type="button" class="btn btn-label-secondary w-100">Save</button>
+                      </div>
+                      <button class="btn btn-primary d-grid w-100" data-bs-toggle="offcanvas" data-bs-target="#sendInvoiceOffcanvas">
+                        <span class="d-flex align-items-center justify-content-center text-nowrap"><i class="bx bx-paper-plane bx-xs me-3"></i>Send Invoice</span>
+                      </button>
+                   
+                    </div>
+                  </div>
+                    <h6 class="my-2">Payment Terms</h6>
+                    <div class="mb-4">
+                        @foreach ($company->paymentTerms as $terms)
+                        <div class="form-check mb-2">
+                            <input type="radio"  id="payment-term-{{ $terms->id }}" name="payment_terms_ids[]" class="form-check-input"
+                                 value="success" />
+                            <label class="form-check-label" for="payment-term-{{ $terms->id }}">{{ $terms->name }}</label>
+                        </div>
+                        @endforeach
 
+                      
+                       
+                    </div>
+                    {{-- List all taxes here and let users toggle to apply tax --}}
+                    <h6 class="my-2">Taxes</h6>
+                    @foreach ($taxes as $tax)
+                    <div class="d-flex justify-content-between mb-2">
+                        @if ($tax->type === 'SECONDARY')
+                        <label for="tax-{{ $tax->id }}" class="badge bg-label-warning mb-0">{{ $tax->tax_name }} {{ $tax->tax_percentage }}%</label>
+                        @else
+                        <label for="tax-{{ $tax->id }}" class="badge bg-label-primary mb-0">{{ $tax->tax_name }} {{ $tax->tax_percentage }}%</label>
+                        @endif
+                        <label class="switch switch-primary">
+                            <input type="checkbox" class="switch-input" id="tax-{{ $tax->id }}" name="tax_ids[]" value="{{ $tax->id }}" />
+                            <span class="switch-toggle-slider">
+                                <span class="switch-on">
+                                    <i class="bx bx-check"></i>
+                                </span>
+                                <span class="switch-off">
+                                    <i class="bx bx-x"></i>
+                                </span>
+                            </span>
+                            <span class="switch-label"></span>
+                        </label>
+                    </div>
+                    @endforeach
 
-
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-    $(document).ready(function() {
-
-        function updateTotal($itemGroup) {
-            var price = parseFloat($itemGroup.find('input[name="price"]').val()) || 0;
-            var quantity = parseFloat($itemGroup.find('input[name="quantity[]"]').val()) || 1;
-            var total = price * quantity;
-            $itemGroup.find('input[name="total[]"]').val(total.toFixed(2)); // Set the total value
-            updateInvoiceCalculations(); // Update overall invoice calculations
-        }
-
-        function updateInvoiceCalculations() {
-            var subtotal = 0;
-            var totalPrimaryTax = 0;
-            var totalSecondaryTax = 0;
-            var allTaxes = []; // Array to hold all taxes
-
-            // Calculate the subtotal by summing all the item totals
-            $('input[name="total[]"]').each(function() {
-                subtotal += parseFloat($(this).val()) || 0;
-            });
-
-            var discount = calculateDiscount(subtotal); // Calculate the discount based on user input
-            var totalAfterDiscount = subtotal - discount; // New total after discount
-
-            // Loop through the selected taxes and apply them
-            $('select.tax_id option:selected').each(function() {
-                var taxRate = parseFloat($(this).data('rate')) || 0;
-                var taxType = $(this).data('type'); // Assuming the type is stored in a data attribute
-                var taxAmount = 0;
-
-                if (taxType === 'PRIMARY') {
-                    taxAmount = totalAfterDiscount * (taxRate / 100); // Calculate primary tax on discounted total
-                    totalPrimaryTax += taxAmount;
-                    allTaxes.push({ name: $(this).text(), rate: taxRate, amount: taxAmount });
-                } else if (taxType === 'SECONDARY') {
-                    var newTotal = totalAfterDiscount + totalPrimaryTax; // New total after adding primary tax
-                    taxAmount = newTotal * (taxRate / 100); // Calculate secondary tax on the new total
-                    totalSecondaryTax += taxAmount;
-                    allTaxes.push({ name: $(this).text(), rate: taxRate, amount: taxAmount });
-                }
-            });
-
-            var finalTotal = totalAfterDiscount + totalPrimaryTax + totalSecondaryTax; // Final total after adding taxes
-
-            // Display all taxes together
-            displayTax(allTaxes);
-
-            // Update the UI with the calculated values
-            $('#subtotal').text('GH₵' + subtotal.toFixed(2));
-            $('#discount').text('GH₵' + discount.toFixed(2));
-            $('#total').text('GH₵' + finalTotal.toFixed(2));
-            $('#total-hidden-input').val(finalTotal.toFixed(2));
-        }
-
-        function calculateDiscount(subtotal) {
-            var discountPercentage = parseFloat($('input[name="discount"]').val()) || 0;
-            return subtotal * (discountPercentage / 100);
-        }
-
-        function displayTax(allTaxes) {
-            var taxDisplay = '';
-
-            // Display each tax individually
-            allTaxes.forEach(function(tax) {
-                taxDisplay += `
-                <div class="d-flex justify-content-between gap-4">
-                    <p>${tax.name} (${tax.rate}%):</p>
-                    <p class="fw-semibold mb-2">GH₵${tax.amount.toFixed(2)}</p>
+                    {{-- <div class="d-flex justify-content-between mb-2">
+                        <label for="client-notes" class="mb-0">Tax 2</label>
+                        <label class="switch switch-primary me-0">
+                            <input type="checkbox" class="switch-input" id="client-notes" />
+                            <span class="switch-toggle-slider">
+                                <span class="switch-on">
+                                    <i class="bx bx-check"></i>
+                                </span>
+                                <span class="switch-off">
+                                    <i class="bx bx-x"></i>
+                                </span>
+                            </span>
+                            <span class="switch-label"></span>
+                        </label>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                        <label for="payment-stub" class="mb-0">Tax 3</label>
+                        <label class="switch switch-primary me-0">
+                            <input type="checkbox" class="switch-input" id="payment-stub" />
+                            <span class="switch-toggle-slider">
+                                <span class="switch-on">
+                                    <i class="bx bx-check"></i>
+                                </span>
+                                <span class="switch-off">
+                                    <i class="bx bx-x"></i>
+                                </span>
+                            </span>
+                            <span class="switch-label"></span>
+                        </label>
+                    </div> --}}
                 </div>
-            `;
-            });
+            </div>
+            <!-- /Invoice Actions -->
+        </div>
 
-            $('#tax_display').html(taxDisplay); // Replace the content with all the taxes
-        }
+        <!-- Offcanvas -->
+        <!-- Send Invoice Sidebar -->
+        <div class="offcanvas offcanvas-end" id="sendInvoiceOffcanvas" aria-hidden="true">
+            <div class="offcanvas-header border-bottom">
+                <h6 class="offcanvas-title">Send Invoice</h6>
+                <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"
+                    aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body flex-grow-1">
+                <form>
+                    <div class="mb-3">
+                        <label for="invoice-from" class="form-label">From</label>
+                        <input type="text" class="form-control" id="invoice-from" value="shelbyComapny@email.com"
+                            placeholder="company@email.com" />
+                    </div>
+                    <div class="mb-3">
+                        <label for="invoice-to" class="form-label">To</label>
+                        <input type="text" class="form-control" id="invoice-to" value="qConsolidated@email.com"
+                            placeholder="company@email.com" />
+                    </div>
+                    <div class="mb-3">
+                        <label for="invoice-subject" class="form-label">Subject</label>
+                        <input type="text" class="form-control" id="invoice-subject"
+                            value="Invoice of purchased Admin Templates" placeholder="Invoice regarding goods" />
+                    </div>
+                    <div class="mb-3">
+                        <label for="invoice-message" class="form-label">Message</label>
+                        <textarea class="form-control" name="invoice-message" id="invoice-message" cols="3" rows="8">
+                                Dear Queen Consolidated,
+                                Thank you for your business, always a pleasure to work with you!
+                                We have generated a new invoice in the amount of $95.59
+                                We would appreciate payment of this invoice by 05/11/2021</textarea>
+                    </div>
+                    <div class="mb-4">
+                        <span class="badge bg-label-primary">
+                            <i class="bx bx-link bx-xs"></i>
+                            <span class="align-middle">Invoice Attached</span>
+                        </span>
+                    </div>
+                    <div class="mb-3 d-flex flex-wrap">
+                        <button type="button" class="btn btn-primary me-3" data-bs-dismiss="offcanvas">Send</button>
+                        <button type="button" class="btn btn-label-secondary"
+                            data-bs-dismiss="offcanvas">Cancel</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <!-- /Send Invoice Sidebar -->
+        <!-- /Offcanvas -->
+    </div>
+    <!-- / Content -->
 
-        // Handle item selection and quantity input changes
-        $(document).on('change', '.catalog_id', function() {
-            var catalogId = $(this).val();
-            var $itemGroup = $(this).closest('.item-group');
 
-            $.ajax({
-                url: '/get-price',
-                method: 'GET',
-                data: { id: catalogId },
-                success: function(response) {
-                    $itemGroup.find('input[name="price"]').val(response.price);
-                    updateTotal($itemGroup);
-                },
-                error: function() {
-                    alert('Failed to fetch the price. Please try again.');
-                }
-            });
-        });
-
-        $(document).on('input', 'input[name="quantity[]"]', function() {
-            var $itemGroup = $(this).closest('.item-group');
-            updateTotal($itemGroup);
-        });
-
-        // Trigger update when the discount input changes
-        $(document).on('input', 'input[name="discount"]', function() {
-            updateInvoiceCalculations(); // Recalculate the total when discount changes
-        });
-
-        // Trigger update when tax selection changes
-        $(document).on('change', '.tax_id', function() {
-            $('#tax_display').empty(); // Clear previous tax display before recalculating
-            updateInvoiceCalculations(); // Recalculate the total when taxes are selected/changed
-        });
-
-    });
-
-
-    document.getElementById('addItem').addEventListener('click', function () {
-        var itemContainer = document.getElementById('itemContainer');
-        var itemGroup = document.querySelector('.item-group');
-        var newItemGroup = itemGroup.cloneNode(true);
-
-        // Clear the values of the cloned elements
-        var selects = newItemGroup.getElementsByTagName('select');
-        for (var i = 0; i < selects.length; i++) {
-            selects[i].selectedIndex = 0;
-        }
-
-        var inputs = newItemGroup.getElementsByTagName('input');
-        for (var i = 0; i < inputs.length; i++) {
-            if (inputs[i].type === 'text') {
-                inputs[i].value = '';
-            }
-        }
-
-        if (!newItemGroup.querySelector('.remove-item')) {
-            var removeButton = document.createElement('button');
-            removeButton.type = 'button';
-            removeButton.className = 'remove-item bg-red-500 text-white rounded-lg px-2 py-1';
-            removeButton.textContent = 'Remove';
-            removeButton.addEventListener('click', function() {
-                this.parentNode.remove();
-            });
-            newItemGroup.appendChild(removeButton);
-        }
-
-        itemContainer.appendChild(newItemGroup);
-    });
-
-    document.getElementById('addTax').addEventListener('click', function () {
-        var taxContainer = document.getElementById('taxContainer');
-        var taxGroup = document.querySelector('.tax-group');
-        var newTaxGroup = taxGroup.cloneNode(true);
-
-        // Clear the values of the cloned elements
-        var selects = newTaxGroup.getElementsByTagName('select');
-        for (var i = 0; i < selects.length; i++) {
-            selects[i].selectedIndex = 0;
-        }
-
-        var inputs = newTaxGroup.getElementsByTagName('input');
-        for (var i = 0; i < inputs.length; i++) {
-            if (inputs[i].type === 'text') {
-                inputs[i].value = '';
-            }
-        }
-
-        if (!newTaxGroup.querySelector('.remove-tax')) {
-            var removeButton = document.createElement('button');
-            removeButton.type = 'button';
-            removeButton.className = 'remove-tax bg-red-500 text-white rounded-lg px-2 py-1';
-            removeButton.textContent = 'Remove';
-            removeButton.addEventListener('click',
-                function() {
-                    this.parentNode.remove();
-            });
-            newTaxGroup.appendChild(removeButton);
-        }
-
-        taxContainer.appendChild(newTaxGroup);
-    });
-</script>
+</x-masterLayout>
