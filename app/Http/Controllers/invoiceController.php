@@ -58,16 +58,27 @@ class invoiceController extends Controller
         return view('invoice.create', compact('company', 'catalogs', 'user', 'taxes', 'latestInvoice', 'invoiceNumber'));
     }
 
-    public function getPrice(Request $request)
-    {
-        $catalog = Catalog::find($request->id);
+    // public function getPrice(Request $request)
+    // {
+    //     $catalog = Catalog::find($request->id);
 
-        if ($catalog) {
-            return response()->json(['price' => $catalog->price]);
-        } else {
-            return response()->json(['error' => 'Catalog not found'], 404);
-        }
+    //     if ($catalog) {
+    //         return response()->json(['price' => $catalog->price]);
+    //     } else {
+    //         return response()->json(['error' => 'Catalog not found'], 404);
+    //     }
+    // }
+    public function getPrice(Request $request)
+{
+    $itemId = $request->id;
+    $item = Catalog::find($itemId);  // Assuming 'Catalog' is your model name
+
+    if ($item) {
+        return response()->json(['price' => $item->price]);  // Assuming 'price' is the attribute for the price
+    } else {
+        return response()->json(['error' => 'Item not found'], 404);
     }
+}
 
 
     /**

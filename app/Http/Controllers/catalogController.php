@@ -92,11 +92,10 @@ class catalogController extends Controller
      */
     public function edit($slug, $id): Factory|Application|View|\Illuminate\Contracts\Foundation\Application
     {
+        
         $company = Company::where('slug', $slug)->firstOrFail();
 
-        $catalog = Catalog::where('id', $id)
-                            ->where('company_id', $company->id)
-                            ->firstOrFail();
+        $catalog = Catalog::where('id', $id)->where('company_id', $company->id)->firstOrFail();
 
 
         return view('company.catalog.edit', compact('catalog', 'company'));
