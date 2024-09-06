@@ -25,7 +25,7 @@ class companyController extends Controller
     public function userAndCompany()
     {
         $user = Auth::user();
-        $companies = $user->companies()->withCount('invoices')->withCount('catalogs')->get();
+        $companies = $user->companies()->with('companyCategory')->withCount('invoices', 'catalogs')->get();
 
         return view('company.index', compact('companies'));
     }
@@ -38,6 +38,7 @@ class companyController extends Controller
             'email' => 'required|string|unique:companies,email',
             'phone' => 'required|string|unique:companies,phone',
             'address' => 'required|string',
+            'gps_address' => 'required|string',
             'logo' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'category' => 'required|string',
             'description' => 'required|string|max:255',
@@ -51,7 +52,10 @@ class companyController extends Controller
             'email' => $validated['email'],
             'phone' => $validated['phone'],
             'address' => $validated['address'],
+            'gps_address' => $validated['gps_address'],
             'category' => $validated['category'],
+            'description' => $validated['description'],
+            'website' => $validated['website'],
         ];
 
         if($request->hasFile('logo')){

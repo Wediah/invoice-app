@@ -38,16 +38,18 @@
                                 </div>
 
                                 <h5 class="mb-1 card-title">{{ $company->name }}</h5>
-                                <span>UI Designer</span>
                                 <div class="d-flex align-items-center justify-content-center my-3 gap-2">
                                     {{-- <a href="javascript:;" class="me-1"><span class="badge bg-label-secondary"></span></a> --}}
-                                    <a href="javascript:;"><span
-                                            class="badge bg-label-warning">{{ $company->category }}</span></a>
+                                    <a href="javascript:;">
+                                        <span class="badge bg-label-warning">
+                                            {{ optional($company->companyCategory)->name ?? 'No Category' }}
+                                        </span>
+                                    </a>
                                 </div>
 
                                 <div class="d-flex align-items-center justify-content-around my-4 py-2 ">
                                     <div>
-                                        <h4 class="mb-1">18</h4>
+                                        <h4 class="mb-1">{{ $company->invoices_count }}</h4>
                                         <span>Invoices</span>
                                     </div>
                                     <div>
@@ -55,7 +57,7 @@
                                         <span>Product Categories</span>
                                     </div>
                                     <div>
-                                        <h4 class="mb-1">129</h4>
+                                        <h4 class="mb-1">{{ $company->catalogs_count }}</h4>
                                         <span>Products</span>
                                     </div>
                                 </div>

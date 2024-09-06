@@ -23,8 +23,8 @@ class companyCategory extends Model
         ];
     }
 
-    public function company(): BelongsTo
+    public function companies(): HasMany
     {
-        return $this->belongsTo(company::class);
+        return $this->hasMany(company::class);
     }
 }
