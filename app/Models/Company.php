@@ -51,8 +51,8 @@ class Company extends Model
         return $this->hasMany(PaymentTerms::class);
     }
 
-    public function companyCategory(): HasMany
+    public function companyCategory(): BelongsTo
     {
-     return $this->hasMany(CompanyCategory::class);
+     return $this->belongsTo(CompanyCategory::class, 'category', 'id');
     }
 }

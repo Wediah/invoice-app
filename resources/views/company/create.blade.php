@@ -43,7 +43,7 @@
                                 <span class="d-none d-sm-block">Upload Logo</span>
                                 <i class="bx bx-upload d-block d-sm-none"></i>
                                 <input type="file" id="logo" class="account-file-input" hidden
-                                    accept="image/png, image/jpeg" name="co_logo_path" value="" />
+                                    accept="image/png, image/jpeg" name="logo" value="" />
                             </label>
 
                           {{-- <button type="button" class="btn btn-label-secondary account-image-reset mb-4"
@@ -54,7 +54,7 @@
 
                             {{-- <p class="mb-0">{{ $laboratories->company_logo_path }}</p> --}}
                             <p class="mb-0">Allowed JPG, GIF or PNG. Max size of 800K</p>
-                            @error('company_logo_path')
+                            @error('logo')
                                 <p class="error">{{ $message }}</p>
                             @enderror
                         </div>
@@ -84,15 +84,13 @@
                               </div>
                               <div class="col-md-6">
                                   <div class="row">
-
-
                                       <div class="mb-2 col-sm-6">
                                           <label for="phone" class="form-label blabel">Company Phone</label>
                                           <div class="input-group input-group-merge">
                                               <span class="input-group-text">
                                                   <i class="fi fi-gh fis rounded-circle fs-3 me-1"></i> &nbsp
                                                   (+233)</span>
-                                              <input class="form-control mobile-number" type="text" id="phone"
+                                              <input class="form-control mobile-number" type="tel" id="phone"
                                                   name="phone" placeholder="202 555 0111" value="" />
                                           </div>
                                           @error('phone')
@@ -106,7 +104,7 @@
                                               <span class="input-group-text">
                                                   <i class="fi fi-gh fis rounded-circle fs-3 me-1"></i> &nbsp
                                                   (+233)</span>
-                                              <input class="form-control mobile-number" type="text" id="phone2"
+                                              <input class="form-control mobile-number" type="tel" id="phone2"
                                                      name="phone2" placeholder="202 555 0111" value="" />
                                           </div>
                                           @error('phone2')
@@ -120,7 +118,7 @@
                                               <span class="input-group-text">
                                                   <i class="fi fi-gh fis rounded-circle fs-3 me-1"></i> &nbsp
                                                   (+233)</span>
-                                              <input class="form-control mobile-number" type="text" id="phone3"
+                                              <input class="form-control mobile-number" type="tel" id="phone3"
                                                      name="phone3" placeholder="202 555 0111" value="" />
                                           </div>
                                           @error('phone3')
@@ -181,7 +179,7 @@
                                                 {{-- <span class="input-group-text">
                                                       Address
                                                   </span> --}}
-                                              <input type="text" id="address" name=address"
+                                              <input type="text" id="address" name="address"
                                                   class="form-control" placeholder="Enter Company Address"
                                                   value="" />
                                           </div>
@@ -189,8 +187,6 @@
                                               <p class="error">{{ $message }}</p>
                                           @enderror
                                       </div>
-
-
                                   </div>
                               </div>
                               <div class="mb-4 col-md-6">
@@ -202,9 +198,6 @@
                                               <option value="{{ $category->id }}">{{ $category->name }}</option>
                                           @endforeach
                                       </select>
-{{--                                      <input type="text" id="category" name=category"--}}
-{{--                                             class="form-control" placeholder=" Enter Company Category"--}}
-{{--                                             value="" />--}}
                                   </div>
                                   @error('category')
                                       <p class="error">{{ $message }}</p>
@@ -215,8 +208,7 @@
                                       description</label>
                                   <textarea class="form-control" id="description" rows="3" maxlength="150"
                                       name="description">
-
-                                      </textarea>
+                                  </textarea>
                                   @error('description')
                                       <p class="error">{{ $message }}</p>
                                   @enderror
