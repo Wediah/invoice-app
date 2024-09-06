@@ -100,6 +100,34 @@
                                           @enderror
                                       </div>
 
+                                      <div class="mb-2 col-sm-6">
+                                          <label for="phone2" class="form-label blabel">Company Phone</label>
+                                          <div class="input-group input-group-merge">
+                                              <span class="input-group-text">
+                                                  <i class="fi fi-gh fis rounded-circle fs-3 me-1"></i> &nbsp
+                                                  (+233)</span>
+                                              <input class="form-control mobile-number" type="text" id="phone2"
+                                                     name="phone2" placeholder="202 555 0111" value="" />
+                                          </div>
+                                          @error('phone2')
+                                          <p class="error">{{ $message }}</p>
+                                          @enderror
+                                      </div>
+
+                                      <div class="mb-2 col-sm-6">
+                                          <label for="phone3" class="form-label blabel">Company Phone</label>
+                                          <div class="input-group input-group-merge">
+                                              <span class="input-group-text">
+                                                  <i class="fi fi-gh fis rounded-circle fs-3 me-1"></i> &nbsp
+                                                  (+233)</span>
+                                              <input class="form-control mobile-number" type="text" id="phone3"
+                                                     name="phone3" placeholder="202 555 0111" value="" />
+                                          </div>
+                                          @error('phone3')
+                                          <p class="error">{{ $message }}</p>
+                                          @enderror
+                                      </div>
+
 
 
                                       <div class="mb-4 col-sm-6">
@@ -169,9 +197,14 @@
                                   <label for="category" class="form-label blabel">Company Category</label>
 
                                   <div class="input-group input-group-merge">
-                                      <input type="text" id="category" name=category"
-                                             class="form-control" placeholder=" Enter Company Category"
-                                             value="" />
+                                      <select name="category" id="category">
+                                          @foreach($categories as $category)
+                                              <option value="{{ $category->id }}">{{ $category->name }}</option>
+                                          @endforeach
+                                      </select>
+{{--                                      <input type="text" id="category" name=category"--}}
+{{--                                             class="form-control" placeholder=" Enter Company Category"--}}
+{{--                                             value="" />--}}
                                   </div>
                                   @error('category')
                                       <p class="error">{{ $message }}</p>

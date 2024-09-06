@@ -50,4 +50,9 @@ class Company extends Model
     {
         return $this->hasMany(PaymentTerms::class);
     }
+
+    public function companyCategory(): HasMany
+    {
+     return $this->hasMany(CompanyCategory::class);
+    }
 }

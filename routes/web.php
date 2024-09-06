@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\catalogController;
+use App\Http\Controllers\companyCategoryController;
 use App\Http\Controllers\companyController;
 use App\Http\Controllers\invoiceController;
 use App\Http\Controllers\ProfileController;
@@ -32,6 +33,13 @@ Route::middleware('auth')->group(function () {
     //business profile
     Route::get('company/{slug}/profile', [CompanyController::class, 'profile'])->name('company.profile');
     Route::patch('/{slug}/info', [CompanyController::class, 'info'])->name('company.info');
+
+    //company category
+    Route::get('company-category/create', [companyCategoryController::class, 'create'])->name('company.category.create');
+    Route::get('company-category/edit', [companyCategoryController::class, 'edit'])->name('company.category.edit');
+    Route::post('company-category/store', [companyCategoryController::class, 'store'])->name('company.category.store');
+    Route::patch('company-category/{id}/update', [companyCategoryController::class, 'update'])->name('company.category.update');
+    Route::delete('company-category/{id}/delete', [companyCategoryController::class, 'delete'])->name('company.category.delete');
 
     //catalog/items
     Route::get('/company/{company_id}/catalog/create', [CatalogController::class, 'create'])->name('catalog.create');

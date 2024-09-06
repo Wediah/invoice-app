@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use App\Models\Company;
+use App\Models\companyCategory;
 use Cviebrock\EloquentSluggable\Services\SlugService;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Contracts\View\View;
@@ -17,9 +18,8 @@ class companyController extends Controller
 {
     public function create()
     {
-//        $categories = Category::all();
-//        return view('company.create', compact('categories'));
-        return view('company.create');
+        $categories = companyCategory::all();
+        return view('company.create', compact('categories'));
     }
 
     public function userAndCompany()
