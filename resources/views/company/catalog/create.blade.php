@@ -25,6 +25,7 @@
     </style>
 @endpush
     <div class="container-xxl flex-grow-1 container-p-y">
+        
         <h4 class="py-3 mb-4 breadcrumb-wrapper">
             <span class="text-muted fw-light"><a href="{{ route('catalog.index', ['slug' => $company->slug]) }} " style="color: #A8B1BB">All Catalog</a>
                 /</span>
@@ -42,7 +43,7 @@
                             <div class="form-group">
                                 <label class="form-label" for="stock_name">Stock Name</label>
                                 <div class="input-group">
-                                    <input type="text" name="stock_name"class="form-control" placeholder="Enter the name of your item/service"
+                                    <input type="text" name="stock_name" class="form-control" placeholder="Enter the name of your item/service"
                                         aria-label="Enter the name of your item/service" aria-describedby="basic-addon11"  value=""  />
                                 </div>
                                 @error('stock_name')

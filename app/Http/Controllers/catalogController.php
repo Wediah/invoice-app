@@ -4,15 +4,16 @@ namespace App\Http\Controllers;
 
 use App\itemStatus;
 use App\Models\Catalog;
-use App\Models\catalogImage;
 use App\Models\Company;
-use Illuminate\Contracts\View\Factory;
-use Illuminate\Contracts\View\View;
-use Illuminate\Foundation\Application;
-use Illuminate\Http\RedirectResponse;
+use App\Models\catalogImage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Foundation\Application;
+use Illuminate\Support\Facades\Validator;
 
 class catalogController extends Controller
 {
@@ -41,40 +42,52 @@ class catalogController extends Controller
      */
     public function store(string $id, Request $request)
     {
-        $company = Company::findOrFail($id);
+        $data = $request->group_a;
 
-        $validatedData = $request->validate([
-            'stock_name' => 'required|max:255|string',
-            'stock_description' => 'required|string|min:5|max:300',
-            'stock_price' => 'required|string',
-            //            'catalog_images.*' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-        ]);
+
+        foreach ($data as $key => $validata) {
+
+            $validator = Validator::make(
+                $validata,
+
+                [
+                    'stock_name' => 'required|max:255|string',
+                    'stock_description' => 'required|string|min:5|max:300',
+                    'stock_price' => 'required|string',
+
+                ]
+            );
+            if ($validator->fails()) {
+                // dd($validator);
+                return redirect()->back()
+                    ->withErrors($validator)
+                    ->withInput();
+            }
+        }
+
+
+        $company = Company::findOrFail($id);
 
         $company_id = $company->id;
 
-        //       $imagePaths = [];
-        //        foreach ($validatedData['catalog_images'] as $key => $image) {
-        //            $imageName = Carbon::now()->timestamp . $key . '.' . $image->extension();
-        //            $image->storeAs('catalogImages', $imageName);
-        //            $imagePaths[] = $imageName;
-        //       }
+      
+        foreach ($data as $prop) {
+            $stock_name = $prop['stock_name'];
+            $stock_price = $prop['stock_price'];
+            $stock_description = $prop['stock_description'];
 
-        $catalogData = array(
-            'company_id' => $company_id,
-            'name' => $validatedData['stock_name'],
-            'description' => $validatedData['stock_description'],
-            'price' => $validatedData['stock_price'],
-        );
 
-        $catalog = Catalog::create($catalogData);
+            $stockData = new Catalog();
+            $stockData->company_id = $company_id;
+            $stockData->name = $stock_name;
+            $stockData->description = $stock_description;
+            $stockData->price = $stock_price;
+            $stockData->save();
 
-        //        foreach ($imagePaths as $imagePath) {
-        //            catalogImage::create([
-        //                'catalog_id' => $catalog->id,
-        //                'image_path' => $imagePath,
-        //            ]);
-        //        }
 
+            
+        }
+       
         return redirect()->intended(route('catalog.index', ['slug' => $company->slug], absolute: false));
     }
 

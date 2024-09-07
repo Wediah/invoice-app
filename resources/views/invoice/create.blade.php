@@ -87,7 +87,7 @@
 
                                 <div data-bs-toggle="modal" data-bs-target="#modalCenter">
                                     <span class="p-2 rounded badge bg-label-secondary"><i
-                                            class="bx bx-edit-alt"></i>EDIT</span>
+                                            class="bx bx-edit"></i>Edit</span>
                                 </div>
 
                                 <!-- Modal -->

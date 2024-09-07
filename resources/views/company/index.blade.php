@@ -4,9 +4,9 @@
     <div class="container-xxl flex-grow-1 container-p-y">
 
 
-        <div class="mb-4 py-3 d-flex justify-content-between align-items-center">
+        <div class="py-3 mb-4 d-flex justify-content-between align-items-center">
             <div>
-                <h4 class=" mb-1 breadcrumb-wrapper">
+                <h4 class="mb-1 breadcrumb-wrapper">
                     {{-- <span class="text-muted fw-light">UI Elements /</span> --}}
                     Welcome,&nbsp;{{ auth()->user()->first_name }}
                 </h4>
@@ -29,7 +29,7 @@
                     <a href="{{ route('catalog.index', ['slug' => $company->slug]) }} " class="">
 
                         <div class="card h-100">
-                            <div class="card-body text-center d-flex flex-column">
+                            <div class="text-center card-body d-flex flex-column">
 
                                 <div class="mx-auto mb-3 d-flex justify-content-center">
                                     <img src="{{ asset('storage/company_logo') }}/{{ $company->logo }}"
@@ -38,7 +38,7 @@
                                 </div>
 
                                 <h5 class="mb-1 card-title">{{ $company->name }}</h5>
-                                <div class="d-flex align-items-center justify-content-center my-3 gap-2">
+                                <div class="gap-2 my-3 d-flex align-items-center justify-content-center">
                                     {{-- <a href="javascript:;" class="me-1"><span class="badge bg-label-secondary"></span></a> --}}
                                     <a href="javascript:;">
                                         <span class="badge bg-label-warning">
@@ -47,22 +47,31 @@
                                     </a>
                                 </div>
 
-                                <div class="d-flex align-items-center justify-content-around my-4 py-2 ">
+                                <div class="py-2 my-4 d-flex align-items-center justify-content-around ">
                                     <div>
-                                        <h4 class="mb-1">{{ $company->invoices_count }}</h4>
-                                        <span>Invoices</span>
+                                        <a class="badge bg-label-primary"  href="#">
+                                            <h4 class="mb-1">{{ $company->invoices_count }}</h4>
+                                            <span>Invoices</span>
+                                        </a>
+
                                     </div>
                                     <div>
-                                        <h4 class="mb-1">834</h4>
-                                        <span>Product Categories</span>
+                                        <a class="badge bg-label-primary" href="{{ route('catalog.index', ['slug' => $company->slug]) }} ">
+                                            <h4 class="mb-1">{{ $company->catalogs_count }}</h4>
+                                            <span>Total Stock</span>
+                                        </a>
+
                                     </div>
                                     <div>
-                                        <h4 class="mb-1">{{ $company->catalogs_count }}</h4>
+                                        <a class="badge bg-label-primary"  href="#">
+                                              <h4 class="mb-1">{{ $company->catalogs_count }}</h4>
                                         <span>Products</span>
+                                        </a>
+                                      
                                     </div>
                                 </div>
-                                <div class="d-flex align-items-center justify-content-center mt-auto">
-                                    <a href="{{ route('catalog.index', ['slug' => $company->slug]) }} "
+                                <div class="mt-auto d-flex align-items-center justify-content-center">
+                                    <a href="#"
                                         class="btn btn-primary d-flex align-items-center me-3"><i
                                             class="bx bx-view me-1"></i>View Company</a>
                                     {{-- <a href="javascript:;" class="btn btn-label-secondary btn-icon"><i
@@ -80,5 +89,5 @@
     </div>
 
 
-        <!--/ Connection Cards -->
+    <!--/ Connection Cards -->
 </x-masterLayout>
