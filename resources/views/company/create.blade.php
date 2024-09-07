@@ -1,31 +1,33 @@
 <x-masterLayout>
+ @push()
+ <style>
+    .blabel {
+        font-weight: 700;
+    }
 
-    <style>
-        .blabel {
-            font-weight: 700;
-        }
+    .error {
+        color: red;
+        font-size: 5px;
+    }
 
-        .error {
-            color: red;
-            font-size: 5px;
-        }
+    .mb-3 {
+        margin-bottom: 1.18rem !important;
+    }
+</style>
+ @endpush
 
-        .mb-3 {
-            margin-bottom: 1.18rem !important;
-        }
-    </style>
 
 
 
 
 
     <div class="container-xxl flex-grow-1 container-p-y">
-        <h4 class="py-3 breadcrumb-wrapper mb-4">
+        <h4 class="py-3 mb-4 breadcrumb-wrapper">
             <span class="text-muted fw-light"><a href="{{ route('dashboard') }}" style="color: #A8B1BB">All Companies</a>
                 /</span>
             Create Company
         </h4>
-        <div class="card mb-4 px-0">
+        <div class="px-0 mb-4 card">
             <h5 class="card-header">Add a new company</h5>
             <!-- Account -->
 
@@ -33,20 +35,20 @@
                 @csrf
 
                 <div class="card-body">
-                    <div class="d-flex align-items-start align-items-sm-center gap-4">
+                    <div class="gap-4 d-flex align-items-start align-items-sm-center">
                         <img src="" alt="user-avatar"
-                            class="d-block  h-auto ms-0 ms-sm-4 rounded-3 user-profile-img" height="100"
+                            class="h-auto d-block ms-0 ms-sm-4 rounded-3 user-profile-img" height="100"
                             width="100" id="uploadedAvatar" name="company_logo_path"
                             onerror="this.onerror=null; this.src='{{ asset('assets/img/avatars/logo-placeholder.png') }}';" />
                         <div class="button-wrapper">
-                            <label for="logo" class="btn btn-primary me-2 mb-4" tabindex="0">
+                            <label for="logo" class="mb-4 btn btn-primary me-2" tabindex="0">
                                 <span class="d-none d-sm-block">Upload Logo</span>
                                 <i class="bx bx-upload d-block d-sm-none"></i>
                                 <input type="file" id="logo" class="account-file-input" hidden
                                     accept="image/png, image/jpeg" name="logo" value="" />
                             </label>
 
-                          {{-- <button type="button" class="btn btn-label-secondary account-image-reset mb-4"
+                          {{-- <button type="button" class="mb-4 btn btn-label-secondary account-image-reset"
                               onclick="document.getElementById('upload').value = null; return false;">
                                   <i class="bx bx-reset d-block d-sm-none"></i>
                                   <span class="d-none d-sm-block">Reset</span>
