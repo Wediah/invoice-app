@@ -179,131 +179,140 @@ $(document).ready(function () {
 
 
 
-// selecting item 
-
-// $(document).ready(function() {
-//   // Function to update the total price
-//   function updateTotalPrice($row) {
-//       var price = parseFloat($row.find('.invoice-item-price').val()) || 0;
-//       var quantity = parseInt($row.find('.quantity').val()) || 1; // Make sure to pick up the quantity from the right class
-//       var totalPrice = price * quantity;
-
-//       // Update the Sub Total input field
-//       $row.find('.invoice-item-sub_total').val(totalPrice.toFixed(2)); // Updates the sub total
-//   }
-
-//   // Handler for item selection changes to fetch price
-//   $(document).on('change', '.item-detailsX', function() {
-//       var itemId = $(this).val();
-//       var $row = $(this).closest('.repeater-wrapper');
-
-//       // AJAX request to get the price
-//       $.ajax({
-//           url: '/get-price',
-//           type: 'GET',
-//           data: { id: itemId },
-//           success: function(response) {
-//               if (response.price) {
-//                   $row.find('.invoice-item-price').val(response.price);
-//                   updateTotalPrice($row); // Update total immediately after fetching price
-//               }
-//           },
-//           error: function(xhr) {
-//               console.error("Error fetching price:", xhr.responseText);
-//           }
-//       });
-//   });
-
-//   // Listener for quantity changes
-//   $(document).on('input change', '.quantity', function() {
-//       var $row = $(this).closest('.repeater-wrapper');
-//       updateTotalPrice($row); // Update total whenever quantity changes
-//   });
-// });
-
-// $(document).ready(function() {
-//   // Function to update the total price, now including more detailed debugging
-//   function updateTotalPrice($row) {
-//       var price = parseFloat($row.find('.invoice-item-price').val()) || 0;
-//       var quantity = parseInt($row.find('.quantity').val()) || 1;
-//       var discountText = $row.find('.discount').text();
-//       var discountPercent = parseFloat(discountText.replace('%', '')) || 0;
-//       var subTotal = price * quantity;
-//       var discountAmount = subTotal * (discountPercent / 100);
-//       var totalAfterDiscount = subTotal - discountAmount;
-
-//       console.log("Price: ", price);
-//       console.log("Quantity: ", quantity);
-//       console.log("Discount Text: ", discountText);
-//       console.log("Discount Percent: ", discountPercent);
-//       console.log("Sub Total: ", subTotal);
-//       console.log("Discount Amount: ", discountAmount);
-//       console.log("Total After Discount: ", totalAfterDiscount);
-
-//       // Update the Sub Total input field with the calculated total after applying the discount
-//       $row.find('.invoice-item-sub_total').val(totalAfterDiscount.toFixed(2));
-//   }
-
-//   // Handler for item selection changes to fetch price
-//   $(document).on('change', '.item-detailsX', function() {
-//       var itemId = $(this).val();
-//       var $row = $(this).closest('.repeater-wrapper');
-//       console.log("Item ID selected: ", itemId);
-
-//       // AJAX request to get the price of the selected item
-//       $.ajax({
-//           url: '/get-price',
-//           type: 'GET',
-//           data: { id: itemId },
-//           success: function(response) {
-//               console.log("Price response: ", response);
-//               if (response.price) {
-//                   $row.find('.invoice-item-price').val(response.price);
-//                   updateTotalPrice($row); // Update total immediately after fetching price
-//               }
-//           },
-//           error: function(xhr) {
-//               console.error("Error fetching price: ", xhr.responseText);
-//           }
-//       });
-//   });
-
-//   // Listener for quantity changes
-//   $(document).on('input change', '.quantity', function() {
-//       var $row = $(this).closest('.repeater-wrapper');
-//       updateTotalPrice($row); // Update total whenever quantity changes
-//   });
-
-//   // Ensure this code snippet matches how you actually update the discount in your application
-//   // If discount is updated elsewhere and not through direct input, consider the appropriate event to listen on
-//   $(document).on('input change', '#discountInput', function() {
-//       var discountValue = $(this).val() + '%';
-//       $('.discount').text(discountValue); // Assuming all discounts on page need update; adjust if necessary
-//       console.log("Discount Updated to: ", discountValue);
-//   });
-// });
-
-
+//Invoice To (Jquery)
 
 $(document).ready(function() {
-  // Function to update the total price
-  function updateTotalPrice($row) {
-      var price = parseFloat($row.find('.invoice-item-price').val()) || 0;
-      var quantity = parseInt($row.find('.quantity').val()) || 1;
-      var discountText = $row.find('.discount').text();
-      var discountPercent = parseFloat(discountText.replace('%', '')) || 0;
-      var subTotal = price * quantity;
-      var discountAmount = subTotal * (discountPercent / 100);
-      var totalAfterDiscount = subTotal - discountAmount;
+  // Cache frequently used jQuery selectors
+  const $invoiceCalculations = $('.invoice-calculations');
+  const $taxList = $('#tax-list');
+  const $subtotalDisplay = $invoiceCalculations.find('.subtotal');
+  const $discountDisplay = $invoiceCalculations.find('.discount');
+  const $taxDisplay = $invoiceCalculations.find('.tax');
+  const $totalDisplay = $invoiceCalculations.find('.total');
 
-      // Update the Sub Total input field with the calculated total after applying the discount
-      $row.find('.invoice-item-sub_total').val(totalAfterDiscount.toFixed(2));
+  // Debounce function to limit the rate at which a function can fire
+  function debounce(func, wait) {
+      let timeout;
+      return function executedFunction(...args) {
+          const later = () => {
+              clearTimeout(timeout);
+              func(...args);
+          };
+          clearTimeout(timeout);
+          timeout = setTimeout(later, wait);
+      };
   }
 
-  // Handler for item selection changes to fetch price
+  // Function to update the total price for a single row
+  function updateTotalPrice($row) {
+      const price = parseFloat($row.find('.invoice-item-price').val()) || 0;
+      const quantity = parseInt($row.find('.quantity').val()) || 1;
+      const discountPercent = parseFloat($row.find('.discount').text()) || 0;
+      const subTotal = price * quantity;
+      const totalAfterDiscount = subTotal * (1 - discountPercent / 100);
+      $row.find('.invoice-item-sub_total').val(totalAfterDiscount.toFixed(2));
+      debouncedUpdateCalculations(); // Call this to update overall calculations
+  }
+  // Function to update all calculations
+  function updateCalculations() {
+      let totalSubtotal = 0;
+      let totalDiscount = 0;
+
+      // Calculate totals for each row
+      $('.repeater-wrapper').each(function() {
+          const $row = $(this);
+          const price = parseFloat($row.find('.invoice-item-price').val()) || 0;
+          const quantity = parseInt($row.find('.quantity').val()) || 0;
+          const discountPercentage = parseFloat($row.find('.discount').text()) || 0;
+
+          const subtotal = price * quantity;
+          const discountAmount = subtotal * (discountPercentage / 100);
+
+          totalSubtotal += subtotal;
+          totalDiscount += discountAmount;
+      });
+
+      // Update the display of subtotal and discount
+      $subtotalDisplay.text(`$${totalSubtotal.toFixed(2)}`);
+      $discountDisplay.text(`$${totalDiscount.toFixed(2)}`);
+
+      // Recalculate the total including taxes
+      calculateTotal();
+  }
+
+  // Create a debounced version of updateCalculations
+  const debouncedUpdateCalculations = debounce(updateCalculations, 300);
+
+  // Function to calculate the final total including taxes
+  function calculateTotal() {
+      const subtotal = parseFloat($subtotalDisplay.text().slice(1)) || 0;
+      const discount = parseFloat($discountDisplay.text().slice(1)) || 0;
+      let primaryTaxTotal = 0;
+      let secondaryTaxTotal = 0;
+      const primaryTaxes = [];
+      const secondaryTaxes = [];
+
+      const subtotalAfterDiscount = subtotal - discount;
+
+      // Calculate primary taxes first
+      $('input[name="tax_ids[]"]:checked').each(function() {
+          const $taxLabel = $(this).closest('.d-flex').find('label');
+          const taxName = $taxLabel.clone().children().remove().end().text().trim();
+          const taxRate = parseFloat($taxLabel.text().match(/(\d+)%/)[1]);
+          const isSecondary = $taxLabel.hasClass('bg-label-warning');
+
+          if (!isSecondary) {
+              const taxAmount = subtotalAfterDiscount * (taxRate / 100);
+              primaryTaxTotal += taxAmount;
+              primaryTaxes.push({ name: taxName, amount: taxAmount });
+          }
+      });
+
+      const subtotalAfterPrimaryTax = subtotalAfterDiscount + primaryTaxTotal;
+
+      // Calculate secondary taxes
+      $('input[name="tax_ids[]"]:checked').each(function() {
+          const $taxLabel = $(this).closest('.d-flex').find('label');
+          const taxName = $taxLabel.clone().children().remove().end().text().trim();
+          const taxRate = parseFloat($taxLabel.text().match(/(\d+)%/)[1]);
+          const isSecondary = $taxLabel.hasClass('bg-label-warning');
+
+          if (isSecondary) {
+              const taxAmount = subtotalAfterPrimaryTax * (taxRate / 100);
+              secondaryTaxTotal += taxAmount;
+              secondaryTaxes.push({ name: taxName, amount: taxAmount });
+          }
+      });
+      // Update tax list display
+      $taxList.empty();
+      primaryTaxes.forEach(tax => {
+          $taxList.append(`
+              <div class="d-flex justify-content-between mb-2">
+                  <span class="me-5">${tax.name}</span>
+                  <span>GHC${tax.amount.toFixed(2)}</span>
+              </div>
+          `);
+      });
+      secondaryTaxes.forEach(tax => {
+          $taxList.append(`
+              <div class="d-flex justify-content-between mb-2">
+                  <span class="me-5">${tax.name}</span>
+                  <span>GHC${tax.amount.toFixed(2)}</span>
+              </div>
+          `);
+      });
+      const totalTax = primaryTaxTotal + secondaryTaxTotal;
+      const totalDue = subtotalAfterDiscount + totalTax;
+
+      // Update totals
+      $taxDisplay.text(`${totalTax.toFixed(2)}`);
+      $totalDisplay.text(`${totalDue.toFixed(2)}`);
+  }
+
+  // Event handler for item selection changes
   $(document).on('change', '.item-detailsX', function() {
-      var itemId = $(this).val();
-      var $row = $(this).closest('.repeater-wrapper');
+      const itemId = $(this).val();
+      const $row = $(this).closest('.repeater-wrapper');
 
       // AJAX request to get the price of the selected item
       $.ajax({
@@ -313,7 +322,8 @@ $(document).ready(function() {
           success: function(response) {
               if (response.price) {
                   $row.find('.invoice-item-price').val(response.price);
-                  updateTotalPrice($row); // Update total immediately after fetching price
+                  updateTotalPrice($row);
+                  debouncedUpdateCalculations();
               }
           },
           error: function(xhr) {
@@ -322,65 +332,53 @@ $(document).ready(function() {
       });
   });
 
-  // Listener for quantity changes
+
+
   $(document).on('input change', '.quantity', function() {
-      var $row = $(this).closest('.repeater-wrapper');
-      updateTotalPrice($row); // Update total whenever quantity changes
-  });
-
-  // Apply discount changes and immediately update the subtotal
-  $(document).on('click', '.btn-apply-changes', function() {
-      var $modal = $(this).closest('.dropdown-menu');
-      var discountInput = $modal.find('#discountInput').val();
-      var $row = $modal.closest('.repeater-wrapper');
-
-      $row.find('.discount').text(discountInput + '%'); // Update the discount display
-      updateTotalPrice($row); // Update the subtotal immediately when the discount is applied
-  });
+    const $row = $(this).closest('.repeater-wrapper');
+    updateTotalPrice($row);
 });
+$(document).on('input change', '.invoice-item-price, .discount', debouncedUpdateCalculations);
 
-$(document).ready(function() {
-  // Function to update all calculations
-  function updateCalculations() {
-      var totalSubtotal = 0;
-      var totalDiscount = 0;
-      var totalTax = 0; // Initialize if you have a method to calculate tax
-
-      $('.repeater-wrapper').each(function() {
-          var price = parseFloat($(this).find('.invoice-item-price').val()) || 0;
-          var quantity = parseInt($(this).find('.quantity').val()) || 0;
-          var discountPercentage = parseFloat($(this).find('.discount').text().replace('%', '')) || 0;
-
-          var subtotal = price * quantity;
-          var discountAmount = subtotal * (discountPercentage / 100);
-          var taxAmount = 0; // Calculate tax if applicable
-
-          totalSubtotal += subtotal;
-          totalDiscount += discountAmount;
-          totalTax += taxAmount; // Update total tax calculation as needed
-      });
-
-      // Update the totals in the invoice summary
-      $('.invoice-calculations').find('.subtotal').text('$' + totalSubtotal.toFixed(2));
-      $('.invoice-calculations').find('.discount').text('$' + totalDiscount.toFixed(2));
-      $('.invoice-calculations').find('.tax').text('$' + totalTax.toFixed(2));
-
-      var totalDue = totalSubtotal - totalDiscount + totalTax;
-      $('.invoice-calculations').find('.total').text('$' + totalDue.toFixed(2));
-  }
-
-  // Event listeners that trigger the recalculation
-  $(document).on('input change', '.invoice-item-price, .quantity, .discount', function() {
-      updateCalculations(); // Update calculations on any change in price, quantity, or discount
-  });
-
+  // Event listener for applying discount changes
   $(document).on('click', '.btn-apply-changes', function() {
-      updateCalculations(); // Ensure calculations are updated when discounts are applied through modal
+      const $modal = $(this).closest('.dropdown-menu');
+      const discountInput = $modal.find('#discountInput').val();
+      const $row = $modal.closest('.repeater-wrapper');
+
+      $row.find('.discount').text(discountInput + '%');
+      updateTotalPrice($row);
+      debouncedUpdateCalculations();
   });
 
-  // Initial calculation call on page load or when items are added dynamically
+  // Event listener for tax changes
+  $('input[name="tax_ids[]"]').change(calculateTotal);
+
+  // Initial calculation on page load
   updateCalculations();
 });
+
+
+
+//disable hide button if quantity is enetred
+$(document).ready(function() {
+  $(document).on('input', '.quantity', function() {
+      const $row = $(this).closest('.repeater-wrapper');
+      const $hideRepeater = $row.find('#hide-repeater');
+      
+      if ($(this).val() && $(this).val() !== '0') {
+          $hideRepeater.prop('disabled', true);
+          $hideRepeater.attr('title', 'To hide this row, please clear quantity first');
+      } else {
+          $hideRepeater.prop('disabled', false);
+          $hideRepeater.attr('title', 'Hide this row');
+      }
+  });
+
+  // Trigger the input event on page load to set initial state
+  $('.quantity').trigger('input');
+});
+
 
 
 
