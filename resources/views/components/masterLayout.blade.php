@@ -47,6 +47,9 @@
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/typeahead-js/typeahead.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/flatpickr/flatpickr.css') }}" />
     <link rel="stylesheet" href="{{ asset('assets/vendor/libs/select2/select2.css') }}" />
+    <link rel="stylesheet" href="{{ asset('assets/vendor/libs/tagify/tagify.css') }}" />
+    <link rel="stylesheet" href="{{ asset('assets/vendor/libs/bootstrap-select/bootstrap-select.css') }}" />
+
 
     <!-- Page CSS -->
     <link rel="stylesheet" href="{{ asset('assets/vendor/css/pages/app-invoice.css') }}" />
@@ -71,7 +74,7 @@
                     id="layout-navbar">
                     <div class="container-fluid">
                         <div class="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0 d-xl-none">
-                            <a class="nav-item nav-link px-0 me-xl-4" href="javascript:void(0)">
+                            <a class="px-0 nav-item nav-link me-xl-4" href="javascript:void(0)">
                                 <i class="bx bx-menu bx-sm"></i>
                             </a>
                         </div>
@@ -79,8 +82,8 @@
                         <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
                             <!-- Search -->
                             <div class="navbar-nav align-items-center">
-                                <div class="nav-item navbar-search-wrapper mb-0">
-                                    <a class="nav-item nav-link search-toggler px-0" href="javascript:void(0);">
+                                <div class="mb-0 nav-item navbar-search-wrapper">
+                                    <a class="px-0 nav-item nav-link search-toggler" href="javascript:void(0);">
                                         <i class="bx bx-search-alt bx-sm"></i>
                                         <span class="d-none d-md-inline-block text-muted">Search (Ctrl+/)</span>
                                     </a>
@@ -88,7 +91,7 @@
                             </div>
                             <!-- /Search -->
 
-                            <ul class="navbar-nav flex-row align-items-center ms-auto">
+                            <ul class="flex-row navbar-nav align-items-center ms-auto">
 
 
 
@@ -102,10 +105,10 @@
                                         <i class="bx bx-bell bx-sm"></i>
                                         <span class="badge bg-danger rounded-pill badge-notifications">5</span>
                                     </a>
-                                    <ul class="dropdown-menu dropdown-menu-end py-0">
+                                    <ul class="py-0 dropdown-menu dropdown-menu-end">
                                         <li class="dropdown-menu-header border-bottom">
-                                            <div class="dropdown-header d-flex align-items-center py-3">
-                                                <h5 class="text-body mb-0 me-auto">Notification</h5>
+                                            <div class="py-3 dropdown-header d-flex align-items-center">
+                                                <h5 class="mb-0 text-body me-auto">Notification</h5>
                                                 <a href="javascript:void(0)"
                                                     class="dropdown-notifications-all text-body"
                                                     data-bs-toggle="tooltip" data-bs-placement="top"
@@ -121,7 +124,7 @@
                                                         <div class="flex-shrink-0 me-3">
                                                             <div class="avatar">
                                                                 <img src="{{ asset('assets/img/avatars/1.png') }}" alt
-                                                                    class="w-px-40 h-auto rounded-circle" />
+                                                                    class="h-auto w-px-40 rounded-circle" />
                                                             </div>
                                                         </div>
                                                         <div class="flex-grow-1">
@@ -169,7 +172,7 @@
                                                         <div class="flex-shrink-0 me-3">
                                                             <div class="avatar">
                                                                 <img src="{{ asset('assets/img/avatars/2.png') }}" alt
-                                                                    class="w-px-40 h-auto rounded-circle" />
+                                                                    class="h-auto w-px-40 rounded-circle" />
                                                             </div>
                                                         </div>
                                                         <div class="flex-grow-1">
@@ -218,7 +221,7 @@
                                                         <div class="flex-shrink-0 me-3">
                                                             <div class="avatar">
                                                                 <img src="{{ asset('assets/img/avatars/9.png') }}" alt
-                                                                    class="w-px-40 h-auto rounded-circle" />
+                                                                    class="h-auto w-px-40 rounded-circle" />
                                                             </div>
                                                         </div>
                                                         <div class="flex-grow-1">
@@ -271,7 +274,7 @@
                                                         <div class="flex-shrink-0 me-3">
                                                             <div class="avatar">
                                                                 <img src="{{ asset('assets/img/avatars/5.png') }}" alt
-                                                                    class="w-px-40 h-auto rounded-circle" />
+                                                                    class="h-auto w-px-40 rounded-circle" />
                                                             </div>
                                                         </div>
                                                         <div class="flex-grow-1">
@@ -295,7 +298,7 @@
                                                         <div class="flex-shrink-0 me-3">
                                                             <div class="avatar">
                                                                 <img src="{{ asset('assets/img/avatars/6.png') }}" alt
-                                                                    class="w-px-40 h-auto rounded-circle" />
+                                                                    class="h-auto w-px-40 rounded-circle" />
                                                             </div>
                                                         </div>
                                                         <div class="flex-grow-1">
@@ -344,7 +347,7 @@
                                         </li>
                                         <li class="dropdown-menu-footer border-top">
                                             <a href="javascript:void(0);"
-                                                class="dropdown-item d-flex justify-content-center p-3">
+                                                class="p-3 dropdown-item d-flex justify-content-center">
                                                 View all notifications
                                             </a>
                                         </li>
@@ -395,9 +398,9 @@
                                             </li>
                                             <li>
                                                 <a class="dropdown-item" href="pages-account-settings-billing.html">
-                                                    <span class="d-flex align-items-center align-middle">
+                                                    <span class="align-middle d-flex align-items-center">
                                                         <i class="flex-shrink-0 bx bx-credit-card me-2"></i>
-                                                        <span class="flex-grow-1 align-middle">Billing</span>
+                                                        <span class="align-middle flex-grow-1">Billing</span>
                                                         <span
                                                             class="flex-shrink-0 badge badge-center rounded-pill bg-danger w-px-20 h-px-20">4</span>
                                                     </span>
@@ -431,7 +434,7 @@
 
                                                 <form action="{{ route('logout') }}" method="Post">
                                                     @csrf
-                                                    <button type="submit" class=" dropdown-item ">
+                                                    <button type="submit" class=" dropdown-item">
                                                         <i class="bx bx-power-off me-2"></i>
                                                         <span class="align-middle">Log Out</span>
                                                     </button>
@@ -483,9 +486,9 @@
 
                         <!-- Search Small Screens -->
                         <div class="navbar-search-wrapper search-input-wrapper d-none">
-                            <input type="text" class="form-control search-input container-fluid border-0"
+                            <input type="text" class="border-0 form-control search-input container-fluid"
                                 placeholder="Search..." aria-label="Search..." />
-                            <i class="bx bx-x bx-sm search-toggler cursor-pointer"></i>
+                            <i class="cursor-pointer bx bx-x bx-sm search-toggler"></i>
                         </div>
                     </div>
                 </nav>
@@ -511,7 +514,7 @@
 
 
     </div>
-    <footer class="content-footer footer bg-footer-theme mt-auto">
+    <footer class="mt-auto content-footer footer bg-footer-theme">
         <div
             class="{{ !empty($containerNav) ? $containerNav : 'container-fluid' }} d-flex flex-wrap justify-content-between py-2 flex-md-row flex-column">
             <div class="mb-2 mb-md-0">
@@ -539,7 +542,6 @@
     </div>
 
     <!-- / Layout wrapper -->
-@stack('scripts')
     <!-- Core JS -->
     <!-- build:js assets/vendor/js/core.js -->
     <script src="{{ asset('assets/vendor/libs/jquery/jquery.js') }}"></script>
@@ -563,7 +565,9 @@
     <script src="{{ asset('assets/vendor/libs/flatpickr/flatpickr.js') }}"></script>
     <script src="{{ asset('assets/vendor/libs/select2/select2.js') }}"></script>
     <script src="{{ asset('assets/vendor/libs/jquery-repeater/jquery-repeater.js') }}"></script>
+    <script src="{{ asset('assets/js/forms-selects.js') }}"></script>
 
+    
     <!-- Main JS -->
     <script src="{{ asset('assets/js/main.js') }}"></script>
 
@@ -571,6 +575,7 @@
     <script src="{{ asset('assets/js/form-layouts.js') }}"></script>
     <script src="{{ asset('assets/js/forms-extras.js') }}"></script>
     <script src="{{ asset('assets/js/app-invoice-add.js') }}"></script>
+    @stack('scripts')
 
 
 </body>
