@@ -48,15 +48,16 @@
                         <div data-repeater-list="group_a">
                             <div data-repeater-item>
 
+
                                 <div class="row">
                                     <table class="table">
 
                                         <thead>
                                             <tr>
-                                                <th class="mb-0 mb-3 col-lg-6 col-xl-3 col-12">Stock Name<br></th>
-                                                <th class="mb-0 mb-3 col-lg-6 col-xl-3 col-12">Stock Price</th>
-                                                <th class="mb-0 mb-3 col-lg-6 col-xl-2 col-12">Stock Description</th>
-                                                {{-- <th class="mb-0 mb-3 col-lg-6 col-xl-3 col-12" data-bs-toggle="tooltip"
+                                                <th class="mb-3 col-lg-6 col-xl-4 col-12">Stock Name<br></th>
+                                                <th class="mb-3 col-lg-6 col-xl-4 col-12">Stock Price</th>
+                                                <th class="mb-3 col-lg-6 col-xl-2 col-12">Stock Description</th>
+                                                {{-- <th class="mb-3 col-lg-6 col-xl-3 col-12" data-bs-toggle="tooltip"
                                                     data-bs-offset="0,4" data-bs-placement="top" data-bs-html="true"
                                                     title=" Amount of time you must wait from exposure to testing">TAF
                                                     <i class="fa-solid fa-circle-question"></i></th> --}}
@@ -67,12 +68,12 @@
                                                 <div>
 
                                                 </div>
-                                                <td class="mb-0 mb-3 col-lg-6 col-xl-4 col-12" style="min-height: 100%">
+                                                <td class="mb-3 col-lg-6 col-xl-4 col-12" style="min-height: 100%">
                                                     <div>
                                                         <input type="text" id="form-repeater-1-1"
                                                             class="form-control {{ $errors->first('stock_name') ? ' form-error' : '' }}"
                                                             placeholder="Enter the name of your item/service"
-                                                            name="stock_name" required />
+                                                            name="stock_name"  />
                                                     </div>
 
 
@@ -82,25 +83,25 @@
 
                                                 </td>
 
-                                                <td class="mb-0 mb-3 col-lg-6 col-xl-4 col-12">
+                                                <td class="mb-3 col-lg-6 col-xl-4 col-12">
 
                                                     <div>
-                                                    <div class="input-group">
-                                                        <span class="input-group-text">GHC</span>
+                                                        <div class="input-group">
+                                                            <span class="input-group-text">GHC</span>
 
-                                                        <input type="number" id="form-repeater-1-1"
-                                                            class="form-control {{ $errors->first('stock_price') ? ' form-error' : '' }}"
-                                                            placeholder="Enter the price of your item/service"
-                                                            name="stock_price"  required/>
+                                                            <input type="number" id="form-repeater-1-1"
+                                                                class="form-control {{ $errors->first('stock_price') ? ' form-error' : '' }}"
+                                                                placeholder="Enter the price of your item/service"
+                                                                name="stock_price"  />
 
-                                                    </div>
+                                                        </div>
                                                     </div>
 
                                                     @error('stock_price')
                                                         <span class="error">{{ $message }}</span>
                                                     @enderror
                                                 </td>
-                                                <td class="mb-0 mb-3 col-lg-6 col-xl-4 col-12">
+                                                <td class="mb-3 col-lg-6 col-xl-4 col-12">
                                                     <div class="input-group">
                                                         <span class="input-group-text">Brief Description</span>
                                                         <textarea name="stock_description" class="form-control" aria-label="With textarea"
@@ -115,7 +116,7 @@
                                                 </td>
 
 
-                                                <td class="mb-0 mb-4 col-lg-6 col-xl-2 col-12">
+                                                <td class="mb-4 col-lg-6 col-xl-2 col-12">
                                                     <button type="button" class="btn btn-label-danger mt-4x"
                                                         data-repeater-delete>
                                                         <i class="bx bx-x"></i>
@@ -135,16 +136,12 @@
                                 <hr />
                             </div>
                         </div>
-                        <div class="mb-0">
-
-                            <button type="button" class="btn btn-primary" data-repeater-create>
+                        <div class="mb-0 d-flex justify-content-between">
+                            <button type="button" class="btn btn-primary me-2" data-repeater-create>
                                 <i class="bx bx-plus"></i>
-                                <span class="align-middle">Add New Row</span>
+                                Add New Row
                             </button>
-
-                            <button type="submit" class="btn btn-primary me-sm-3 me-1" style="float: right">Save
-                                Changes
-                            </button>
+                            <button type="submit" class="btn btn-label-success">Save Changes</button>
 
                         </div>
                     </form>
@@ -164,7 +161,7 @@
                         <div class="text-center head-label">
                             <h5 class="mb-0 card-title">Comapny: {{ $company->name }}</h5>
                         </div>
-                       
+
                     </div>
                     <div class="px-4 mb-4 row">
                         <div class="col-sm-12 col-md-6">
@@ -227,7 +224,7 @@
                                                 href="{{ route('catalog.edit', ['slug' => $company->slug, 'id' => $catalog->id]) }}"><i
                                                     class="bx bx-edit"></i></a>
 
-                                                  
+
 
                                         </div>
 
