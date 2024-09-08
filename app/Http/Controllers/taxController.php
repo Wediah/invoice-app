@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Company;
 use App\Models\Tax;
-use Illuminate\Http\RedirectResponse;
+use App\Models\Company;
 use Illuminate\Http\Request;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Validator;
 
 class taxController extends Controller
 {
@@ -24,25 +25,51 @@ class taxController extends Controller
         return view('tax.create', compact('company'));
     }
 
-    public function store($slug)
+    public function store($slug, Request $request)
     {
+        $data = $request->group_a;
+        // dd($data);
+
+        foreach ($data as $key => $validata) {
+
+            $validator = Validator::make(
+                $validata,
+
+                [
+                    'tax_name' => 'required|string|max:255',
+                    'tax_percentage' => 'required|numeric|between:0,100',
+                    'tax_type' => 'required|string|in:primary,secondary',
+
+                ]
+            );
+            if ($validator->fails()) {
+                // dd($validator);
+                return redirect()->back()
+                    ->withErrors($validator)
+                    ->withInput();
+            }
+        }
+
         $company = Company::where('slug', $slug)->firstOrFail();
         $company_id = $company->id;
 
-        $validatedData = request()->validate([
-            'tax_name' => 'required|string|max:255',
-            'tax_percentage' => 'required|numeric|between:0,100',
-            'type' => 'required|string|in:primary,secondary',
-        ]);
+        foreach ($data as $prop) {
+            $tax_name = $prop['tax_name'];
+            $tax_percentage = $prop['tax_percentage'];
+            $tax_type = $prop['tax_type'];
 
-        $taxData = array(
-            'company_id' => $company_id,
-            'tax_name' => $validatedData['tax_name'],
-            'tax_percentage' => $validatedData['tax_percentage'],
-            'type' => $validatedData['type'],
-        );
 
-        Tax::create($taxData);
+            $taxData = new Tax();
+            $taxData->company_id = $company_id;
+            $taxData->tax_name = $tax_name;
+            $taxData->tax_percentage = $tax_percentage;
+            $taxData->type = $tax_type;
+            $taxData->save();
+
+
+            
+        }
+
 
         return redirect()->back()->with('success', 'Tax added successfully!');
     }
