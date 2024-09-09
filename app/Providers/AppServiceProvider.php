@@ -21,6 +21,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        View::composer('sections.aside', function ($view) {
+            $user = auth()->user();
+            $companies = $user ? $user->companies : collect();
+            $view->with('companies', $companies);
+        });
     }
 }

@@ -22,13 +22,20 @@ class companyController extends Controller
         return view('company.create', compact('categories'));
     }
 
-    public function userAndCompany()
-    {
-        $user = Auth::user();
-        $companies = $user->companies()->with('companyCategory')->withCount('invoices', 'catalogs')->get();
+    // public function userAndCompany()
+    // {
+    //     $user = Auth::user();
+    //     $companies = $user->companies()->with('companyCategory')->withCount('invoices', 'catalogs')->get();
 
-        return view('company.index', compact('companies'));
-    }
+    //     return view('company.index', compact('companies'));
+    // }
+
+    public function userAndCompany()
+{
+    $user = auth()->user();
+    $companies = $user->companies;
+    return view('company.index', compact('companies'));
+}
 
     //starting new company data
     public function store(Request $request): Application|Redirector|\Illuminate\Contracts\Foundation\Application|RedirectResponse

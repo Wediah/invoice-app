@@ -7,16 +7,16 @@
         </a>
 
         <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto">
-            <i class="bx menu-toggle-icon d-none d-xl-block fs-4 align-middle"></i>
-            <i class="bx bx-x d-block d-xl-none bx-sm align-middle"></i>
+            <i class="align-middle bx menu-toggle-icon d-none d-xl-block fs-4"></i>
+            <i class="align-middle bx bx-x d-block d-xl-none bx-sm"></i>
         </a>
     </div>
 
-    <div class="menu-divider mt-0"></div>
+    <div class="mt-0 menu-divider"></div>
 
     <div class="menu-inner-shadow"></div>
 
-    <ul class="menu-inner py-1">
+    <ul class="py-1 menu-inner">
         <!-- Company -->
         <li class="menu-item">
             <a href="{{ route('dashboard') }}" class="menu-link">
@@ -38,12 +38,12 @@
             </a>
             <ul class="menu-sub">
                 <li class="menu-item">
-                    <a  href="#"  class="menu-link">
+                    <a href="{{ route('invoice.index',['slug'=>$companies->first()->slug]) }}" class="menu-link">
                         <div data-i18n="List">List</div>
                     </a>
                 </li>
                 <li class="menu-item">
-                    <a href="#" class="menu-link">
+                    <a href="{{ route('invoice.create',['slug'=>$companies->first()->slug]) }}" class="menu-link">
                         <div data-i18n="Create New">Create New</div>
                     </a>
                 </li>
@@ -65,6 +65,13 @@
                 <div data-i18n="Stock">Stocks</div>
             </a>
             <ul class="menu-sub">
+                @if($companies->isNotEmpty())
+                <li class="menu-item">
+                    <a href="{{ route('catalog.index', ['slug' => $companies->first()->slug]) }}" class="menu-link">
+                        <div data-i18n="List">List</div>
+                    </a>
+                </li>
+            @endif
                 <li class="menu-item">
                     <a href="form-wizard-numbered.html" class="menu-link">
                         <div data-i18n="Active">In-Stock</div>
@@ -93,15 +100,11 @@
             </a>
             <ul class="menu-sub">
                 <li class="menu-item">
-                    <a href="app-invoice-list.html" class="menu-link">
+                    <a href="{{ route('tax.index',['slug'=>$companies->first()->slug]) }}" class="menu-link">
                         <div data-i18n="List">List</div>
                     </a>
                 </li>
-                <li class="menu-item">
-                    <a href="app-invoice-preview.html" class="menu-link">
-                        <div data-i18n="Create New">Create New</div>
-                    </a>
-                </li>
+               
                 <li class="menu-item">
                     <a href="app-invoice-edit.html" class="menu-link">
                         <div data-i18n="Edit">Primary</div>
