@@ -1,5 +1,5 @@
 <x-masterLayout>
- @push()
+ @push('styles')
  <style>
     .blabel {
         font-weight: 700;
