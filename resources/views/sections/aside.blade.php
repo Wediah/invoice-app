@@ -48,12 +48,12 @@
                     </a>
                 </li>
                 <li class="menu-item">
-                    <a href="app-invoice-edit.html" class="menu-link">
+                    <a href="{{ route('invoice.allunpaid', ['slug' => $companies->first()->slug]) }}" class="menu-link">
                         <div data-i18n="Edit">Pending</div>
                     </a>
                 </li>
                 <li class="menu-item">
-                    <a href="app-invoice-add.html" class="menu-link">
+                    <a href="{{ route('invoice.allpaid', ['slug' => $companies->first()->slug]) }}" class="menu-link">
                         <div data-i18n="Add">Paid</div>
                     </a>
                 </li>
@@ -104,7 +104,7 @@
                         <div data-i18n="List">List</div>
                     </a>
                 </li>
-               
+
                 <li class="menu-item">
                     <a href="app-invoice-edit.html" class="menu-link">
                         <div data-i18n="Edit">Primary</div>
