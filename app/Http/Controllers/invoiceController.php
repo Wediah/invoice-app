@@ -23,12 +23,28 @@ class invoiceController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index($slug)
+    public function index($slug): Factory|Application|View|\Illuminate\Contracts\Foundation\Application
     {
         $company = Company::where('slug', $slug)->firstOrFail();
         $allInvoices = $company->invoices->sortByDesc('created_at');
 
         return view('invoice.index', compact('company', 'allInvoices'));
+    }
+
+    public function unpaidInvoices($slug): Factory|Application|View|\Illuminate\Contracts\Foundation\Application
+    {
+        $company = Company::where('slug', $slug)->firstOrFail();
+        $unpaidInvoices = $company->invoices->where('status', 'unpaid');
+
+        return view('invoice.unpaid', compact('company', 'unpaidInvoices'));
+    }
+
+    public function paidInvoices($slug): Factory|Application|View|\Illuminate\Contracts\Foundation\Application
+    {
+        $company = Company::where('slug', $slug)->firstOrFail();
+        $paidInvoices = $company->invoices->where('status', 'paid');
+
+        return view('invoice.paid', compact('company', 'paidInvoices'));
     }
 
     /**

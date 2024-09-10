@@ -1,4 +1,4 @@
-<x-masterLayout :company="$company">
+<x-masterLayout >
     <div class="container-xxl flex-grow-1 container-p-y pt-4">
         <div class="row invoice-preview">
             <!-- Invoice -->
@@ -11,7 +11,7 @@
                             <div class="mb-xl-0 mb-4">
                                 <div class="d-flex svg-illustration mb-3 gap-2 align-items-baseline">
                                     <img src="{{ asset('storage/company_logo') }}/{{$invoice->company->logo}}" alt="company logo" class="h-20
-                                        w-20 rounded"
+                                        w-20 rounded" style="width: auto; height: 50px;"
                                     >
                                     <span class="app-brand-text h3 mb-0 fw-bold">{{ $invoice->company->name }}</span>
                                 </div>

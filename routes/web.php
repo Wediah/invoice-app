@@ -54,6 +54,8 @@ Route::middleware('auth')->group(function () {
 
     //invoice
     Route::get('/{slug}/all-invoices', [InvoiceController::class, 'index'])->name('invoice.index');
+    Route::get('/{slug}/paid-invoices', [InvoiceController::class, 'paidInvoices'])->name('invoice.allpaid');
+    Route::get('/{slug}/unpaid-invoices', [InvoiceController::class, 'unpaidInvoices'])->name('invoice.allunpaid');
     Route::post('/{slug}/invoice', [invoiceController::class, 'store'])->name('invoice.store');
     Route::get('/{slug}/invoice', [invoiceController::class, 'create'])->name('invoice.create');
     Route::get('/invoice/{id}', [invoiceController::class, 'show'])->name('invoice.show');
