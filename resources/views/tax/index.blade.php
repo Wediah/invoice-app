@@ -23,15 +23,15 @@
                 font-size: 12px;
             }
 
-            @media (min-width: 1200px) { 
+            @media (min-width: 1200px) {
                 .rm-btn{
             padding-left: 50px;
            }
             }
 
 
-           
-            
+
+
         </style>
     @endpush
     <div class="container-xxl flex-grow-1 container-p-y">
@@ -123,7 +123,7 @@
                                                 <span class="align-middle"></span>
                                             </button>
                                         </div>
-                                       
+
                                     </div>
                                 </div>
 
@@ -207,11 +207,12 @@
 
                                             <div class="dropdown-menu">
                                                 <form
+                                                    id="deleteForm"
                                                     action="{{ route('tax.delete', ['slug' => $company->slug, 'id' => $tax->id]) }}"
                                                     method="POST" class="dropdown-item">
                                                     @csrf
                                                     @method('DELETE')
-                                                    <button class="dropdown-item" type="submit">
+                                                    <button class="dropdown-item deleteTax" type="submit">
                                                         <i class="bx bx-trash me-1"></i>
                                                         Delete
                                                     </button>
@@ -235,7 +236,46 @@
 
     </div>
 
+    <script>
+        document.querySelectorAll('.deleteTax').forEach(function(button) {
+            button.addEventListener('click', function (e) {
+                e.preventDefault(); // Prevent the default form submission
 
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "You are about to delete this invoice. Are you sure you want to proceed?",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Yes, delete it!',
+                    customClass: {
+                        confirmButton: 'btn btn-warning me-2',
+                        cancelButton: 'btn btn-label-secondary'
+                    }
+                }).then(function (result) {
+                    if (result.isConfirmed) { // Use `isConfirmed` to check if confirmed
+                        button.closest('form').submit(); // Submit the closest form to the button
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Deleted!',
+                            text: 'Tax has been deleted.',
+                            customClass: {
+                                confirmButton: 'btn btn-success'
+                            }
+                        });
+                    } else if (result.dismiss === Swal.DismissReason.cancel) {
+                        Swal.fire({
+                            title: 'Cancelled',
+                            text: 'Deletion cancelled :)',
+                            icon: 'error',
+                            customClass: {
+                                confirmButton: 'btn btn-success'
+                            }
+                        });
+                    }
+                });
+            });
+        });
+    </script>
 
 </x-masterLayout>
 {{-- <script>

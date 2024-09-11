@@ -172,73 +172,99 @@
                     </tr>
 
                     </thead>
-                    @php
-                        $taxes = $taxes ?? [];
-                    @endphp
-                    @unless (count($taxes) == 0)
                         <tbody class="table-border-bottom-0">
-                        @foreach ($secondaryTaxes as $tax)
-                            <tr>
-                                <td>{{ $tax->tax_name }}</td>
-                                <td>{{ $tax->tax_percentage }}%</td>
+                            @foreach ($secondaryTaxes as $tax)
+                                <tr>
+                                    <td>{{ $tax->tax_name }}</td>
+                                    <td>{{ $tax->tax_percentage }}%</td>
 
 
-                                @if ($tax->type === 'SECONDARY')
-                                    <td><span style="padding: 3px; border-radius:4px"
-                                              class="bg-label-warning">Secondary</span>
-                                    </td>
-                                @else
-                                    <td><span style="padding: 3px; border-radius:4px"
-                                              class="bg-label-primary">Primary</span>
-                                    </td>
-                                @endif
-                                <td valign="top" class="d-flex">
-                                    <div>
-                                        <a class="p-0 dropdown-item"
-                                           href="{{ route('tax.edit', ['slug' => $company->slug, 'id' => $tax->id]) }}"><i
-                                                class="bx bx-edit"></i></a>
-
-
-
-                                    </div>
-                                    <div class="dropdown">
-
-                                        <button type="button" class="py-0 btn pe-1 dropdown-toggle hide-arrow"
-                                                data-bs-toggle="dropdown">
-                                            <i class="bx bx-dots-vertical-rounded"></i>
-                                        </button>
-
-                                        <div class="dropdown-menu">
-                                            <form
-                                                action="{{ route('tax.delete', ['slug' => $company->slug, 'id' => $tax->id]) }}"
-                                                method="POST" class="dropdown-item">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button class="dropdown-item" type="submit">
-                                                    <i class="bx bx-trash me-1"></i>
-                                                    Delete
-                                                </button>
-                                            </form>
+                                    @if ($tax->type === 'SECONDARY')
+                                        <td><span style="padding: 3px; border-radius:4px"
+                                                  class="bg-label-warning">Secondary</span>
+                                        </td>
+                                    @else
+                                        <td><span style="padding: 3px; border-radius:4px"
+                                                  class="bg-label-primary">Primary</span>
+                                        </td>
+                                    @endif
+                                    <td valign="top" class="d-flex">
+                                        <div>
+                                            <a class="p-0 dropdown-item"
+                                               href="{{ route('tax.edit', ['slug' => $company->slug, 'id' => $tax->id]) }}">
+                                                <i class="bx bx-edit"></i>
+                                            </a>
                                         </div>
+                                        <div class="dropdown">
 
+                                            <button type="button" class="py-0 btn pe-1 dropdown-toggle hide-arrow"
+                                                    data-bs-toggle="dropdown">
+                                                <i class="bx bx-dots-vertical-rounded"></i>
+                                            </button>
 
-                                    </div>
-
-
-
-                                </td>
-                            </tr>
-                        @endforeach
+                                            <div class="dropdown-menu">
+                                                <form
+                                                    id="deleteForm"
+                                                    action="{{ route('tax.delete', ['slug' => $company->slug, 'id' => $tax->id]) }}"
+                                                    method="POST" class="dropdown-item">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button class="dropdown-item deleteTax" type="submit">
+                                                        <i class="bx bx-trash me-1"></i>
+                                                        Delete
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            @endforeach
                         </tbody>
-                    @endunless
                 </table>
             </div>
         </div>
-
-
     </div>
 
+    <script>
+        document.querySelectorAll('.deleteTax').forEach(function(button) {
+            button.addEventListener('click', function (e) {
+                e.preventDefault(); // Prevent the default form submission
 
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "You are about to delete this invoice. Are you sure you want to proceed?",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Yes, delete it!',
+                    customClass: {
+                        confirmButton: 'btn btn-warning me-2',
+                        cancelButton: 'btn btn-label-secondary'
+                    }
+                }).then(function (result) {
+                    if (result.isConfirmed) { // Use `isConfirmed` to check if confirmed
+                        button.closest('form').submit(); // Submit the closest form to the button
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Deleted!',
+                            text: 'Tax has been deleted.',
+                            customClass: {
+                                confirmButton: 'btn btn-success'
+                            }
+                        });
+                    } else if (result.dismiss === Swal.DismissReason.cancel) {
+                        Swal.fire({
+                            title: 'Cancelled',
+                            text: 'Deletion cancelled :)',
+                            icon: 'error',
+                            customClass: {
+                                confirmButton: 'btn btn-success'
+                            }
+                        });
+                    }
+                });
+            });
+        });
+    </script>
 
 </x-masterLayout>
 {{-- <script>

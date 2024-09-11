@@ -111,15 +111,10 @@
                                                     </li>
                                                     <hr/>
                                                     <li>
-                                                        <form id="deleteForm" action="{{ route('invoice.delete',
-                                                        ['id'
-                                                         =>
-                                                        $invoice->id]) }}"
-                                                          method="POST" >
+                                                        <form id="deleteForm" action="{{ route('invoice.delete', ['id' => $invoice->id]) }}" method="POST">
                                                             @csrf
                                                             @method('DELETE')
-                                                            <button type="submit" class="btn dropdown-item
-                                                            text-danger deleteInvoice">Delete</button>
+                                                            <button type="submit" class="btn dropdown-item text-danger deleteInvoice">Delete</button>
                                                         </form>
                                                     </li>
                                                 </ul>
@@ -158,42 +153,47 @@
         </div>
     </div>
 
+    <script>
+        document.querySelectorAll('.deleteInvoice').forEach(function(button) {
+            button.addEventListener('click', function (e) {
+                e.preventDefault(); // Prevent the default form submission
+
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "You are about to delete this invoice. Are you sure you want to proceed?",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Yes, delete it!',
+                    customClass: {
+                        confirmButton: 'btn btn-warning me-2',
+                        cancelButton: 'btn btn-label-secondary'
+                    }
+                }).then(function (result) {
+                    if (result.isConfirmed) { // Use `isConfirmed` to check if confirmed
+                        button.closest('form').submit(); // Submit the closest form to the button
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Deleted!',
+                            text: 'Invoice has been deleted.',
+                            customClass: {
+                                confirmButton: 'btn btn-success'
+                            }
+                        });
+                    } else if (result.dismiss === Swal.DismissReason.cancel) {
+                        Swal.fire({
+                            title: 'Cancelled',
+                            text: 'Deletion cancelled :)',
+                            icon: 'error',
+                            customClass: {
+                                confirmButton: 'btn btn-success'
+                            }
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+
+
 
 </x-masterLayout>
-
-
-<script>
-    document.querySelector('.deleteInvoice').addEventListener('click', function (e) {
-        e.preventDefault();
-        Swal.fire({
-            title: 'Are you sure?',
-            text: "You are about to delete this invoice. Are you sure you want to proceed?",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonText: 'Yes, delete it!',
-            customClass: {
-            confirmButton: 'btn btn-warning me-2',
-            cancelButton: 'btn btn-label-secondary'
-        },
-        }).then(function (result) {
-                if (result.value) {
-                    document.getElementById('deleteForm').submit();
-                    Swal.fire({
-                    icon: 'success',
-                    title: 'Deleted!',
-                    text: 'Invoice has been deleted.',
-                    customClass: {
-                    confirmButton: 'btn btn-success'
-                }});
-            } else if (result.dismiss === Swal.DismissReason.cancel) {
-                Swal.fire({
-                    title: 'Cancelled',
-                    text: 'Cancelled Suspension :)',
-                    icon: 'error',
-                    customClass: {
-                    confirmButton: 'btn btn-success'
-                }});
-            }
-        });
-    });
-</script>

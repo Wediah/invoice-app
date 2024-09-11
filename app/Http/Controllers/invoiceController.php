@@ -359,7 +359,7 @@ class invoiceController extends Controller
 
         $deleteInvoice->delete();
 
-        return redirect()->back();
+        return redirect()->back()->with('success', 'Invoice deleted successfully');
     }
 
     /**

@@ -21,7 +21,7 @@ class taxController extends Controller
     public function allPrimaryTax($slug)
     {
         $company = Company::where('slug', $slug)->with('taxes')->firstOrFail();
-        $primaryTaxes = $company->taxes()->where('type', 'PRIMARY');
+        $primaryTaxes = $company->taxes()->where('type', 'PRIMARY')->get();
 
         return view('tax.primary', compact('primaryTaxes', 'company'));
     }
@@ -29,7 +29,7 @@ class taxController extends Controller
     public function allSecondaryTax($slug)
     {
         $company = Company::where('slug', $slug)->with('taxes')->firstOrFail();
-        $secondaryTaxes = $company->taxes()->where('type', 'SECONDARY');
+        $secondaryTaxes = $company->taxes()->where('type', 'SECONDARY')->get();
 
         return view('tax.secondary', compact('secondaryTaxes', 'company'));
     }
