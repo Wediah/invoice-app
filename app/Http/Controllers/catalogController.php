@@ -28,6 +28,22 @@ class catalogController extends Controller
         return view('company.catalog.index', compact('company', 'companyCatalog', 'user'));
     }
 
+    public function catalogInstock($slug)
+    {
+        $company = Company::where('slug', $slug)->firstOrFail();
+        $companyCatalogInstock = $company->catalogs->where('status', 'instock');
+        $user = Auth::user();
+        return view('company.catalog.instock', compact('company', 'companyCatalogInstock', 'user'));
+    }
+
+    public function catalogOutofstock($slug)
+    {
+        $company = Company::where('slug', $slug)->firstOrFail();
+        $companyCatalogOutofstock = $company->catalogs->where('status', 'outofstock');
+        $user = Auth::user();
+        return view('company.catalog.outofstock', compact('company', 'companyCatalogOutofstock', 'user'));
+    }
+
     /**
      * Show the form for creating a new resource.
      */
@@ -70,7 +86,7 @@ class catalogController extends Controller
 
         $company_id = $company->id;
 
-      
+
         foreach ($data as $prop) {
             $stock_name = $prop['stock_name'];
             $stock_price = $prop['stock_price'];
@@ -85,9 +101,9 @@ class catalogController extends Controller
             $stockData->save();
 
 
-            
+
         }
-       
+
         return redirect()->intended(route('catalog.index', ['slug' => $company->slug], absolute: false));
     }
 

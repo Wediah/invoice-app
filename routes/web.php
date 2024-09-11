@@ -45,6 +45,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/company/{company_id}/catalog/create', [CatalogController::class, 'create'])->name('catalog.create');
     Route::post('/company/{company_id}/catalog', [CatalogController::class, 'store'])->name('catalog.store');
     Route::get('/{slug}/all-catalogs/', [catalogController::class, 'index'])->name('catalog.index');
+    Route::get('/{slug}/catalogs/in-stock', [catalogController::class, 'catalogInstock'])->name('catalog.inStock');
+    Route::get('/{slug}/catalogs/out-of-stock', [catalogController::class, 'catalogOutofstock'])->name('catalog.outOfStock');
     Route::get('/catalog/{slug}/edit/{id}', [catalogController::class, 'edit'])->name('catalog.edit');
     Route::patch('/catalog/{slug}/update/{id}', [catalogController::class, 'update'])->name('catalog.update');
     Route::delete('/catalog/{slug}/delete/{id}', [catalogController::class, 'destroy'])->name('catalog.delete');
@@ -76,6 +78,8 @@ Route::middleware('auth')->group(function () {
 
     //tax
     Route::get('tax/{slug}/index', [taxController::class, 'index'])->name('tax.index');
+    Route::get('tax/{slug}/primary', [taxController::class, 'allPrimaryTax'])->name('tax.primary');
+    Route::get('tax/{slug}/secondary', [taxController::class, 'allSecondaryTax'])->name('tax.secondary');
     Route::get('/tax/{slug}/create', [taxController::class, 'create'])->name('tax.create');
     Route::post('/tax/{slug}/store', [taxController::class, 'store'])->name('tax.store');
     Route::get('tax/{slug}/edit/{id}', [taxController::class, 'edit'])->name('tax.edit');

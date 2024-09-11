@@ -2,12 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Enums\directoryStatus;
-use App\Events\DirectoryApproved;
 use App\invoiceStatus;
 use App\Models\Catalog;
 use App\Models\Company;
-use App\Models\Directory;
 use App\Models\invoice;
 use App\Models\paymentTerms;
 use Illuminate\Contracts\View\Factory;
@@ -110,7 +107,7 @@ class invoiceController extends Controller
         $validatedData = request()->validate([
             'customer_name' => 'required|string|max:255',
             'catalog_id.*' => 'required|exists:catalogs,id',
-            'term_id' => 'required|exists:payment_terms,id',
+//            'term_id' => 'required|exists:payment_terms,id',
             'quantity.*' => 'required|integer|min:1',
             'tax_id.*' => 'required|exists:taxes,id',
             'discount' => 'numeric|min:0',
@@ -145,7 +142,7 @@ class invoiceController extends Controller
             'user_id' => $user_id,
             'company_id' => $company_id,
             'invoice_number' => $invoiceNumber,
-            'term_id' => $validatedData['term_id'],
+//            'term_id' => $validatedData['term_id'],
             'customer_name' => $validatedData['customer_name'],
             'discount' => $validatedData['discount'],
             'email' => $validatedData['email'],
@@ -309,7 +306,7 @@ class invoiceController extends Controller
         $validatedData = $request->validate([
             'customer_name' => 'required|string|max:255',
             'catalog_id.*' => 'required|exists:catalogs,id',
-            'term_id' => 'required|exists:payment_terms,id',
+//            'term_id' => 'required|exists:payment_terms,id',
             'quantity.*' => 'required|integer|min:1',
             'tax_id.*' => 'required|exists:taxes,id',
             'discount' => 'numeric|min:0',
@@ -333,7 +330,7 @@ class invoiceController extends Controller
             'user_id' => $user_id,
             'company_id' => $company_id,
             'invoice_number' => $updatedInvoiceNumber,
-            'term_id' => $validatedData['term_id'] ?? $invoice->term_id,
+//            'term_id' => $validatedData['term_id'] ?? $invoice->term_id,
             'customer_name' => $validatedData['customer_name'] ?? $invoice->customer_name,
             'discount' => $validatedData['discount'] ?? $invoice->discount,
             'email' => $validatedData['email'] ?? $invoice->email,
@@ -362,7 +359,7 @@ class invoiceController extends Controller
 
         $deleteInvoice->delete();
 
-        return redirect()->intended(route('invoice.index', absolute: false));
+        return redirect()->back();
     }
 
     /**
