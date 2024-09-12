@@ -25,8 +25,8 @@
 
             @media (min-width: 1200px) {
                 .rm-btn{
-            padding-left: 50px;
-           }
+                    padding-left: 50px;
+                }
             }
 
 
@@ -49,7 +49,7 @@
                 @endif
                 <div class="card-body">
                     <form method="POST" action="{{ route('tax.store', ['slug' => $company->slug]) }}" id="tax-repeater"
-                        class="tax-repeater">
+                          class="tax-repeater">
                         @csrf
                         <div data-repeater-list="group_a">
                             <div data-repeater-item>
@@ -58,13 +58,13 @@
                                         <div class="form-group">
                                             <label for="tax-name">Tax Name</label>
                                             <input type="text" id="form-repeater-1-1"
-                                                class="form-control {{ $errors->first('tax_name') ? ' form-error' : '' }}"
-                                                placeholder="Enter Tax Name" name="tax_name" />
+                                                   class="form-control {{ $errors->first('tax_name') ? ' form-error' : '' }}"
+                                                   placeholder="Enter Tax Name" name="tax_name" />
                                         </div>
                                         <div class="error" data-error="tax_name"></div>
 
                                         @error('tax_name')
-                                            <p class="error">{{ $message }}</p>
+                                        <p class="error">{{ $message }}</p>
                                         @enderror
                                     </div>
                                     <div class="mb-3 col-lg-6 col-xl-3 col-12">
@@ -72,8 +72,8 @@
                                             <label for="tax_percentage">Tax Percent</label>
                                             <div class="input-group">
                                                 <input type="number" id="form-repeater-1-1"
-                                                    class="form-control {{ $errors->first('tax_percentage') ? ' form-error' : '' }}"
-                                                    placeholder="Enter Tax %" name="tax_percentage" /> <span
+                                                       class="form-control {{ $errors->first('tax_percentage') ? ' form-error' : '' }}"
+                                                       placeholder="Enter Tax %" name="tax_percentage" /> <span
                                                     class="input-group-text">%</span>
                                             </div>
 
@@ -81,7 +81,7 @@
                                         <div class="error" data-error="tax_percentage"></div>
 
                                         @error('tax_percentage')
-                                            <p class="error">{{ $message }}</p>
+                                        <p class="error">{{ $message }}</p>
                                         @enderror
                                     </div>
                                     <div class="mb-3 col-lg-6 col-xl-3 col-12">
@@ -89,19 +89,19 @@
                                             <label for="tax-type">Tax Type</label>
                                             <div class="mt-2 d-flex">
                                                 <div class="form-check me-4" data-bs-toggle="tooltip"
-                                                    data-bs-placement="top" data-bs-offset="0,8"
-                                                    data-bs-original-title="Primary Tax">
+                                                     data-bs-placement="top" data-bs-offset="0,8"
+                                                     data-bs-original-title="Primary Tax">
                                                     <input name="tax_type" class="form-check-input" type="radio"
-                                                        value="primary" id="primaryRadio">
+                                                           value="primary" id="primaryRadio">
                                                     <label class="form-check-label" for="primaryRadio">
                                                         Primary
                                                     </label>
                                                 </div>
 
                                                 <div class="form-check" data-bs-toggle="tooltip" data-bs-placement="top"
-                                                    data-bs-offset="0,8" data-bs-original-title="Secondary Tax">
+                                                     data-bs-offset="0,8" data-bs-original-title="Secondary Tax">
                                                     <input name="tax_type" class="form-check-input" type="radio"
-                                                        value="secondary" id="secondaryRadio">
+                                                           value="secondary" id="secondaryRadio">
                                                     <label class="form-check-label" for="secondaryRadio">
                                                         Secondary
                                                     </label>
@@ -111,7 +111,7 @@
                                         <div class="error" data-error="tax_type"></div>
 
                                         @error('tax_type')
-                                            <p class="error">{{ $message }}</p>
+                                        <p class="error">{{ $message }}</p>
                                         @enderror
                                     </div>
 
@@ -163,18 +163,17 @@
             <div class=" table-responsive text-nowrap">
                 <table class="table " id="datatable">
                     <thead class="mx-auto">
-                        <tr>
-                            <th>Tax Name</th>
-                            <th>Tax Percentage</th>
-                            <th>Tax Type</th>
-                            <th>Actions</th>
+                    <tr>
+                        <th>Tax Name</th>
+                        <th>Tax Percentage</th>
+                        <th>Tax Type</th>
+                        <th>Actions</th>
 
-                        </tr>
+                    </tr>
 
                     </thead>
-                    @unless (count($taxes) == 0)
                         <tbody class="table-border-bottom-0">
-                            @foreach ($taxes as $tax)
+                            @foreach ($secondaryTaxes as $tax)
                                 <tr>
                                     <td>{{ $tax->tax_name }}</td>
                                     <td>{{ $tax->tax_percentage }}%</td>
@@ -182,26 +181,24 @@
 
                                     @if ($tax->type === 'SECONDARY')
                                         <td><span style="padding: 3px; border-radius:4px"
-                                                class="bg-label-warning">Secondary</span>
+                                                  class="bg-label-warning">Secondary</span>
                                         </td>
                                     @else
                                         <td><span style="padding: 3px; border-radius:4px"
-                                                class="bg-label-primary">Primary</span>
+                                                  class="bg-label-primary">Primary</span>
                                         </td>
                                     @endif
                                     <td valign="top" class="d-flex">
                                         <div>
                                             <a class="p-0 dropdown-item"
-                                                href="{{ route('tax.edit', ['slug' => $company->slug, 'id' => $tax->id]) }}"><i
-                                                    class="bx bx-edit"></i></a>
-
-
-
+                                               href="{{ route('tax.edit', ['slug' => $company->slug, 'id' => $tax->id]) }}">
+                                                <i class="bx bx-edit"></i>
+                                            </a>
                                         </div>
                                         <div class="dropdown">
 
                                             <button type="button" class="py-0 btn pe-1 dropdown-toggle hide-arrow"
-                                                data-bs-toggle="dropdown">
+                                                    data-bs-toggle="dropdown">
                                                 <i class="bx bx-dots-vertical-rounded"></i>
                                             </button>
 
@@ -218,22 +215,14 @@
                                                     </button>
                                                 </form>
                                             </div>
-
-
                                         </div>
-
-
-
                                     </td>
                                 </tr>
                             @endforeach
                         </tbody>
-                    @endunless
                 </table>
             </div>
         </div>
-
-
     </div>
 
     <script>
@@ -482,63 +471,63 @@
 </script>
 
 <script>
-$(function() {
-    $('#tax-repeater').on('submit', function(e) {
-        let isValid = true;
+    $(function() {
+        $('#tax-repeater').on('submit', function(e) {
+            let isValid = true;
 
-        $('[data-repeater-item]').each(function(index) {
-            const taxName = $(this).find('input[name^="group_a"][name$="[tax_name]"]');
-            const taxPercentage = $(this).find('input[name^="group_a"][name$="[tax_percentage]"]');
-            const taxType = $(this).find('input[name^="group_a"][name$="[tax_type]"]:checked');
+            $('[data-repeater-item]').each(function(index) {
+                const taxName = $(this).find('input[name^="group_a"][name$="[tax_name]"]');
+                const taxPercentage = $(this).find('input[name^="group_a"][name$="[tax_percentage]"]');
+                const taxType = $(this).find('input[name^="group_a"][name$="[tax_type]"]:checked');
 
-            // Clear previous error messages
-            $(this).find('.error').text('');
+                // Clear previous error messages
+                $(this).find('.error').text('');
 
-            // Validate tax name
-            if (taxName.val().trim() === '') {
-                isValid = false;
-                taxName.addClass('is-invalid');
-                $(this).find('[data-error="tax_name"]').text('Tax name is required.');
-            } else if (taxName.val().length > 255) {
-                isValid = false;
-                taxName.addClass('is-invalid');
-                $(this).find('[data-error="tax_name"]').text('Tax name must not exceed 255 characters.');
-            } else {
-                taxName.removeClass('is-invalid');
-            }
+                // Validate tax name
+                if (taxName.val().trim() === '') {
+                    isValid = false;
+                    taxName.addClass('is-invalid');
+                    $(this).find('[data-error="tax_name"]').text('Tax name is required.');
+                } else if (taxName.val().length > 255) {
+                    isValid = false;
+                    taxName.addClass('is-invalid');
+                    $(this).find('[data-error="tax_name"]').text('Tax name must not exceed 255 characters.');
+                } else {
+                    taxName.removeClass('is-invalid');
+                }
 
-            // Validate tax percentage
-            const percentage = parseFloat(taxPercentage.val());
-            if (isNaN(percentage) || taxPercentage.val().trim() === '') {
-                isValid = false;
-                taxPercentage.addClass('is-invalid');
-                $(this).find('[data-error="tax_percentage"]').text('Tax percentage is required and must be a number.');
-            } else if (percentage < 0 || percentage > 100) {
-                isValid = false;
-                taxPercentage.addClass('is-invalid');
-                $(this).find('[data-error="tax_percentage"]').text('Tax percentage must be between 0 and 100.');
-            } else {
-                taxPercentage.removeClass('is-invalid');
-            }
+                // Validate tax percentage
+                const percentage = parseFloat(taxPercentage.val());
+                if (isNaN(percentage) || taxPercentage.val().trim() === '') {
+                    isValid = false;
+                    taxPercentage.addClass('is-invalid');
+                    $(this).find('[data-error="tax_percentage"]').text('Tax percentage is required and must be a number.');
+                } else if (percentage < 0 || percentage > 100) {
+                    isValid = false;
+                    taxPercentage.addClass('is-invalid');
+                    $(this).find('[data-error="tax_percentage"]').text('Tax percentage must be between 0 and 100.');
+                } else {
+                    taxPercentage.removeClass('is-invalid');
+                }
 
-            // Validate tax type
-            if (taxType.length === 0) {
-                isValid = false;
-                $(this).find('input[name^="group_a"][name$="[tax_type]"]').addClass('is-invalid');
-                $(this).find('[data-error="tax_type"]').text('Please select a tax type.');
-            } else if (!['primary', 'secondary'].includes(taxType.val())) {
-                isValid = false;
-                $(this).find('input[name^="group_a"][name$="[tax_type]"]').addClass('is-invalid');
-                $(this).find('[data-error="tax_type"]').text('Invalid tax type selected.');
-            } else {
-                $(this).find('input[name^="group_a"][name$="[tax_type]"]').removeClass('is-invalid');
+                // Validate tax type
+                if (taxType.length === 0) {
+                    isValid = false;
+                    $(this).find('input[name^="group_a"][name$="[tax_type]"]').addClass('is-invalid');
+                    $(this).find('[data-error="tax_type"]').text('Please select a tax type.');
+                } else if (!['primary', 'secondary'].includes(taxType.val())) {
+                    isValid = false;
+                    $(this).find('input[name^="group_a"][name$="[tax_type]"]').addClass('is-invalid');
+                    $(this).find('[data-error="tax_type"]').text('Invalid tax type selected.');
+                } else {
+                    $(this).find('input[name^="group_a"][name$="[tax_type]"]').removeClass('is-invalid');
+                }
+            });
+
+            if (!isValid) {
+                e.preventDefault();
             }
         });
-
-        if (!isValid) {
-            e.preventDefault();
-        }
     });
-});
 
 </script>

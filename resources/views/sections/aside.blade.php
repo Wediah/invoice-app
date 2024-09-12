@@ -66,19 +66,21 @@
             </a>
             <ul class="menu-sub">
                 @if($companies->isNotEmpty())
+                    <li class="menu-item">
+                        <a href="{{ route('catalog.index', ['slug' => $companies->first()->slug]) }}" class="menu-link">
+                            <div data-i18n="List">List</div>
+                        </a>
+                    </li>
+               @endif
                 <li class="menu-item">
-                    <a href="{{ route('catalog.index', ['slug' => $companies->first()->slug]) }}" class="menu-link">
-                        <div data-i18n="List">List</div>
-                    </a>
-                </li>
-            @endif
-                <li class="menu-item">
-                    <a href="form-wizard-numbered.html" class="menu-link">
+                    <a href="{{ route('catalog.inStock', ['slug' => $companies->first()->slug]) }}"
+                       class="menu-link">
                         <div data-i18n="Active">In-Stock</div>
                     </a>
                 </li>
                 <li class="menu-item">
-                    <a href="form-wizard-icons.html" class="menu-link">
+                    <a href="{{ route('catalog.outOfStock', ['slug' => $companies->first()->slug]) }}"
+                       class="menu-link">
                         <div data-i18n="Icons">Out Of Stock</div>
                     </a>
                 </li>
@@ -87,12 +89,12 @@
         <!-- Payments & Taxes -->
         <li class="menu-header small text-uppercase"><span class="menu-header-text">Payments &amp; Taxes</span></li>
 
-        <li class="menu-item">
-            <a href="{{ route('dashboard') }}" class="menu-link">
-                <i class="menu-icon tf-icons bx bx-home-circle"></i>
-                <div data-i18n="Payment Terms">Payment Terms</div>
-            </a>
-        </li>
+{{--        <li class="menu-item">--}}
+{{--            <a href="{{ route('dashboard') }}" class="menu-link">--}}
+{{--                <i class="menu-icon tf-icons bx bx-home-circle"></i>--}}
+{{--                <div data-i18n="Payment Terms">Payment Terms</div>--}}
+{{--            </a>--}}
+{{--        </li>--}}
         <li class="menu-item">
             <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="menu-icon tf-icons bx bx-food-menu"></i>
@@ -106,12 +108,12 @@
                 </li>
 
                 <li class="menu-item">
-                    <a href="app-invoice-edit.html" class="menu-link">
+                    <a href="{{ route('tax.primary',['slug'=>$companies->first()->slug]) }}" class="menu-link">
                         <div data-i18n="Edit">Primary</div>
                     </a>
                 </li>
                 <li class="menu-item">
-                    <a href="app-invoice-add.html" class="menu-link">
+                    <a href="{{ route('tax.secondary',['slug'=>$companies->first()->slug]) }}" class="menu-link">
                         <div data-i18n="Add">Secondary</div>
                     </a>
                 </li>

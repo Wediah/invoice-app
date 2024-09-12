@@ -8,7 +8,7 @@
                 <div id="DataTables_Table_0_wrapper" class="dataTables_wrapper dt-bootstrap5 no-footer">
                     <div class="card-header d-flex justify-content-between">
                         <div class="text-center head-label">
-                            <h5 class="mb-0 card-title">Comapny: {{ $company->name }}</h5>
+                            <h5 class="mb-0 card-title">Company: {{ $company->name }}</h5>
                         </div>
 
                     </div>
@@ -61,7 +61,7 @@
 
                                     <td>{{ $invoice->customer_name }}</td>
                                     <td> GH¢{{ number_format((float) $invoice->total, 2) }}</td>
-                                    <td><span class="badge bg-label-primary me-1">{{ $catalog->status }}</span></td>
+                                    <td><span class="badge bg-label-primary me-1">{{ $invoice->status }}</span></td>
                                     <td>{{ $invoice->created_at->format('d/m/Y') }}</td>
                                     <td> GH¢{{ number_format((float) $invoice->balance, 2) }}</td>
                                     <td>
@@ -111,12 +111,10 @@
                                                     </li>
                                                     <hr/>
                                                     <li>
-                                                        <form action="{{ route('invoice.delete', ['id' => $invoice->id]) }}"
-                                                          method="POST" onsubmit="return confirm('Are you sure you want to ' +
-                                                           'delete ' + 'this invoice?');">
+                                                        <form id="deleteForm" action="{{ route('invoice.delete', ['id' => $invoice->id]) }}" method="POST">
                                                             @csrf
                                                             @method('DELETE')
-                                                            <button type="submit" class="btn dropdown-item text-danger">Delete</button>
+                                                            <button type="submit" class="btn dropdown-item text-danger deleteInvoice">Delete</button>
                                                         </form>
                                                     </li>
                                                 </ul>
@@ -154,6 +152,48 @@
             </div>
         </div>
     </div>
+
+    <script>
+        document.querySelectorAll('.deleteInvoice').forEach(function(button) {
+            button.addEventListener('click', function (e) {
+                e.preventDefault(); // Prevent the default form submission
+
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "You are about to delete this invoice. Are you sure you want to proceed?",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Yes, delete it!',
+                    customClass: {
+                        confirmButton: 'btn btn-warning me-2',
+                        cancelButton: 'btn btn-label-secondary'
+                    }
+                }).then(function (result) {
+                    if (result.isConfirmed) { // Use `isConfirmed` to check if confirmed
+                        button.closest('form').submit(); // Submit the closest form to the button
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Deleted!',
+                            text: 'Invoice has been deleted.',
+                            customClass: {
+                                confirmButton: 'btn btn-success'
+                            }
+                        });
+                    } else if (result.dismiss === Swal.DismissReason.cancel) {
+                        Swal.fire({
+                            title: 'Cancelled',
+                            text: 'Deletion cancelled :)',
+                            icon: 'error',
+                            customClass: {
+                                confirmButton: 'btn btn-success'
+                            }
+                        });
+                    }
+                });
+            });
+        });
+    </script>
+
 
 
 </x-masterLayout>
