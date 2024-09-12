@@ -99,6 +99,8 @@ class invoiceController extends Controller
      */
     public function store(Request $request, $slug)
     {
+        dd($request);
+        
         $user_id = Auth::id();
 
         $company = Company::where('slug', $slug)->firstOrFail();

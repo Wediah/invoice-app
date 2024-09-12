@@ -168,9 +168,9 @@ $(document).ready(function () {
       '<p class="mb-2"><span class="h6 me-2"> Contact Person:</span>' + contactPerson + '</p>' +
       '<p class="mb-2"><span class="h6 me-2">Company Name: </span>' + companyName + '</p>' +
       '<p class="mb-2"><span class="h6 me-2">Company Address: </span>' + companyAddress + '</p>' +
-      '<p class="mb-2"><span class="h6 me-2">Company Email: </span>' + companyPhone + '</p>' +
-      '<p class="mb-2"><span class="h6 me-2">Company Phone: </span>' + companyEmail + '</p>' +
-      '<p class="mb-0"><span class="h6 me-4"> Fax Number:</span>' + faxNumber + '</p>'
+      '<p class="mb-2"><span class="h6 me-2">Company Email: </span>' + companyEmail  + '</p>' +
+      '<p class="mb-2"><span class="h6 me-2">Company Phone: </span>' + companyPhone + '</p>' 
+      // '<p class="mb-0"><span class="h6 me-4"> Fax Number:</span>' + faxNumber + '</p>'
     );
 
     $('#modalCenter').modal('hide'); // Optional: Close the modal after applying changes
