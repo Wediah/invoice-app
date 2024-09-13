@@ -80,7 +80,7 @@
                                         <dd class="col-sm-6 d-flex justify-content-md-end">
                                             <div class="w-px-150">
                                                 <input type="date" name="due_date" class="form-control date-picker"
-                                                    placeholder="YYYY-MM-DD" />
+                                                    placeholder="YYYY-MM-DD" required/>
                                             </div>
                                         </dd>
                                     </dl>
@@ -273,7 +273,7 @@
                                                                 <label for="discountInput"
                                                                     class="form-label">Discount(%)</label>
                                                                 <input type="number" class="form-control"
-                                                                    id="discountInput" min="1"
+                                                                    id="discountInput" min="1" name="discount_percent"
                                                                     max="100" />
                                                             </div>
 
