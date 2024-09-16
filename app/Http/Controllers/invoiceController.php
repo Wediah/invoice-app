@@ -99,8 +99,6 @@ class invoiceController extends Controller
      */
     public function store(Request $request, $slug)
     {
-        dd($request);
-        
         $user_id = Auth::id();
 
         $company = Company::where('slug', $slug)->firstOrFail();
@@ -113,11 +111,11 @@ class invoiceController extends Controller
             'quantity.*' => 'required|integer|min:1',
             'tax_id.*' => 'required|exists:taxes,id',
             'discount' => 'numeric|min:0',
-            'email' => 'string|email|nullable|max:255',
-            'phone' => 'string|nullable|max:255',
-            'address' => 'string|nullable|max:255',
-            'mobile' => 'string|nullable|max:255',
-            'fax' => 'string|nullable|max:255',
+            'customer_email' => 'string|email|nullable|max:255',
+            'customer_phone' => 'string|nullable|max:255',
+            'customer_address' => 'string|nullable|max:255',
+            'customer_mobile' => 'string|nullable|max:255',
+            'customer_fax' => 'string|nullable|max:255',
             'due_date' => 'string|nullable|max:255',
             'notes' => 'string|nullable|max:255',
             'total' => 'required|numeric|regex:/^\d+(\.\d{1,2})?$/',
@@ -147,11 +145,11 @@ class invoiceController extends Controller
 //            'term_id' => $validatedData['term_id'],
             'customer_name' => $validatedData['customer_name'],
             'discount' => $validatedData['discount'],
-            'email' => $validatedData['email'],
-            'phone' => $validatedData['phone'],
-            'address' => $validatedData['address'],
-            'mobile' => $validatedData['mobile'],
-            'fax' => $validatedData['fax'],
+            'customer_email' => $validatedData['email'],
+            'customer_phone' => $validatedData['phone'],
+            'customer_address' => $validatedData['address'],
+            'customer_mobile' => $validatedData['mobile'],
+            'customer_fax' => $validatedData['fax'],
             'due_date' => $validatedData['due_date'],
             'notes' => $validatedData['notes'],
             'total' => $validatedData['total'],
@@ -175,92 +173,92 @@ class invoiceController extends Controller
         return view('invoice.show', compact('invoice', 'user'));
     }
 
-    //terms of invoice
-    public function showTerms($slug)
-    {
-        $company = Company::where('slug', $slug)->firstOrFail();
-
-        return view('invoice.terms', compact('company'));
-    }
-
-    public function terms($slug)
-    {
-        $company = Company::where('slug', $slug)->firstOrFail();
-
-        $validatedData = request()->validate([
-            'name' => 'required|string|max:255',
-        ]);
-
-        $terms = array(
-            'company_id' => $company->id,
-            'name' => $validatedData['name'],
-        );
-
-        paymentTerms::firstOrCreate($terms);
-
-        return redirect()->back();
-    }
-
-    public function allTerms($slug)
-    {
-        $company = Company::where('slug', $slug)->firstOrFail();
-        $allTerms = $company->paymentTerms;
-
-        return view('terms.index', compact('allTerms', 'company'));
-    }
-
-    public function editTerms($slug, $id)
-    {
-        $company = Company::where('slug', $slug)->firstOrFail();
-        $term  = paymentTerms::where('id', $id)
-                                ->where('company_id', $company->id)
-                                ->firstOrFail();
-
-        return view('terms.edit', compact('term', 'company'));
-    }
-
-    public function updateTerms($slug, $id, Request $request)
-    {
-        $company = Company::where('slug', $slug)->firstOrFail();
-        $term  = paymentTerms::where('id', $id)
-            ->where('company_id', $company->id)
-            ->firstOrFail();
-
-        $validatedData = request()->validate([
-            'name' => 'sometimes|string|max:255',
-        ]);
-
-        $terms = array(
-            'company_id' => $company->id,
-            'name' => $validatedData['name'],
-        );
-
-        $term->update($terms);
-
-        return redirect()->back();
-    }
-
-    public function deleteTerms($slug, $id)
-    {
-        $company = Company::where('slug', $slug)->firstOrFail();
-        $term  = paymentTerms::where('id', $id)
-            ->where('company_id', $company->id)
-            ->firstOrFail();
-
-        $term->delete();
-
-        return redirect()->back();
-    }
-
-    public function downloadPDF($id): \Illuminate\Http\Response
-    {
-        $invoice = invoice::where('id', $id)->firstOrFail();
-
-        PDF::setOptions(['dpi' => 150, 'defaultFont' => 'sans-serif']);
-        $pdf = PDF::loadView('invoice.show', compact('invoice'));
-
-        return $pdf->download('invoice.pdf');
-    }
+//    //terms of invoice
+//    public function showTerms($slug)
+//    {
+//        $company = Company::where('slug', $slug)->firstOrFail();
+//
+//        return view('invoice.terms', compact('company'));
+//    }
+//
+//    public function terms($slug)
+//    {
+//        $company = Company::where('slug', $slug)->firstOrFail();
+//
+//        $validatedData = request()->validate([
+//            'name' => 'required|string|max:255',
+//        ]);
+//
+//        $terms = array(
+//            'company_id' => $company->id,
+//            'name' => $validatedData['name'],
+//        );
+//
+//        paymentTerms::firstOrCreate($terms);
+//
+//        return redirect()->back();
+//    }
+//
+//    public function allTerms($slug)
+//    {
+//        $company = Company::where('slug', $slug)->firstOrFail();
+//        $allTerms = $company->paymentTerms;
+//
+//        return view('terms.index', compact('allTerms', 'company'));
+//    }
+//
+//    public function editTerms($slug, $id)
+//    {
+//        $company = Company::where('slug', $slug)->firstOrFail();
+//        $term  = paymentTerms::where('id', $id)
+//                                ->where('company_id', $company->id)
+//                                ->firstOrFail();
+//
+//        return view('terms.edit', compact('term', 'company'));
+//    }
+//
+//    public function updateTerms($slug, $id, Request $request)
+//    {
+//        $company = Company::where('slug', $slug)->firstOrFail();
+//        $term  = paymentTerms::where('id', $id)
+//            ->where('company_id', $company->id)
+//            ->firstOrFail();
+//
+//        $validatedData = request()->validate([
+//            'name' => 'sometimes|string|max:255',
+//        ]);
+//
+//        $terms = array(
+//            'company_id' => $company->id,
+//            'name' => $validatedData['name'],
+//        );
+//
+//        $term->update($terms);
+//
+//        return redirect()->back();
+//    }
+//
+//    public function deleteTerms($slug, $id)
+//    {
+//        $company = Company::where('slug', $slug)->firstOrFail();
+//        $term  = paymentTerms::where('id', $id)
+//            ->where('company_id', $company->id)
+//            ->firstOrFail();
+//
+//        $term->delete();
+//
+//        return redirect()->back();
+//    }
+//
+//    public function downloadPDF($id): \Illuminate\Http\Response
+//    {
+//        $invoice = invoice::where('id', $id)->firstOrFail();
+//
+//        PDF::setOptions(['dpi' => 150, 'defaultFont' => 'sans-serif']);
+//        $pdf = PDF::loadView('invoice.show', compact('invoice'));
+//
+//        return $pdf->download('invoice.pdf');
+//    }
 
     /**
      * Show the form for editing the specified resource.
@@ -312,11 +310,11 @@ class invoiceController extends Controller
             'quantity.*' => 'required|integer|min:1',
             'tax_id.*' => 'required|exists:taxes,id',
             'discount' => 'numeric|min:0',
-            'email' => 'string|email|nullable|max:255',
-            'phone' => 'string|nullable|max:255',
-            'address' => 'string|nullable|max:255',
-            'mobile' => 'string|nullable|max:255',
-            'fax' => 'string|nullable|max:255',
+            'customer_email' => 'string|email|nullable|max:255',
+            'customer_phone' => 'string|nullable|max:255',
+            'customer_address' => 'string|nullable|max:255',
+            'customer_mobile' => 'string|nullable|max:255',
+            'customer_fax' => 'string|nullable|max:255',
             'due_date' => 'string|nullable|max:255',
             'notes' => 'string|nullable|max:255',
             'total' => 'required|numeric|regex:/^\d+(\.\d{1,2})?$/',
@@ -335,11 +333,11 @@ class invoiceController extends Controller
 //            'term_id' => $validatedData['term_id'] ?? $invoice->term_id,
             'customer_name' => $validatedData['customer_name'] ?? $invoice->customer_name,
             'discount' => $validatedData['discount'] ?? $invoice->discount,
-            'email' => $validatedData['email'] ?? $invoice->email,
-            'phone' => $validatedData['phone'] ?? $invoice->phone,
-            'address' => $validatedData['address'] ?? $invoice->address,
-            'mobile' => $validatedData['mobile'] ?? $invoice->mobile,
-            'fax' => $validatedData['fax'] ?? $invoice->fax,
+            'customer_email' => $validatedData['email'] ?? $invoice->email,
+            'customer_phone' => $validatedData['phone'] ?? $invoice->phone,
+            'customer_address' => $validatedData['address'] ?? $invoice->address,
+            'customer_mobile' => $validatedData['mobile'] ?? $invoice->mobile,
+            'customer_fax' => $validatedData['fax'] ?? $invoice->fax,
             'due_date' => $validatedData['due_date'] ?? $invoice->due_date,
             'notes' => $validatedData['notes'] ?? $invoice->notes,
             'total' => $validatedData['total'] ?? $invoice->total,
