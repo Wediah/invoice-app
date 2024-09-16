@@ -43,10 +43,10 @@
                                 <label class="form-label" for="basic-default-password12">Edit Stock Name</label>
                                 <div class="input-group">
                                     <input type="text" class="form-control" placeholder="Enter Stock Name"
-                                        aria-label="Enter Stock Name" aria-describedby="basic-addon11" name="stock_name"
+                                        aria-label="Enter Stock Name" aria-describedby="basic-addon11" name="name"
                                         value="{{ $catalog->name }}" />
                                 </div>
-                                @error('stock_name')
+                                @error('name')
                                 <p class="error">{{ $message }}</p>
                             @enderror
                             </div>
@@ -55,9 +55,9 @@
                                 <div class="input-group">
                                     <span class="input-group-text">GHC</span>
                                     <input type="number" class="form-control" placeholder="Amount"
-                                        aria-label="Amount (to the nearest Cedi)" name="stock_price" value="{{ $catalog->price }}" />
+                                        aria-label="Amount (to the nearest Cedi)" name="price" value="{{ $catalog->price }}" />
                                 </div>
-                                @error('stock_price')
+                                @error('price')
                                 <p class="error">{{ $message }}</p>
                             @enderror
                             </div>
@@ -66,15 +66,22 @@
                                 <label class="form-label" for="basic-default-password12">Edit Stock Description</label>
                                 <div class="input-group">
                                     <span class="input-group-text">Brief Description</span>
-                                    <textarea class="form-control" aria-label="With textarea" name="stock_description">{{ $catalog->description }}</textarea>
+                                    <textarea class="form-control" aria-label="With textarea" name="description">{{ $catalog->description }}</textarea>
                                 </div>
-                                @error('stock_description')
+                                @error('description')
                                 <p class="error">{{ $message }}</p>
                                 @enderror
                             </div>
-                            <div class="pb-3 float-end">
-                                <button type="submit" class="btn btn-primary">Submit</button>
-
+                            <div class="col-12 text-center mt-4">
+                                <button type="submit" class="btn btn-primary me-sm-3 me-1">Submit</button>
+                                <a href="{{ route('catalog.index', ['slug' => $company->slug]) }}">
+                                    <button
+                                        type="button"
+                                        class="btn btn-label-secondary"
+                                    >
+                                        Cancel
+                                    </button>
+                                </a>
                             </div>
                         </div>
                     </form>

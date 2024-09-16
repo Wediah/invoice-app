@@ -22,7 +22,8 @@
                                 <div class="col-md-6 mb-md-0 mb-4">
                                     <div class="d-flex svg-illustration mb-4 gap-2 align-items-baseline">
                                         <img src="{{ asset('storage/company_logo') }}/{{$company->logo}}" alt="company logo"
-                                             class="h-12 w-12 rounded-circle shadow-lg"
+                                             class="w-12 h-12 rounded shadow-lg "
+                                             style="width: auto; height: 50px;"
                                         >
                                         <span class="app-brand-text h3 mb-0 fw-bold">{{ $company->name }}</span>
                                     </div>
@@ -249,11 +250,15 @@
                 <div class="col-lg-3 col-12 invoice-actions">
                     <div class="card mb-4">
                         <div class="card-body">
-                            <input
-                                type="submit"
-                                class="bg-blue-400 text-white rounded-lg w-full py-2 px-4 hover:bg-blue-800 cursor-pointer"
-                                value="Submit"
-                            >
+                            <button type="submit" class="btn btn-primary me-sm-3 me-1">Submit</button>
+                            <a href="{{ route('invoice.index', ['slug' => $company->slug]) }}">
+                                <button
+                                    type="button"
+                                    class="btn btn-label-secondary"
+                                >
+                                    Cancel
+                                </button>
+                            </a>
                         </div>
                     </div>
                     <div>
