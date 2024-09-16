@@ -156,20 +156,20 @@ $(document).ready(function () {
   });
   $('#invoiceTo').click(function () { // Event listener for the 'Apply changes' button
     // Capture the input values
-    var contactPerson = $('input[name="contact_person"]').val();
-    var companyName = $('input[name="company_name"]').val();
-    var companyAddress = $('input[name="company_address"]').val();
-    var companyEmail = $('input[name="company_email"]').val();
-    var companyPhone = $('input[name="company_phone"]').val();
+    var customerName = $('input[name="customer_name"]').val();
+    var customerEmail = $('input[name="customer_email"]').val();
+    var customerAddress = $('input[name="customer_address"]').val();
+    var customerMobile = $('input[name="customer_mobile"]').val();
+    var customerPhone = $('input[name="customer_phone"]').val();
     // var faxNumber = $('input[name="fax_number"]').val();
 
     // Display the captured values in another part of your page
     $('#displayArea').html(
-      '<p class="mb-2"><span class="h6 me-2"> Contact Person:</span>' + contactPerson + '</p>' +
-      '<p class="mb-2"><span class="h6 me-2">Company Name: </span>' + companyName + '</p>' +
-      '<p class="mb-2"><span class="h6 me-2">Company Address: </span>' + companyAddress + '</p>' +
-      '<p class="mb-2"><span class="h6 me-2">Company Email: </span>' + companyEmail  + '</p>' +
-      '<p class="mb-2"><span class="h6 me-2">Company Phone: </span>' + companyPhone + '</p>'
+      '<p class="mb-2"><span class="h6 me-2"> Customer Name:</span>' + customerName + '</p>' +
+      '<p class="mb-2"><span class="h6 me-2">Customer Email: </span>' + customerEmail + '</p>' +
+      '<p class="mb-2"><span class="h6 me-2">Customer Address: </span>' + customerAddress + '</p>' +
+      '<p class="mb-2"><span class="h6 me-2">Customer Mobile: </span>' + customerMobile  + '</p>' +
+      '<p class="mb-2"><span class="h6 me-2">Customer Phone: </span>' + customerPhone + '</p>'
       // '<p class="mb-0"><span class="h6 me-4"> Fax Number:</span>' + faxNumber + '</p>'
     );
 
