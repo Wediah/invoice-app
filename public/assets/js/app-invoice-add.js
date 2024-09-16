@@ -161,7 +161,7 @@ $(document).ready(function () {
     var companyAddress = $('input[name="company_address"]').val();
     var companyEmail = $('input[name="company_email"]').val();
     var companyPhone = $('input[name="company_phone"]').val();
-    var faxNumber = $('input[name="fax_number"]').val();
+    // var faxNumber = $('input[name="fax_number"]').val();
 
     // Display the captured values in another part of your page
     $('#displayArea').html(
@@ -169,7 +169,7 @@ $(document).ready(function () {
       '<p class="mb-2"><span class="h6 me-2">Company Name: </span>' + companyName + '</p>' +
       '<p class="mb-2"><span class="h6 me-2">Company Address: </span>' + companyAddress + '</p>' +
       '<p class="mb-2"><span class="h6 me-2">Company Email: </span>' + companyEmail  + '</p>' +
-      '<p class="mb-2"><span class="h6 me-2">Company Phone: </span>' + companyPhone + '</p>' 
+      '<p class="mb-2"><span class="h6 me-2">Company Phone: </span>' + companyPhone + '</p>'
       // '<p class="mb-0"><span class="h6 me-4"> Fax Number:</span>' + faxNumber + '</p>'
     );
 
@@ -365,7 +365,7 @@ $(document).ready(function() {
   $(document).on('input', '.quantity', function() {
       const $row = $(this).closest('.repeater-wrapper');
       const $hideRepeater = $row.find('#hide-repeater');
-      
+
       if ($(this).val() && $(this).val() !== '0') {
           $hideRepeater.prop('disabled', true);
           $hideRepeater.attr('title', 'To hide this row, please clear quantity first');
@@ -378,7 +378,3 @@ $(document).ready(function() {
   // Trigger the input event on page load to set initial state
   $('.quantity').trigger('input');
 });
-
-
-
-
