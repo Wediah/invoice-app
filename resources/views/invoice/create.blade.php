@@ -41,6 +41,15 @@
                     <div class="card invoice-preview-card">
                         <div class="card-body">
                             <div class="p-0 row p-sm-3">
+                                @if ($errors->any())
+                                <span class="error">
+                                    <ol>
+                                        @foreach ($errors->all() as $error)
+                                            <li>{{ $error }}</li>
+                                        @endforeach
+                                    </ol>
+                                </span>
+                            @endif
                                 <div class="mb-4 col-md-6 mb-md-0">
                                     <div class="gap-2 mb-4 d-flex svg-illustration">
                                         <img src="{{ asset('storage/company_logo') }}/{{ $company->logo }}"
@@ -110,46 +119,44 @@
 
                                                     <div class="mb-3 row g-4">
                                                         <div class="mb-0 col">
-                                                            <label for="contact_person" class="form-label">Contact
-                                                                Person</label>
+                                                            <label for="customer_name" class="form-label">Customer Name</label>
                                                             <input type="text" class="form-control no-border"
-                                                                name="contact_person" placeholder="Contact Rep"
-                                                                aria-label="Enter Contact Person"
+                                                                name="customer_name" placeholder="Enter Customer Name"
+                                                                aria-label="Enter Customer Name"
                                                                 aria-describedby="basic-addon11" value="" />
                                                         </div>
                                                         <div class="mb-0 col">
-                                                            <label for="company_name" class="form-label">Company
-                                                                Name</label>
+                                                            <label for="customer_email" class="form-label">Customer Email</label>
                                                             <input type="text" class="form-control no-border"
-                                                                name="company_name" placeholder="Company Name"
-                                                                aria-label="Enter Company Name"
+                                                                name="customer_email" placeholder="Enter Customer Email"
+                                                                aria-label="Enter Customer Email"
                                                                 aria-describedby="basic-addon11" value="" />
                                                         </div>
                                                     </div>
                                                     <div class="mb-3 row g-4">
                                                         <div class="mb-0 col">
-                                                            <label for="company_address" class="form-label">Company
+                                                            <label for="customer_address" class="form-label">Customer
                                                                 Address</label>
                                                             <input type="text" class="form-control no-border"
-                                                                name="company_address" placeholder="Company Address"
-                                                                aria-label="Enter Company Address"
+                                                                name="customer_address" placeholder="Enter Customer Address"
+                                                                aria-label="Enter Enter Customer Address"
                                                                 aria-describedby="basic-addon11" value="" />
                                                         </div>
                                                         <div class="mb-0 col">
-                                                            <label for="company_email" class="form-label">Company
-                                                                Email</label>
+                                                            <label for="customer_mobile" class="form-label">Customer
+                                                                Mobile</label>
                                                             <input type="text" class="form-control no-border"
-                                                                placeholder="Company Email"
-                                                                aria-label="Enter Company Email" name="company_email"
+                                                                placeholder="Enter Customer Mobile"
+                                                                aria-label="Enter Customer Mobile" name="customer_mobile"
                                                                 aria-describedby="basic-addon11" value="" />
                                                         </div>
                                                     </div>
                                                     <div class="mb-3 row g-4">
                                                         <div class="mb-0 col-md-6">
-                                                            <label for="company_phone" class="form-label">Company Phone</label>
+                                                            <label for="customer_phone" class="form-label">Customer Phone</label>
                                                             <input type="text" class="form-control no-border"
-                                                                name="company_phone" placeholder="Company Phone"
-                                                                aria-label="Enter Company Phone"
+                                                                name="customer_phone" placeholder="Enter Customer Phone"
+                                                                aria-label="Enter Customer Phone"
                                                                 aria-describedby="basic-addon11" value="" />
                                                         </div>
                                                         {{-- <div class="mb-0 col">
@@ -183,11 +190,11 @@
                                 <h5 class="pb-2">Invoice To:</h5>
 
                                 <div id="displayArea" class="mb-4 col-md-12 col-sm-5 col-12 mb-sm-0 ">
-                                    <p class="mb-1 error-2"> Contact Person:</p>
-                                    <p class="mb-1 error-2">Company Name:</p>
-                                    <p class="mb-1 error-2">Company Address:</p>
-                                    <p class="mb-1 error-2">Company Email:</p>
-                                    <p class="mb-1 error-2">Company Phone:</p>
+                                    <p class="mb-1 error-2">Customer Name: :</p>
+                                    <p class="mb-1 error-2">Customer Email:</p>
+                                    <p class="mb-1 error-2">Customer Address:</p>
+                                    <p class="mb-1 error-2">Customer Mobile:</p>
+                                    <p class="mb-1 error-2">Customer Phone:</p>
                                     {{-- <p class="mb-0">Fax Number:</p> --}}
                                 </div>
 
