@@ -167,8 +167,8 @@
             </a>
             <ul class="menu-sub">
                 <li class="menu-item">
-                    <a href="app-access-roles.html" class="menu-link">
-                        <div data-i18n="User Management">User Settings</div>
+                    <a href="{{ route('company.profile', ['slug' => $companies->first()->slug]) }}" class="menu-link">
+                        <div data-i18n="User Management">Company Settings</div>
                     </a>
                 </li>
                 <li class="menu-item">
