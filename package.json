@@ -16,7 +16,6 @@
         "vite": "^5.0"
     },
     "dependencies": {
-        "micromatch": "^4.0.8",
-        "sweetalert2": "^11.14.0"
+        "micromatch": "^4.0.8"
     }
 }

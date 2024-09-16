@@ -357,7 +357,7 @@
                 <div class="col-lg-3 col-12 invoice-actions">
 
 
-                  
+
 
                     {{-- List all taxes here and let users toggle to apply tax --}}
                     <div class="mb-5 card">
