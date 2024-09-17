@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\invoiceStatus;
 use App\Models\Catalog;
 use App\Models\Company;
+use App\Models\customerInfo;
 use App\Models\invoice;
 use App\Models\paymentTerms;
 use Illuminate\Contracts\View\Factory;
@@ -140,15 +141,19 @@ class invoiceController extends Controller
             'user_id' => $user_id,
             'company_id' => $company_id,
             'invoice_number' => $invoiceNumber,
+            'due_date' => $validatedData['due_date'],
+            'notes' => $validatedData['notes'],
+            'total' => $validatedData['total'],
+            'salesperson' => $validatedData['salesperson'],
+        ]);
+
+        $customerInfo = CustomerInfo::create([
+            'invoice_id' => $invoice->id,
             'customer_name' => $validatedData['customer_name'],
             'customer_email' => $validatedData['customer_email'],
             'customer_phone' => $validatedData['customer_phone'],
             'customer_address' => $validatedData['customer_address'],
             'customer_mobile' => $validatedData['customer_mobile'],
-            'due_date' => $validatedData['due_date'],
-            'notes' => $validatedData['notes'],
-            'total' => $validatedData['total'],
-            'salesperson' => $validatedData['salesperson'],
         ]);
 
         $this->extracted($request, $invoice);
