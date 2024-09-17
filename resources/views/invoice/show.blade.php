@@ -41,13 +41,11 @@
                         <div class="row p-sm-3 p-0">
                             <h6 class="pb-2">Invoice To:</h6>
                             <div class="col-xl-6 col-md-12 col-sm-5 col-12 mb-xl-0 mb-md-4 mb-sm-0 mb-4">
-                                <p class="mb-1">{{ $invoice->customer_name }}</p>
-                                <p class="mb-1">{{ $invoice->email }}</p>
-                                <p class="mb-1">{{ $invoice->address }}</p>
-                            </div>
-                            <div class="col-xl-6 col-md-12 col-sm-7 col-12">
-                                <p class="mb-1">{{ $invoice->phone }}</p>
-                                <p class="mb-1">{{ $invoice->fax }}</p>
+                                <p class="mb-1">{{ $invoice->customerInfo->customer_name }}</p>
+                                <p class="mb-1">{{ $invoice->customerInfo->customer_email }}</p>
+                                <p class="mb-1">{{ $invoice->customerInfo->customer_address }}</p>
+                                <p class="mb-1">{{ $invoice->customerInfo->customer_mobile }}</p>
+                                <p class="mb-1">{{ $invoice->customerInfo->customer_phone}}</p>
                             </div>
                         </div>
                     </div>
@@ -66,24 +64,30 @@
                                 $taxRate = 0; // Initialize total price variable
                                  $totalPrice = 0; // Initialize total price variable
                                  $totalTax = 0; // Initialize total tax variable
-                                $discountRate = $invoice->discount / 100;
+//                                $discountRate = $invoice->discount / 100;
                                 $totalPrimaryTax = 0;
                                 $totalSecondaryTax = 0;
                                 $primaryTax = 0;
                                 $secondaryTax = 0;
                                 $newTotalPrice = 0;
+                                $totalDiscount = 0;
                             @endphp
                             @foreach ($invoice->catalogs as $catalog)
                                 @php
+                                    //calculate rate on each item
+                                    $discountRate = $catalog->pivot->discount_percent / 100;
+
                                     // Calculate subtotal for this catalog item
-                                    $subtotal = $catalog->pivot->quantity * $catalog->price;
+                                    $subtotalBeforeDiscount = $catalog->pivot->quantity * $catalog->price;
+
+                                    //calculate the subtotal after discount is applied
+                                    $subtotal = $subtotalBeforeDiscount - ( $subtotalBeforeDiscount * $discountRate );
 
                                     // Add subtotal to total price
                                     $totalPrice += $subtotal;
 
                                     // Calculate the discount amount
-                                    $discountedAmount = $totalPrice * $discountRate;
-                                    $newTotalPrice = $totalPrice - $discountedAmount
+                                    $totalDiscount += ( $subtotalBeforeDiscount * $discountRate )
                                 @endphp
                                 <tr>
                                     <th class="text-nowrap" scope="row">{{ $catalog->name }}</th>
@@ -106,7 +110,7 @@
                                     </div>
                                     <div class="d-flex justify-content-between">
                                         <p>Discount:</p>
-                                        <p class="fw-semibold mb-2">GH₵{{ number_format($discountedAmount, 2) }}</p>
+                                        <p class="fw-semibold mb-2">GH₵{{ number_format($totalDiscount, 2) }}</p>
                                     </div>
                                     <div class="d-flex justify-content-between">
                                         <p>Tax(es)</p>
@@ -117,11 +121,12 @@
                                             @php
                                                 //calculate the taxes
                                                 if ($tax->type === 'PRIMARY') {
-                                                    $primaryTax = $newTotalPrice * ($tax->tax_percentage / 100);
+                                                    $primaryTax = $totalPrice * ($tax->tax_percentage / 100);
                                                     $totalPrimaryTax += $primaryTax;
                                                 }
                                                 else {
-                                                    $secondaryTax = ( $totalPrimaryTax + $newTotalPrice ) * ($tax->tax_percentage / 100);
+                                                    $secondaryTax = ( $totalPrimaryTax + $totalPrice ) *
+                                                    ($tax->tax_percentage / 100);
                                                     $totalSecondaryTax += $secondaryTax;
                                                 }
 
@@ -134,26 +139,20 @@
                                                         <p>{{ $tax->tax_name }}({{ $tax->tax_percentage}}%):</p>
                                                         <p class="fw-semibold mb-2">GH₵{{ number_format($primaryTax, 2) }}</p>
                                                     </div>
-{{--                                                    {{ $tax->tax_name }}({{ $tax->tax_percentage}}%): GH₵{{ number_format($primaryTax, 2) }}--}}
                                                 @else
                                                     <div class="d-flex justify-content-between">
                                                         <p>{{ $tax->tax_name }}({{ $tax->tax_percentage}}%):</p>
                                                         <p class="fw-semibold mb-2">GH₵{{ number_format($secondaryTax,
                                                          2) }}</p>
                                                     </div>
-{{--                                                    {{ $tax->tax_name }}({{ $tax->tax_percentage}}%): GH₵{{ number_format($secondaryTax, 2) }}--}}
                                                 @endif
 
                                             </div>
                                         @endforeach
                                     </div>
                                     @php
-                                        // Calculate the discount amount
-                                        $discountedAmount = $totalPrice * $discountRate;
-                                        // Calculate the total price after applying the discount
-                                        $totalPriceAfterDiscount = $totalPrice - $discountedAmount;
                                         // Calculate the final total price after adding the tax
-                                        $finalTotalPrice = $totalPriceAfterDiscount + $totalTax;
+                                        $finalTotalPrice = $totalPrice + $totalTax;
                                     @endphp
                                     <div class="d-flex justify-content-between">
                                         <p class="mb-0">Total:</p>
