@@ -71,7 +71,7 @@
                                             </div>
                                         </div>
                                     </td>
-                                    <td class="text-center"> GH¢{{ number_format((float) $invoice->total, 2) }}</td>
+                                    <td class="text-center"> GHS{{ number_format((float) $invoice->total, 2) }}</td>
                                     <td class="text-center">
                                      
                                         {{ $invoice->created_at->format('jS M, Y') }}
