@@ -307,6 +307,7 @@ $(document).ready(function() {
       // Update totals
       $taxDisplay.text(`${totalTax.toFixed(2)}`);
       $totalDisplay.text(`${totalDue.toFixed(2)}`);
+      $('#total_hidden_input').val(totalDue.toFixed(2));
   }
 
   // Event handler for item selection changes
@@ -360,7 +361,7 @@ $(document).on('input change', '.invoice-item-price, .discount', debouncedUpdate
 
 
 
-//disable hide button if quantity is enetred
+//disable hide button if quantity is entered
 $(document).ready(function() {
   $(document).on('input', '.quantity', function() {
       const $row = $(this).closest('.repeater-wrapper');
