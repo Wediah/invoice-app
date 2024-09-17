@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class invoice extends Model
 {
@@ -24,7 +25,7 @@ class invoice extends Model
 
     public function catalogs(): BelongsToMany
     {
-        return $this->belongsToMany(catalog::class)->withPivot('quantity')->withTimestamps();
+        return $this->belongsToMany(catalog::class)->withPivot('quantity', 'discount_percent')->withTimestamps();
     }
 
     public function taxes(): BelongsToMany
@@ -35,5 +36,10 @@ class invoice extends Model
     public function paymentTerms(): BelongsTo
     {
         return $this->belongsTo(paymentTerms::class, 'term_id');
+    }
+
+    public function customerInfo(): HasOne
+    {
+        return $this->hasOne(customerInfo::class);
     }
 }

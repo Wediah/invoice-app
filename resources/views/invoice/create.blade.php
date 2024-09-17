@@ -280,7 +280,7 @@
                                                                 <label for="discountInput"
                                                                     class="form-label">Discount(%)</label>
                                                                 <input type="number" class="form-control"
-                                                                    id="discountInput" min="1" name="discount_percent"
+                                                                    id="discountInput" min="1" name="discount_percent[]"
                                                                     max="100" />
                                                             </div>
 
@@ -312,6 +312,7 @@
                                     <div class="mb-3 d-flex align-items-center">
                                         <label for="salesperson"
                                             class="form-label me-1 fw-semibold">Salesperson:</label>
+                                        <input type="text" hidden="" name="salesperson" value="{{ $user->first_name }}">
                                         <p class="mb-1">{{ $user->first_name }}</p>
 
                                     </div>
@@ -340,6 +341,7 @@
                                             <span>Total:</span>
                                             <span class="total">GHC 0.00</span>
                                         </div>
+                                        <input type="hidden" id="total_hidden_input" name="total" value="0.00">
                                     </div>
 
                                 </div>

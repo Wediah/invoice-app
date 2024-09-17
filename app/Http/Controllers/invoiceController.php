@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\invoiceStatus;
 use App\Models\Catalog;
 use App\Models\Company;
+use App\Models\customerInfo;
 use App\Models\invoice;
 use App\Models\paymentTerms;
 use Illuminate\Contracts\View\Factory;
@@ -107,19 +108,17 @@ class invoiceController extends Controller
         $validatedData = request()->validate([
             'customer_name' => 'required|string|max:255',
             'catalog_id.*' => 'required|exists:catalogs,id',
-//            'term_id' => 'required|exists:payment_terms,id',
             'quantity.*' => 'required|integer|min:1',
             'tax_id.*' => 'required|exists:taxes,id',
-            'discount' => 'numeric|min:0',
+            'discount_percent.*' => 'numeric|nullable|min:0',
             'customer_email' => 'string|email|nullable|max:255',
             'customer_phone' => 'string|nullable|max:255',
             'customer_address' => 'string|nullable|max:255',
             'customer_mobile' => 'string|nullable|max:255',
-            'customer_fax' => 'string|nullable|max:255',
             'due_date' => 'string|nullable|max:255',
             'notes' => 'string|nullable|max:255',
             'total' => 'required|numeric|regex:/^\d+(\.\d{1,2})?$/',
-            'balance' => 'required|numeric|regex:/^\d+(\.\d{1,2})?$/',
+            'balance' => 'numeric|nullable|regex:/^\d+(\.\d{1,2})?$/',
             'salesperson' => 'required|string|max:255'
         ]);
 
@@ -142,24 +141,25 @@ class invoiceController extends Controller
             'user_id' => $user_id,
             'company_id' => $company_id,
             'invoice_number' => $invoiceNumber,
-//            'term_id' => $validatedData['term_id'],
-            'customer_name' => $validatedData['customer_name'],
-            'discount' => $validatedData['discount'],
-            'customer_email' => $validatedData['email'],
-            'customer_phone' => $validatedData['phone'],
-            'customer_address' => $validatedData['address'],
-            'customer_mobile' => $validatedData['mobile'],
-            'customer_fax' => $validatedData['fax'],
             'due_date' => $validatedData['due_date'],
             'notes' => $validatedData['notes'],
             'total' => $validatedData['total'],
-            'balance' => $validatedData['balance'],
             'salesperson' => $validatedData['salesperson'],
+        ]);
+
+        $customerInfo = CustomerInfo::create([
+            'invoice_id' => $invoice->id,
+            'customer_name' => $validatedData['customer_name'],
+            'customer_email' => $validatedData['customer_email'],
+            'customer_phone' => $validatedData['customer_phone'],
+            'customer_address' => $validatedData['customer_address'],
+            'customer_mobile' => $validatedData['customer_mobile'],
         ]);
 
         $this->extracted($request, $invoice);
 
-        return redirect()->route('invoice.show', $invoice->id)->with('success', 'Product added to cart successfully!');
+//        return redirect()->route('invoice.show', $invoice->id)->with('success', 'Product added to cart successfully!');
+        return redirect()->back()->with('success', 'Invoice Created Successfully');
     }
 
     /**
@@ -306,19 +306,16 @@ class invoiceController extends Controller
         $validatedData = $request->validate([
             'customer_name' => 'required|string|max:255',
             'catalog_id.*' => 'required|exists:catalogs,id',
-//            'term_id' => 'required|exists:payment_terms,id',
             'quantity.*' => 'required|integer|min:1',
             'tax_id.*' => 'required|exists:taxes,id',
-            'discount' => 'numeric|min:0',
+            'discount_percent.*' => 'numeric|min:0',
             'customer_email' => 'string|email|nullable|max:255',
             'customer_phone' => 'string|nullable|max:255',
             'customer_address' => 'string|nullable|max:255',
             'customer_mobile' => 'string|nullable|max:255',
-            'customer_fax' => 'string|nullable|max:255',
             'due_date' => 'string|nullable|max:255',
             'notes' => 'string|nullable|max:255',
             'total' => 'required|numeric|regex:/^\d+(\.\d{1,2})?$/',
-            'balance' => 'required|numeric|regex:/^\d+(\.\d{1,2})?$/',
             'salesperson' => 'required|string|max:255'
         ]);
 
@@ -330,9 +327,7 @@ class invoiceController extends Controller
             'user_id' => $user_id,
             'company_id' => $company_id,
             'invoice_number' => $updatedInvoiceNumber,
-//            'term_id' => $validatedData['term_id'] ?? $invoice->term_id,
             'customer_name' => $validatedData['customer_name'] ?? $invoice->customer_name,
-            'discount' => $validatedData['discount'] ?? $invoice->discount,
             'customer_email' => $validatedData['email'] ?? $invoice->email,
             'customer_phone' => $validatedData['phone'] ?? $invoice->phone,
             'customer_address' => $validatedData['address'] ?? $invoice->address,
@@ -341,7 +336,6 @@ class invoiceController extends Controller
             'due_date' => $validatedData['due_date'] ?? $invoice->due_date,
             'notes' => $validatedData['notes'] ?? $invoice->notes,
             'total' => $validatedData['total'] ?? $invoice->total,
-            'balance' => $validatedData['balance'] ?? $invoice->balance,
             'salesperson' => $validatedData['salesperson'] ?? $invoice->salesperson,
         ]);
 
@@ -369,23 +363,37 @@ class invoiceController extends Controller
      */
     public function extracted(Request $request, $invoice): void
     {
-        $catalogIds = $request->input('catalog_id');
-        $quantities = $request->input('quantity');
+        $catalogIds = $request->input('catalog_id', []);
+        $quantities = $request->input('quantity', []);
+        $discountPercents = $request->input('discount_percent', []);
 
+// Ensure all inputs are arrays
+        $catalogIds = is_array($catalogIds) ? $catalogIds : [];
+        $quantities = is_array($quantities) ? $quantities : [];
+        $discountPercents = is_array($discountPercents) ? $discountPercents : [];
+
+// Get the count of the longest array
+        $count = max(count($catalogIds), count($quantities), count($discountPercents));
 
         $items = [];
-        for ($i = 0; $i < count($catalogIds); $i++) {
+        for ($i = 0; $i < $count; $i++) {
             $items[] = [
-                'catalog_id' => $catalogIds[$i],
-                'quantity' => $quantities[$i],
+                'catalog_id' => $catalogIds[$i] ?? null,
+                'quantity' => $quantities[$i] ?? null,
+                'discount_percent' => $discountPercents[$i] ?? null,
             ];
         }
 
         $invoice->catalogs()->attach($items);
 
-        $taxIds = $request->input('tax_id');
-
         $taxes = [];
+        $taxIds = $request->input('tax_ids', []); // Assuming $taxIds comes from a request
+
+// Ensure $taxIds is an array
+        if (!is_array($taxIds)) {
+            $taxIds = [];
+        }
+
         foreach ($taxIds as $taxId) {
             $taxes[] = $taxId;
         }
