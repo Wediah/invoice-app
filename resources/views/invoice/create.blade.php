@@ -209,7 +209,7 @@
                                             <div class="p-3 m-0 row w-100">
                                                 <div class="mb-3 col-md-4 col-12 mb-md-0 ps-md-0">
                                                     <p class="mb-2 repeater-title">Item</p>
-                                                    <select name="catalog_id[]"
+                                                    <select name="group-a[0][catalog_id]"
                                                         class="mb-2 catalog_id form-select item-detailsX">
                                                         <option selected disabled>Select Item</option>
                                                         @foreach ($catalogs as $catalog)
@@ -232,7 +232,7 @@
                                                 </div>
                                                 <div class="mb-3 col-md-2 col-12 mb-md-0">
                                                     <p class="mb-2 repeater-title">Qty</p>
-                                                    <input type="number" name="quantity[]"
+                                                    <input type="number" name="group-a[0][quantity]"
                                                         class="form-control quantity invoice-item-qty" min="1"
                                                         required />
                                                 </div>
@@ -277,10 +277,11 @@
                                                     <div class="p-3 dropdown-menu dropdown-menu-end w-px-300" aria-labelledby="dropdownMenuButton">
                                                         <div class="row g-3">
                                                             <div class="col-12">
-                                                                <label for="discountInput"
+                                                                <label for="discount_percent[]"
                                                                     class="form-label">Discount(%)</label>
                                                                 <input type="number" class="form-control"
-                                                                    id="discountInput" min="1" name="discount_percent[]"
+                                                                    id="discountInput" min="1"
+                                                                       name="group-a[0][discount_percent]"
                                                                     max="100" />
                                                             </div>
 

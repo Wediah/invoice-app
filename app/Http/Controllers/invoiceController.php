@@ -15,6 +15,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Barryvdh\DomPDF\Facade\Pdf as PDF;
+use Illuminate\Support\Facades\Log;
 
 class invoiceController extends Controller
 {
@@ -118,7 +119,6 @@ class invoiceController extends Controller
             'due_date' => 'string|nullable|max:255',
             'notes' => 'string|nullable|max:255',
             'total' => 'required|numeric|regex:/^\d+(\.\d{1,2})?$/',
-            'balance' => 'numeric|nullable|regex:/^\d+(\.\d{1,2})?$/',
             'salesperson' => 'required|string|max:255'
         ]);
 
@@ -168,97 +168,10 @@ class invoiceController extends Controller
     public function show($id)
     {
         $user = Auth::user();
-        $invoice = invoice::with('catalogs', 'taxes', 'paymentTerms')->findOrFail($id);
+        $invoice = invoice::with('catalogs', 'taxes', 'customerInfo')->findOrFail($id);
 
         return view('invoice.show', compact('invoice', 'user'));
     }
-
-//    //terms of invoice
-//    public function showTerms($slug)
-//    {
-//        $company = Company::where('slug', $slug)->firstOrFail();
-//
-//        return view('invoice.terms', compact('company'));
-//    }
-//
-//    public function terms($slug)
-//    {
-//        $company = Company::where('slug', $slug)->firstOrFail();
-//
-//        $validatedData = request()->validate([
-//            'name' => 'required|string|max:255',
-//        ]);
-//
-//        $terms = array(
-//            'company_id' => $company->id,
-//            'name' => $validatedData['name'],
-//        );
-//
-//        paymentTerms::firstOrCreate($terms);
-//
-//        return redirect()->back();
-//    }
-//
-//    public function allTerms($slug)
-//    {
-//        $company = Company::where('slug', $slug)->firstOrFail();
-//        $allTerms = $company->paymentTerms;
-//
-//        return view('terms.index', compact('allTerms', 'company'));
-//    }
-//
-//    public function editTerms($slug, $id)
-//    {
-//        $company = Company::where('slug', $slug)->firstOrFail();
-//        $term  = paymentTerms::where('id', $id)
-//                                ->where('company_id', $company->id)
-//                                ->firstOrFail();
-//
-//        return view('terms.edit', compact('term', 'company'));
-//    }
-//
-//    public function updateTerms($slug, $id, Request $request)
-//    {
-//        $company = Company::where('slug', $slug)->firstOrFail();
-//        $term  = paymentTerms::where('id', $id)
-//            ->where('company_id', $company->id)
-//            ->firstOrFail();
-//
-//        $validatedData = request()->validate([
-//            'name' => 'sometimes|string|max:255',
-//        ]);
-//
-//        $terms = array(
-//            'company_id' => $company->id,
-//            'name' => $validatedData['name'],
-//        );
-//
-//        $term->update($terms);
-//
-//        return redirect()->back();
-//    }
-//
-//    public function deleteTerms($slug, $id)
-//    {
-//        $company = Company::where('slug', $slug)->firstOrFail();
-//        $term  = paymentTerms::where('id', $id)
-//            ->where('company_id', $company->id)
-//            ->firstOrFail();
-//
-//        $term->delete();
-//
-//        return redirect()->back();
-//    }
-//
-//    public function downloadPDF($id): \Illuminate\Http\Response
-//    {
-//        $invoice = invoice::where('id', $id)->firstOrFail();
-//
-//        PDF::setOptions(['dpi' => 150, 'defaultFont' => 'sans-serif']);
-//        $pdf = PDF::loadView('invoice.show', compact('invoice'));
-//
-//        return $pdf->download('invoice.pdf');
-//    }
 
     /**
      * Show the form for editing the specified resource.
@@ -363,33 +276,21 @@ class invoiceController extends Controller
      */
     public function extracted(Request $request, $invoice): void
     {
-        $catalogIds = $request->input('catalog_id', []);
-        $quantities = $request->input('quantity', []);
-        $discountPercents = $request->input('discount_percent', []);
+        $items =  $request->input('group-a', []);
 
-// Ensure all inputs are arrays
-        $catalogIds = is_array($catalogIds) ? $catalogIds : [];
-        $quantities = is_array($quantities) ? $quantities : [];
-        $discountPercents = is_array($discountPercents) ? $discountPercents : [];
-
-// Get the count of the longest array
-        $count = max(count($catalogIds), count($quantities), count($discountPercents));
-
-        $items = [];
-        for ($i = 0; $i < $count; $i++) {
-            $items[] = [
-                'catalog_id' => $catalogIds[$i] ?? null,
-                'quantity' => $quantities[$i] ?? null,
-                'discount_percent' => $discountPercents[$i] ?? null,
+        foreach ($items as $item) {
+            $processedItems[$item['catalog_id']] = [
+                'quantity' => $item['quantity'],
+                'discount_percent' => $item['discount_percent'],
             ];
         }
 
-        $invoice->catalogs()->attach($items);
+        $invoice->catalogs()->attach($processedItems);
 
         $taxes = [];
         $taxIds = $request->input('tax_ids', []); // Assuming $taxIds comes from a request
 
-// Ensure $taxIds is an array
+        // Ensure $taxIds is an array
         if (!is_array($taxIds)) {
             $taxIds = [];
         }
