@@ -39,14 +39,12 @@
                         style="width: 1382px;">
                         <thead>
                             <tr>
-                                <th></th>
                                 <th>#ID</th>
-                                <th><i class='bx bx-trending-up'></i></th>
                                 <th>Client</th>
                                 <th>Total</th>
                                 <th class="text-truncate">Issued Date</th>
-                                <th>Balance</th>
-                                <th>Invoice Status</th>
+                                <th class="cell-fit">Due Date</th>
+                                <th class="cell-fit">Invoice Status</th>
                                 <th class="cell-fit">Actions</th>
                             </tr>
                         </thead>
@@ -54,73 +52,100 @@
 
                             @foreach ($allInvoices as $invoice)
                                 <tr class="odd">
-                                    <td></td>
 
-                                    <td>{{ $invoice->invoice_number }}</td>
-                                    <td></td>
-
-                                    <td>{{ $invoice->customer_name }}</td>
-                                    <td> GH¢{{ number_format((float) $invoice->total, 2) }}</td>
-                                    <td><span class="badge bg-label-primary me-1">{{ $invoice->status }}</span></td>
-                                    <td>{{ $invoice->created_at->format('d/m/Y') }}</td>
-                                    <td> GH¢{{ number_format((float) $invoice->balance, 2) }}</td>
+                                    <td class="text-center">{{ $invoice->invoice_number }}</td>
                                     <td>
+                                        <div class="d-flex justify-content-start align-items-center">
+                                            <div class="avatar-wrapper">
+                                                <div class="avatar avatar-sm me-2">
+                                                    <span class="avatar-initial rounded-circle bg-label-info">
+                                                        {{ substr($invoice->customerInfo->customer_name, 0, 1) .
+                                                            substr(strrchr($invoice->customerInfo->customer_name, ' '), 1, 1) }}
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div class="d-flex flex-column"><a
+                                                    href="http://127.0.0.1:8000/pages/profile-user"
+                                                    class="text-body text-truncate fw-semibold">{{ $invoice->customerInfo->customer_name }}</a><small
+                                                    class="text-truncate text-muted">{{ $invoice->customerInfo->customer_email }}</small>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="text-center"> GH¢{{ number_format((float) $invoice->total, 2) }}</td>
+                                    <td class="text-center">
+                                     
+                                        {{ $invoice->created_at->format('jS M, Y') }}
+                                    </td>
+                                    <td class="text-center"> 
+                                      
+                                       <span data-bs-toggle="tooltip" data-bs-html="true"   data-bs-original-title="{{ $invoice->due_date < now() ? '<span>Past Due Date':'Not Due' }} " class="badge  {{ $invoice->due_date > now() ? 'bg-label-primary' : 'bg-label-danger' }}">
+                                        {{ \Carbon\Carbon::parse($invoice->due_date)->format('jS M, Y') }}
+
+                                       </span>
+                                    </td>
+                                    <td class="text-center">
                                         <span
-                                            class="rounded-pill text-light px-2 p-1 fs-6 {{ $invoice->status === 'paid' ? 'bg-success' : 'bg-danger' }}">
+                                            class="badge  {{ $invoice->status === 'paid' ? 'bg-label-success' : 'bg-label-danger' }}">
                                             {{ $invoice->status }}
                                         </span>
                                     </td>
 
-
-
                                     <td>
-                                        <div class="items-center gap-2 d-flex">
-                                            <i class='bx bx-send'></i>
-                                            <a href="{{ route('invoice.show', ['id' => $invoice->id]) }}">
-                                                <i class='bx bx-show'></i>
+                                        <div class="d-flex align-items-center">
+                                            <a href="{{ route('invoice.edit', ['id' => $invoice->id]) }}"
+                                                data-bs-toggle="tooltip" class="text-body" data-bs-placement="top"
+                                                title="" data-bs-original-title="Edit Invoice"
+                                                aria-label="Edit Invoice">
+                                                <i class="bx bx-edit"></i>
                                             </a>
-                                            <div class="btn-group">
-                                                <button type="button" class="" data-bs-toggle="dropdown" aria-expanded="false">
-                                                    <i class='bx bx-dots-vertical-rounded' ></i>
-                                                </button>
-                                                <ul class="dropdown-menu dropdown-menu-end">
-                                                    <li>
-                                                        <form action="{{ route('invoice.paid', ['id' => $invoice->id]) }}"
-                                                              method="POST" onsubmit="return confirm('Are you sure this ' +
-                                                               'invoice has been paid?')">
-                                                            @csrf
-                                                            @method('PATCH')
-                                                            <button class="dropdown-item" type="submit">Paid</button>
-                                                        </form>
-                                                    </li>
-                                                    <li>
-                                                        <form action="{{ route('invoice.unpaid', ['id' => $invoice->id]) }}"
-                                                              method="POST" onsubmit="return confirm('Are you sure you want ' +
-                                                               'to mark this invoice as unpaid?')">
-                                                            @csrf
-                                                            @method('PATCH')
-                                                            <button class="dropdown-item" type="submit">Unpaid</button>
-                                                        </form>
-                                                    </li>
-                                                    <li><button class="dropdown-item" type="button">Download</button></li>
-                                                    <li>
-                                                        <a class="dropdown-item" href="{{ route('invoice.edit', ['id' =>
-                                                        $invoice->id]) }}">
-                                                            Edit
-                                                        </a>
-                                                    </li>
-                                                    <hr/>
-                                                    <li>
-                                                        <form id="deleteForm" action="{{ route('invoice.delete', ['id' => $invoice->id]) }}" method="POST">
-                                                            @csrf
-                                                            @method('DELETE')
-                                                            <button type="submit" class="btn dropdown-item text-danger deleteInvoice">Delete</button>
-                                                        </form>
-                                                    </li>
-                                                </ul>
+
+                                            <a href="{{ route('invoice.show', ['id' => $invoice->id]) }}"
+                                                data-bs-toggle="tooltip" class="text-body" data-bs-placement="top"
+                                                title="" data-bs-original-title="Preview Invoice"
+                                                aria-label="Preview Invoice"><i class="mx-1 bx bx-show"></i>
+                                            </a>
+                                            <div class="dropdown">
+                                                <a href="javascript:;"
+                                                    class="p-0 btn dropdown-toggle hide-arrow text-body"
+                                                    data-bs-toggle="dropdown"><i
+                                                        class="bx bx-dots-vertical-rounded"></i>
+                                                </a>
+                                                <div class="dropdown-menu dropdown-menu-end">
+                                                    <a href="javascript:;" class="dropdown-item">Download
+                                                    </a>
+                                                    <form action="{{ route('invoice.paid', ['id' => $invoice->id]) }}"
+                                                        method="POST"
+                                                        onsubmit="return confirm('Are you sure this ' +
+                                                       'invoice has been paid?')">
+                                                        @csrf
+                                                        @method('PATCH')
+                                                        <button class="dropdown-item" type="submit">Paid</button>
+                                                    </form>
+                                                    <form
+                                                        action="{{ route('invoice.unpaid', ['id' => $invoice->id]) }}"
+                                                        method="POST"
+                                                        onsubmit="return confirm('Are you sure you want ' +
+                                                   'to mark this invoice as unpaid?')">
+                                                        @csrf
+                                                        @method('PATCH')
+                                                        <button class="dropdown-item" type="submit">Unpaid</button>
+                                                    </form>
+                                                    <div class="dropdown-divider"></div>
+                                                    <form id="deleteForm"
+                                                        action="{{ route('invoice.delete', ['id' => $invoice->id]) }}"
+                                                        method="POST">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="submit"
+                                                            class="btn dropdown-item text-danger deleteInvoice">Delete</button>
+                                                    </form>
+                                                </div>
                                             </div>
                                         </div>
                                     </td>
+
+
+
 
                                 </tr>
                             @endforeach
@@ -130,7 +155,8 @@
 
                     <div class="px-4 mt-4 d-flex justify-content-between">
                         <div class="">
-                            <div class="dataTables_info" id="DataTables_Table_0_info" role="status" aria-live="polite">
+                            <div class="dataTables_info" id="DataTables_Table_0_info" role="status"
+                                aria-live="polite">
                                 Showing 0 to 0 of 0 entries</div>
                         </div>
                         <div class="">
@@ -151,11 +177,14 @@
                 </div>
             </div>
         </div>
+
+
+
     </div>
 
     <script>
         document.querySelectorAll('.deleteInvoice').forEach(function(button) {
-            button.addEventListener('click', function (e) {
+            button.addEventListener('click', function(e) {
                 e.preventDefault(); // Prevent the default form submission
 
                 Swal.fire({
@@ -168,7 +197,7 @@
                         confirmButton: 'btn btn-warning me-2',
                         cancelButton: 'btn btn-label-secondary'
                     }
-                }).then(function (result) {
+                }).then(function(result) {
                     if (result.isConfirmed) { // Use `isConfirmed` to check if confirmed
                         button.closest('form').submit(); // Submit the closest form to the button
                         Swal.fire({
