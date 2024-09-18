@@ -1,4 +1,6 @@
 <x-masterLayout>
+    @section('title', $invoice->customerInfo->customer_name. ' - Invoice')
+
     <div class="pt-4 container-xxl flex-grow-1 container-p-y">
         <div class="row invoice-preview">
             <!-- Invoice -->
@@ -55,10 +57,10 @@
                         <table class="table">
                             <thead>
                                 <tr>
-                                    <th scope="col">Item/Service</th>
-                                    <th scope="col">QTY</th>
-                                    <th scope="col">Unit</th>
-                                    <th scope="col">Price</th>
+                                    <th scope="col-4">Item/Service</th>
+                                    <th scope="col-2">QTY</th>
+                                    <th scope="col-3">Unit</th>
+                                    <th scope="col-3">Price</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -92,10 +94,10 @@
                                         $totalDiscount += $subtotalBeforeDiscount * $discountRate;
                                     @endphp
                                     <tr>
-                                        <th class="text-nowrap" scope="row">{{ $catalog->name }}</th>
-                                        <td>{{ $catalog->pivot->quantity }}</td>
-                                        <td>GH₵{{ number_format($catalog->price, 2) }}</td>
-                                        <td>GH₵{{ number_format($subtotal, 2) }}</td>
+                                        <td class="text-nowrap col-4 " scope="row"><strong>{{ $catalog->name }}</strong> </td>
+                                        <td class="col-2">{{ $catalog->pivot->quantity }}</td>
+                                        <td class="col-3">GH₵{{ number_format($catalog->price, 2) }}</td>
+                                        <td class="col-3">GH₵{{ number_format($subtotal, 2) }}</td>
                                     </tr>
                                 @endforeach
                                 <tr>
