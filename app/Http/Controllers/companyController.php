@@ -61,7 +61,7 @@ class companyController extends Controller
             'phone' => $validated['phone'],
             'address' => $validated['address'],
             'gps_address' => $validated['gps_address'],
-            'category' => $validated['category'],
+            'category' => $validated['category'] ?? 'not known',
             'description' => $validated['description'],
             'website' => $validated['website'],
         ];
