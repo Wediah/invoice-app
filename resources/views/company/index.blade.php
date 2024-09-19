@@ -71,7 +71,7 @@
                                     </div>
                                 </div>
                                 <div class="mt-auto d-flex align-items-center justify-content-center">
-                                    <a href="#"
+                                    <a  href="{{ route('company.profile', ['slug' => $company->slug]) }} "
                                         class="btn btn-primary d-flex align-items-center me-3"><i
                                             class="bx bx-view me-1"></i>View Company</a>
                                     {{-- <a href="javascript:;" class="btn btn-label-secondary btn-icon"><i
