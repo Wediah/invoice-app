@@ -234,22 +234,25 @@ class invoiceController extends Controller
 
         $latestInvoiceNumber = $invoice->invoice_number;
 
-        $updatedInvoiceNumber = $latestInvoiceNumber . 'UP';
+        $updatedInvoiceNumber = 'UP'.$latestInvoiceNumber ;
 
         $invoice = Invoice::create([
             'user_id' => $user_id,
             'company_id' => $company_id,
             'invoice_number' => $updatedInvoiceNumber,
-            'customer_name' => $validatedData['customer_name'] ?? $invoice->customer_name,
-            'customer_email' => $validatedData['email'] ?? $invoice->email,
-            'customer_phone' => $validatedData['phone'] ?? $invoice->phone,
-            'customer_address' => $validatedData['address'] ?? $invoice->address,
-            'customer_mobile' => $validatedData['mobile'] ?? $invoice->mobile,
-            'customer_fax' => $validatedData['fax'] ?? $invoice->fax,
             'due_date' => $validatedData['due_date'] ?? $invoice->due_date,
             'notes' => $validatedData['notes'] ?? $invoice->notes,
             'total' => $validatedData['total'] ?? $invoice->total,
             'salesperson' => $validatedData['salesperson'] ?? $invoice->salesperson,
+        ]);
+
+        $customerInfo = CustomerInfo::create([
+            'invoice_id' => $invoice->id,
+            'customer_name' => $validatedData['customer_name'] ?? $invoice->customer_name,
+            'customer_email' => $validatedData['customer_email'] ?? $invoice->customer_email,
+            'customer_phone' => $validatedData['customer_phone'] ?? $invoice->customer_phone,
+            'customer_address' => $validatedData['customer_address'] ?? $invoice->customer_address,
+            'customer_mobile' => $validatedData['customer_mobile'] ?? $invoice->customer_mobile,
         ]);
 
         $this->extracted($request, $invoice);
@@ -300,5 +303,15 @@ class invoiceController extends Controller
         }
 
         $invoice->taxes()->attach($taxes);
+    }
+
+    public function downloadPDF($id): \Illuminate\Http\Response
+    {
+        $invoice = invoice::where('id', $id)->firstOrFail();
+
+        PDF::setOptions(['dpi' => 150, 'defaultFont' => 'sans-serif']);
+        $pdf = PDF::loadView('invoice.show', compact('invoice'));
+
+        return $pdf->download('invoice'.$invoice->invoice_number.'.pdf');
     }
 }

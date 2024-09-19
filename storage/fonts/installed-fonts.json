@@ -3,5 +3,39 @@
         "normal": "C:\\laragon\\www\\invoice-app\\storage\\fonts\/open_sans_normal_2bf6e8a03908d49a7fa7b1094b0c2804",
         "600": "C:\\laragon\\www\\invoice-app\\storage\\fonts\/open_sans_600_94288badef373364367fbfb769e688ce",
         "bold": "open_sans_bold_0e7196744e416eea97ecd5b9781a44c2"
+    },
+    "ibm plex sans": {
+        "300_italic": "C:\\laragon\\www\\invoice-app\\storage\\fonts\/ibm_plex_sans_300_italic_42b5c7d30907d9df19bf8206c0ba796a",
+        "italic": "C:\\laragon\\www\\invoice-app\\storage\\fonts\/ibm_plex_sans_italic_57fbf211064f00af76b3e82f33df3d57",
+        "500_italic": "C:\\laragon\\www\\invoice-app\\storage\\fonts\/ibm_plex_sans_500_italic_479ed99b684ce184418dc81de42915d7",
+        "600_italic": "C:\\laragon\\www\\invoice-app\\storage\\fonts\/ibm_plex_sans_600_italic_0d6e844888e9e9ce34cacc014c30dd7a",
+        "bold_italic": "C:\\laragon\\www\\invoice-app\\storage\\fonts\/ibm_plex_sans_bold_italic_e601a45659e2be4f27d37f9beab35ef2",
+        "300": "C:\\laragon\\www\\invoice-app\\storage\\fonts\/ibm_plex_sans_300_f30824237163a78589b0870a47e8762d",
+        "normal": "C:\\laragon\\www\\invoice-app\\storage\\fonts\/ibm_plex_sans_normal_4b2022158408614c1f0f15444bbf6a80",
+        "500": "C:\\laragon\\www\\invoice-app\\storage\\fonts\/ibm_plex_sans_500_819af649fc667789a5384e7ade01353c",
+        "600": "C:\\laragon\\www\\invoice-app\\storage\\fonts\/ibm_plex_sans_600_45d02e65340cf872d07a52e63fdce8f9",
+        "bold": "ibm_plex_sans_bold_023dcde48227d10bfb05cc7c8e3ae824"
+    },
+    "rubik": {
+        "300_italic": "C:\\laragon\\www\\invoice-app\\storage\\fonts\/rubik_300_italic_f3ec58ab97438b92000a72ac84211776",
+        "italic": "C:\\laragon\\www\\invoice-app\\storage\\fonts\/rubik_italic_5c891f698c1caff0020be78c92f10a39",
+        "500_italic": "C:\\laragon\\www\\invoice-app\\storage\\fonts\/rubik_500_italic_57371c20d285fa8599a1ccca87395b92",
+        "600_italic": "C:\\laragon\\www\\invoice-app\\storage\\fonts\/rubik_600_italic_b053170af6c2126ab22c724493729d55",
+        "bold_italic": "C:\\laragon\\www\\invoice-app\\storage\\fonts\/rubik_bold_italic_07131578a76967b2b50479f169d6c6f7",
+        "300": "C:\\laragon\\www\\invoice-app\\storage\\fonts\/rubik_300_82a112de692d08b55c2b11842e5a67fc",
+        "normal": "C:\\laragon\\www\\invoice-app\\storage\\fonts\/rubik_normal_b6ec54c36a02fb811d72194115ec42db",
+        "500": "C:\\laragon\\www\\invoice-app\\storage\\fonts\/rubik_500_c5ab0af2d954c4140f26e728dad090b3",
+        "600": "C:\\laragon\\www\\invoice-app\\storage\\fonts\/rubik_600_5d61a1f1e601158e12a385b1e07b6a27",
+        "bold": "rubik_bold_98a50ec8225be60b521143fc843a3c06"
+    },
+    "boxicons": {
+        "normal": "boxicons_normal_939cf24681a2bb385c55b5c7d492fc9c"
+    },
+    "font awesome 6 free": {
+        "normal": "C:\\laragon\\www\\invoice-app\\storage\\fonts\/font_awesome_6_free_normal_cb129dc4863fe6096e9c7f467526d925",
+        "900": "font_awesome_6_free_900_801d431556f4809d2fa7c7b118874c52"
+    },
+    "font awesome 6 brands": {
+        "normal": "font_awesome_6_brands_normal_9585d21beec0cfceaa55a3170b307279"
     }
 }

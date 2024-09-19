@@ -46,10 +46,10 @@
                                     <img src="{{ asset('storage/company_logo') }}/{{ $company->logo }}"
                                         alt="company logo" class="w-12 h-12 rounded shadow-lg "
                                         style="width: auto; height: 50px;">
-    
+
                                 </div>
                             </div>
-               
+
                             <div class="p-0 row p-sm-3">
                                 @if ($errors->any())
                                     <span class="error">
@@ -405,32 +405,10 @@
                             @endforeach
                         </div>
                     </div>
-
-                    {{--                <div class="mb-4 card"> --}}
-                    {{--                    <div class="card-body"> --}}
-                    {{--                        <h6 class="my-2 ">Payment Terms</h6> --}}
-                    {{--                        <div class="mb-4"> --}}
-                    {{--                            @foreach ($company->paymentTerms as $terms) --}}
-                    {{--                                <div class="mb-2 form-check"> --}}
-                    {{--                                    <input type="radio" id="payment-term-{{ $terms->id }}" --}}
-                    {{--                                        name="payment_terms_ids[]" class="form-check-input" value="success" /> --}}
-                    {{--                                    <label class="form-check-label" --}}
-                    {{--                                        for="payment-term-{{ $terms->id }}">{{ $terms->name }}</label> --}}
-                    {{--                                </div> --}}
-                    {{--                            @endforeach --}}
-
-
-
-                    {{--                        </div> --}}
-                    {{--                    </div> --}}
-                    {{--                </div> --}}
-
                     <div class="mb-4 card">
                         <div class="card-body">
 
                             <div class="my-3 d-flex">
-                                {{--                            <a href="./app-invoice-preview.html" --}}
-                                {{--                                class="btn btn-label-secondary w-100 me-3">Preview</a> --}}
                                 <button type="submit" class="btn btn-label-success w-100">Save Invoice</button>
                             </div>
                             <span class="btn btn-primary d-grid w-100" data-bs-toggle="offcanvas"

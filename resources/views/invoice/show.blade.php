@@ -13,11 +13,11 @@
                                     alt="company logo" class="w-20 h-20 rounded" style="width: auto; height: 50px;">
                             </div>
                         </div>
-                        
+
                         <div
                             class="p-0 d-flex justify-content-between flex-xl-row flex-md-column flex-sm-row flex-column p-sm-3">
                             <div class="mb-4 mb-xl-0">
-                               
+
                                 <span class="mb-2 app-brand-text h5 fw-bold">{{ $invoice->company->name }}</span>
                                 <p class="mb-1">{{ $invoice->company->email }}</p>
                                 <p class="mb-1">{{ $invoice->company->address }}</p>
@@ -186,26 +186,16 @@
             <div class="col-xl-3 col-md-4 col-12 invoice-actions">
                 <div class="card">
                     <div class="card-body">
-                        <button class="mb-3 btn btn-primary d-grid w-100" data-bs-toggle="offcanvas"
-                            data-bs-target="#sendInvoiceOffcanvas">
-                            <span class="d-flex align-items-center justify-content-center text-nowrap"><i
-                                    class="bx bx-paper-plane bx-xs me-3"></i>Send Invoice</span>
-                        </button>
-                        <a href="{{ route('invoice.download_pdf', ['id' => $invoice->id]) }}">
-                            <button class="mb-3 btn btn-label-secondary d-grid w-100">Download</button>
+                        <a href="{{ route('invoice.download', $invoice->id) }}">
+                            <button class="mb-3 btn btn-primary d-grid w-100">Download</button>
                         </a>
                         <a class="mb-3 btn btn-label-secondary d-grid w-100" target="_blank"
                             href="./app-invoice-print.html">
                             Print
                         </a>
-                        <a href="./app-invoice-edit.html" class="mb-3 btn btn-label-secondary d-grid w-100">
+                        <a href="{{ route('invoice.edit', ['id' => $invoice->id]) }}" class="mb-3 btn btn-label-secondary d-grid w-100">
                             Edit Invoice
                         </a>
-                        <button class="btn btn-primary d-grid w-100" data-bs-toggle="offcanvas"
-                            data-bs-target="#addPaymentOffcanvas">
-                            <span class="d-flex align-items-center justify-content-center text-nowrap"><i
-                                    class="bx bx-dollar bx-xs me-3"></i>Add Payment</span>
-                        </button>
                     </div>
                 </div>
             </div>

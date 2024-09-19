@@ -8,11 +8,14 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class invoice extends Model
 {
-    use HasFactory;
+    use HasFactory, softDeletes;
+
     protected $guarded = [];
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
@@ -25,12 +28,17 @@ class invoice extends Model
 
     public function catalogs(): BelongsToMany
     {
-        return $this->belongsToMany(catalog::class)->withPivot('quantity', 'discount_percent')->withTimestamps();
+        return $this->belongsToMany(catalog::class)
+                    ->withPivot('quantity', 'discount_percent')
+                    ->withTimestamps();
     }
 
     public function taxes(): BelongsToMany
     {
-        return $this->belongsToMany(tax::class)->withPivot('tax_id')->withTimestamps();
+        return $this->belongsToMany(tax::class)
+                    ->withPivot('tax_id')
+                    ->withTimestamps()
+                    ->withTrashed();
     }
 
     public function paymentTerms(): BelongsTo

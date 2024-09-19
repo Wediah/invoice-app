@@ -8,9 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Cviebrock\EloquentSluggable\Services\SlugService;
+use Illuminate\Database\Eloquent\SoftDeletes;
+
 class Company extends Model
 {
-    use HasFactory, Sluggable;
+    use HasFactory, Sluggable, softDeletes;
     protected $guarded = [];
 
     public function sluggable(): array
