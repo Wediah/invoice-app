@@ -149,6 +149,7 @@ class invoiceController extends Controller
 
         $customerInfo = CustomerInfo::create([
             'invoice_id' => $invoice->id,
+            'company_id' => $company_id,
             'customer_name' => $validatedData['customer_name'],
             'customer_email' => $validatedData['customer_email'],
             'customer_phone' => $validatedData['customer_phone'],
@@ -248,6 +249,7 @@ class invoiceController extends Controller
 
         $customerInfo = CustomerInfo::create([
             'invoice_id' => $invoice->id,
+            'company_id' => $company_id,
             'customer_name' => $validatedData['customer_name'] ?? $invoice->customer_name,
             'customer_email' => $validatedData['customer_email'] ?? $invoice->customer_email,
             'customer_phone' => $validatedData['customer_phone'] ?? $invoice->customer_phone,

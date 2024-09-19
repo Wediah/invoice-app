@@ -31,11 +31,12 @@ class companyController extends Controller
     // }
 
     public function userAndCompany()
-{
-    $user = auth()->user();
-    $companies = $user->companies;
-    return view('company.index', compact('companies'));
-}
+    {
+        $user = auth()->user();
+        $companies = $user->companies()->withCount('invoices')->withCount('catalogs')->withCount('customerInfos')
+            ->get();
+        return view('company.index', compact('companies'));
+    }
 
     //starting new company data
     public function store(Request $request): Application|Redirector|\Illuminate\Contracts\Foundation\Application|RedirectResponse
