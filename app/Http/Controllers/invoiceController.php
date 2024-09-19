@@ -116,7 +116,7 @@ class invoiceController extends Controller
             'customer_phone' => 'string|nullable|max:255',
             'customer_address' => 'string|nullable|max:255',
             'customer_mobile' => 'string|nullable|max:255',
-            'due_date' => 'string|nullable|max:255',
+            'due_date' => 'required|string|max:255',
             'notes' => 'string|nullable|max:255',
             'total' => 'required|numeric|regex:/^\d+(\.\d{1,2})?$/',
             'salesperson' => 'required|string|max:255'
