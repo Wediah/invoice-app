@@ -1,23 +1,107 @@
-<div class="max-w-lg p-6 mx-auto">
+<div class=" card-body demo-vertical-spacing demo-only-element">
     <form action="{{ route('company.info',['slug'=>$company->slug]) }}" method="POST">
         @csrf
         @method('PATCH')
-        <x-form.input name="registration_number" label="Registration Number" value="{{ $company->registration_number
-        }}"/>
-        <x-form.input name="description" label="Company Description" value="{{ $company->description }}"/>
-        <x-form.input name="website" label="Company Website" value="{{ $company->website }}"/>
-        <x-form.input name="instagram" label="instagram" value="{{ $company->instagram }}"/>
-        <x-form.input name="twitter" label="X(twitter)" value="{{ $company->twitter }}"/>
-        <x-form.input name="facebook" label="Facebook" value="{{ $company->facebook }}"/>
-        <x-form.input name="tiktok" label="tiktok" value="{{ $company->tiktok }}"/>
-        <x-form.input name="linkedin" label="LinkedIn" value="{{ $company->linkedin }}"/>
-
-        <div class="mb-6 mt-4">
-            <input
-                type="submit"
-                class="bg-blue-400 text-white rounded-lg w-full py-2 px-4 hover:bg-blue-800 cursor-pointer"
-                value="Save Changes"
-            >
+        <div class="mb-2 row">
+            <div class="form-group col-6">
+                <label class="form-label" for="name">Registration Number</label>
+                <div class="input-group">
+                    <input type="text" name="registration_number" class="form-control"
+                        placeholder="" aria-label=""
+                        aria-describedby="basic-addon11" value="{{ $company->registration_number }}" />
+                </div>
+                @error('name')
+                    <p class="error">{{ $message }}</p>
+                @enderror
+            </div>
+            <div class="col-6 form-group">
+                <label class="form-label" for="description">Company Description</label>
+                <div class="input-group">
+                    <input type="text" name="description" class="form-control"
+                        placeholder="" aria-label=""
+                        aria-describedby="basic-addon11" value="{{ $company->description }}" />
+                </div>
+                @error('description')
+                    <p class="error">{{ $message }}</p>
+                @enderror
+            </div>
         </div>
+        <div class="mb-2 row">
+            <div class="form-group col-6">
+                <label class="form-label" for="address">Company Address</label>
+                <div class="input-group">
+                    <input type="text" name="address" class="form-control"
+                        placeholder="" aria-label=""
+                        aria-describedby="basic-addon11" value="{{ $company->address }}" />
+                </div>
+                @error('address')
+                    <p class="error">{{ $message }}</p>
+                @enderror
+            </div>
+            <div class="col-6 form-group">
+                <label class="form-label" for="website">Company Website</label>
+                <div class="input-group">
+                    <input type="text" name="website" class="form-control"
+                        placeholder="" aria-label=""
+                        aria-describedby="basic-addon11" value="{{ $company->website }}" />
+                </div>
+                @error('website')
+                    <p class="error">{{ $message }}</p>
+                @enderror
+            </div>
+        </div>
+        <div class="mb-2 row">
+            <div class="form-group col-6">
+                <label class="form-label" for="instagram">Instagram</label>
+                <div class="input-group">
+                    <input type="text" name="instagram" class="form-control"
+                        placeholder="" aria-label=""
+                        aria-describedby="basic-addon11" value="{{ $company->instagram }}" />
+                </div>
+                @error('instagram')
+                    <p class="error">{{ $message }}</p>
+                @enderror
+            </div>
+            <div class="col-6 form-group">
+                <label class="form-label" for="category">X (Twitter)</label>
+                <div class="input-group">
+                    <input type="text" name="twitter" class="form-control"
+                        placeholder="" aria-label=""
+                        aria-describedby="basic-addon11" value="{{ $company->twitter }}" />
+                </div>
+                @error('twitter')
+                    <p class="error">{{ $message }}</p>
+                @enderror
+            </div>
+            <div class="col-6 form-group">
+                <label class="form-label" for="linkedin">Linkedin</label>
+                <div class="input-group">
+                    <input type="text" name="linkedin" class="form-control"
+                        placeholder="" aria-label=""
+                        aria-describedby="basic-addon11" value="{{ $company->linkedin }}" />
+                </div>
+                @error('twitter')
+                    <p class="error">{{ $message }}</p>
+                @enderror
+            </div>
+            <div class="col-6 form-group">
+                <label class="form-label" for="category">Facebook</label>
+                <div class="input-group">
+                    <input type="text" name="facebook" class="form-control"
+                        placeholder="" aria-label=""
+                        aria-describedby="basic-addon11" value="{{ $company->facebook }}" />
+                </div>
+                @error('facebook')
+                    <p class="error">{{ $message }}</p>
+                @enderror
+            </div>
+        </div>
+        <div class="pt-4 float-end">
+            <button type="submit"  class="btn btn-success">Submit</button>
+
+        </div>
+     
+
+    
     </form>
 </div>

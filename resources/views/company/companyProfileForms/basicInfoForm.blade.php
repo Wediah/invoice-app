@@ -1,21 +1,93 @@
-<div class="max-w-lg p-6 mx-auto">
-    <form action="{{ route('company.update', ['slug'=> $company->slug]) }}" method="POST"
-          enctype="multipart/form-data">
+<div class=" card-body demo-vertical-spacing demo-only-element">
+    <form action="{{ route('company.update', ['slug' => $company->slug]) }}" method="POST" enctype="multipart/form-data">
         @method('PATCH')
         @csrf
-        <x-form.input name="name" label="Name" value="{{ $company->name }}"/>
-        <x-form.input name="email" label="Email" value="{{ $company->email }}"/>
-        <x-form.input name="address" label="Address" value="{{ $company->address }}"/>
-        <x-form.input name="phone" label="Phone" value="{{ $company->phone }}"/>
-        <x-form.input name="logo" label="Logo" type="file" value="{{ $company->logo }}"/>
-        <x-form.input name="category" label="Industry" value="{{ $company->category }}"/>
 
-        <div class="mb-6 mt-4">
-            <input
-                type="submit"
-                class="bg-blue-400 text-white rounded-lg w-full py-2 px-4 hover:bg-blue-800 cursor-pointer"
-                value="Save Changes"
-            >
+        <div class="mb-2 row">
+            <div class="form-group col-6">
+                <label class="form-label" for="name">Company Name</label>
+                <div class="input-group">
+                    <input type="text" name="name" class="form-control"
+                        placeholder="" aria-label=""
+                        aria-describedby="basic-addon11" value="{{ $company->name }}" />
+                </div>
+                @error('name')
+                    <p class="error">{{ $message }}</p>
+                @enderror
+            </div>
+            <div class="col-6 form-group">
+                <label class="form-label" for="email">Company Email</label>
+                <div class="input-group">
+                    <input type="text" name="email" class="form-control"
+                        placeholder="" aria-label=""
+                        aria-describedby="basic-addon11" value="{{ $company->email }}" />
+                </div>
+                @error('email')
+                    <p class="error">{{ $message }}</p>
+                @enderror
+            </div>
         </div>
+        <div class="mb-2 row">
+            <div class="form-group col-6">
+                <label class="form-label" for="address">Company Address</label>
+                <div class="input-group">
+                    <input type="text" name="address" class="form-control"
+                        placeholder="" aria-label=""
+                        aria-describedby="basic-addon11" value="{{ $company->address }}" />
+                </div>
+                @error('address')
+                    <p class="error">{{ $message }}</p>
+                @enderror
+            </div>
+            <div class="col-6 form-group">
+                <label class="form-label" for="phone">Company Phone</label>
+                <div class="input-group">
+                    <input type="text" name="phone" class="form-control"
+                        placeholder="" aria-label=""
+                        aria-describedby="basic-addon11" value="{{ $company->phone }}" />
+                </div>
+                @error('phone')
+                    <p class="error">{{ $message }}</p>
+                @enderror
+            </div>
+        </div>
+        <div class="mb-2 row">
+            <div class="form-group col-6">
+                <label class="form-label" for="logo">Company Logo</label>
+                <div class="input-group">
+                    <input type="file" name="logo" class="form-control"
+                        placeholder="" aria-label="" accept="image/*"
+                        aria-describedby="basic-addon11" value="{{ $company->logo }}" />
+                </div>
+                @error('logo')
+                    <p class="error">{{ $message }}</p>
+                @enderror
+            </div>
+            <div class="col-6 form-group">
+                <label class="form-label" for="category">Company Category</label>
+                <div class="input-group">
+                    <input type="text" name="category" class="form-control"
+                        placeholder="" aria-label=""
+                        aria-describedby="basic-addon11" value="{{ $company->category }}" />
+                </div>
+                @error('category')
+                    <p class="error">{{ $message }}</p>
+                @enderror
+            </div>
+        </div>
+        <div class="pt-4 float-end">
+            <button type="submit"  class="btn btn-success">Submit</button>
+
+        </div>
+
+{{--        
+        <x-form.input name="name" label="Name" value="{{ $company->name }}" />
+        <x-form.input name="email" label="Email" value="{{ $company->email }}" /> --}}
+        {{-- <x-form.input name="address" label="Address" value="{{ $company->address }}" /> --}}
+        {{-- <x-form.input name="phone" label="Phone" value="{{ $company->phone }}" /> --}}
+        {{-- <x-form.input name="logo" label="Logo" type="file" value="{{ $company->logo }}" />
+        <x-form.input name="category" label="Industry" value="{{ $company->category }}" /> --}}
+
+       
     </form>
 </div>
