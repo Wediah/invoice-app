@@ -81,26 +81,26 @@
                             <div class="row p-sm-3 p-0">
                                 <h6 class="pb-2">Invoice To:</h6>
                                 <div class="col-md-6 col-sm-5 col-12 mb-sm-0 mb-4">
-                                    <x-form.input name="customer_name" label="Name" placeholder="Enter customer name"
-                                    value="{{ $invoice->customer_name }}"></x-form.input>
+                                    <x-form.input name="customer_name" label="Name"
+                                    value="{{ $invoice->customerInfo->customer_name }}"></x-form.input>
                                     <x-form.input
-                                        name="email"
+                                        name="customer_email"
                                         label="Email"
                                         placeholder="Enter email"
-                                        value="{{ $invoice->email }}"
+                                        value="{{ $invoice->customerInfo->customer_email }}"
                                     >
                                     </x-form.input>
-                                    <x-form.input name="address" label="Address" placeholder="Enter address" value="{{ $invoice->address }}"></x-form.input>
+                                    <x-form.input name="customer_address" label="Address" value="{{
+                                    $invoice->customerInfo->customer_address }}"></x-form.input>
                                 </div>
                                 <div class="col-md-6 col-sm-7">
-                                    <x-form.input name="phone" label="Phone" placeholder="Enter phone number"
-                                                  value="{{ $invoice->phone }}"
+                                    <x-form.input name="customer_phone" label="Phone"
+                                                  value="{{ $invoice->customerInfo->customer_phone }}"
                                     ></x-form.input>
-                                    <x-form.input name="mobile" label="Mobile" placeholder="Enter mobile number"
-                                                  value="{{ $invoice->mobile }}"
+                                    <x-form.input name="customer_mobile" label="Mobile" placeholder="Enter mobile
+                                    number"
+                                                  value="{{ $invoice->customerInfo->customer_mobile }}"
                                     ></x-form.input>
-                                    <x-form.input name="fax" label="Fax" placeholder="Enter fax number" value="{{
-                                    $invoice->fax }}"></x-form.input>
                                 </div>
                             </div>
 
@@ -217,24 +217,6 @@
                             <div class="row">
                                 <div class="col-12">
                                     <div class="mb-3">
-                                        <label for="note" class="form-label fw-semibold">Balance:</label>
-                                        <div class="d-flex gap-1 align-items-center border border-dark ">
-                                            <span class="py-2 px-2">GH₵</span>
-                                            <input
-                                                type="number"
-                                                name="balance"
-                                                class="form-control  border-0"
-                                                placeholder="Balance to be paid"
-                                                value="{{ $invoice->balance }}"
-                                            />
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-12">
-                                    <div class="mb-3">
                                         <label for="note" class="form-label fw-semibold">Note:</label>
                                         <textarea class="form-control" rows="2" name="notes" id="notes"
                                                   placeholder="Invoice note" value="{{ $invoice->notes }}"></textarea>
@@ -262,16 +244,6 @@
                         </div>
                     </div>
                     <div>
-                        <p class="mb-2">Payments terms</p>
-                        <select name="term_id" class="form-select mb-4">
-                            @foreach($company->paymentTerms as $terms)
-                                <option value="{{ $terms->id }}">{{ $terms->name }}</option>
-                            @endforeach
-                        </select>
-
-                        <x-form.input type="number" name="discount" placeholder="Enter discount" label="Discount"
-                                      class="discount"/>
-
                         <div id="taxContainer">
                             <div class="flex flex-row gap-3 items-center tax-group">
                                 <div class="mt-6">

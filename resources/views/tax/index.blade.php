@@ -73,8 +73,10 @@
                                             <div class="input-group">
                                                 <input type="number" id="form-repeater-1-1"
                                                     class="form-control {{ $errors->first('tax_percentage') ? ' form-error' : '' }}"
-                                                    placeholder="Enter Tax %" name="tax_percentage" /> <span
-                                                    class="input-group-text">%</span>
+                                                    placeholder="Enter Tax %" name="tax_percentage" step="0.01"
+                                                       min="0" max="100"
+                                                />
+                                                <span class="input-group-text">%</span>
                                             </div>
 
                                         </div>

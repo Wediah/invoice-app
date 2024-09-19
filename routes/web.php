@@ -60,7 +60,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/{slug}/unpaid-invoices', [InvoiceController::class, 'unpaidInvoices'])->name('invoice.allunpaid');
     Route::post('/{slug}/invoice', [invoiceController::class, 'store'])->name('invoice.store');
     Route::get('/{slug}/invoice', [invoiceController::class, 'create'])->name('invoice.create');
-    Route::get('/invoice/{id}', [invoiceController::class, 'show'])->name('invoice.show');
+    Route::get('/invoice/{id}', [invoiceController::class, 'show'])->name('invoice.show')->withTrashed();
     Route::get('/get-price', [invoiceController::class, 'getPrice'])->name('getPrice');
     Route::delete('/invoice/{id}/delete', [invoiceController::class, 'destroy'])->name('invoice.delete');
     Route::get('/invoice/{id}/edit', [invoiceController::class, 'edit'])->name('invoice.edit');
@@ -87,7 +87,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/tax/{slug}/delete/{id}', [taxController::class, 'destroy'])->name('tax.delete');
 
     //download Invoice
-    Route::get('/download-pdf/{id}', [invoiceController::class, 'downloadPDF'])->name('invoice.download_pdf');
+    Route::get('/invoice/{id}/download-pdf', [invoiceController::class, 'downloadPDF'])->name('invoice.download');
 });
 
 require __DIR__.'/auth.php';

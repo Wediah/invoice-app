@@ -53,7 +53,7 @@ class taxController extends Controller
 
                 [
                     'tax_name' => 'required|string|max:255',
-                    'tax_percentage' => 'required|numeric|between:0,100',
+                    'tax_percentage' => 'required|numeric|min:0|max:100',
                     'tax_type' => 'required|string|in:primary,secondary',
 
                 ]
@@ -109,7 +109,7 @@ class taxController extends Controller
 
         $validated = request()->validate([
             'tax_name' => 'sometimes',
-            'tax_percentage' => 'sometimes',
+            'tax_percentage' => 'sometimes|numeric',
             'type' => 'sometimes|in:primary,secondary',
         ]);
 

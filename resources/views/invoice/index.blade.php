@@ -59,25 +59,31 @@
                                             <div class="avatar-wrapper">
                                                 <div class="avatar avatar-sm me-2">
                                                     <span class="avatar-initial rounded-circle bg-label-info">
-                                                        {{ substr($invoice->customerInfo->customer_name, 0, 1) .
-                                                            substr(strrchr($invoice->customerInfo->customer_name, ' '), 1, 1) }}
+                                                        {{
+                                                            $invoice->customerInfo && $invoice->customerInfo->customer_name
+                                                                ? (substr($invoice->customerInfo->customer_name, 0, 1) .
+                                                                   substr(strrchr($invoice->customerInfo->customer_name, ' ') ?: ' ', 1, 1))
+                                                                : 'N/A'
+                                                        }}
                                                     </span>
                                                 </div>
                                             </div>
                                             <div class="d-flex flex-column"><a
                                                     href="http://127.0.0.1:8000/pages/profile-user"
-                                                    class="text-body text-truncate fw-semibold">{{ $invoice->customerInfo->customer_name }}</a><small
-                                                    class="text-truncate text-muted">{{ $invoice->customerInfo->customer_email }}</small>
+                                                    class="text-body text-truncate fw-semibold">{{
+                                                    $invoice->customerInfo->customer_name ?? 'No Name' }}</a><small
+                                                    class="text-truncate text-muted">{{
+                                                    $invoice->customerInfo->customer_email ?? 'No Email'}}</small>
                                             </div>
                                         </div>
                                     </td>
                                     <td class="text-center"> GHS{{ number_format((float) $invoice->total, 2) }}</td>
                                     <td class="text-center">
-                                     
+
                                         {{ $invoice->created_at->format('jS M, Y') }}
                                     </td>
-                                    <td class="text-center"> 
-                                      
+                                    <td class="text-center">
+
                                        <span data-bs-toggle="tooltip" data-bs-html="true"   data-bs-original-title="{{ $invoice->due_date < now() ? '<span>Past Due Date':'Not Due' }} " class="badge  {{ $invoice->due_date > now() ? 'bg-label-primary' : 'bg-label-danger' }}">
                                         {{ \Carbon\Carbon::parse($invoice->due_date)->format('jS M, Y') }}
 
