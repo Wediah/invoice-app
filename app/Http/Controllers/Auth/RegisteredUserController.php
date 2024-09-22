@@ -54,6 +54,6 @@ class RegisteredUserController extends Controller
 
         Auth::login($user);
 
-        return redirect(route('company.create', absolute: false));
+        return redirect(route('authCompany.create', absolute: false));
     }
 }

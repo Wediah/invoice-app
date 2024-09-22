@@ -234,7 +234,7 @@
                                                 <div class="col-md-3 col-12 pe-0">
                                                     <p class="mb-2 repeater-title">Unit Cost</p>
                                                     <div class="input-group">
-                                                        <span class="input-group-text">₵</span>
+                                                        <span class="input-group-text">{{ $company->currency ?? 'GHS' }}</span>
                                                         <input type="number" name="price"
                                                             class="form-control invoice-item-price " required
                                                             readonly />
@@ -250,7 +250,7 @@
                                                 <div class="col-md-3 col-12 pe-0">
                                                     <p class="mb-2 repeater-title">Sub Total</p>
                                                     <div class="input-group">
-                                                        <span class="input-group-text">₵</span>
+                                                        <span class="input-group-text">{{ $company->currency ?? 'GHS'}}</span>
                                                         <input type="number" name="total[]"
                                                             class="form-control invoice-item-sub_total "
                                                             aria-label="Amount " required readonly />
@@ -336,11 +336,12 @@
                                     <div class="invoice-calculations">
                                         <div class="mb-2 d-flex justify-content-between">
                                             <span class="me-5">Subtotal:</span>
-                                            <span class="subtotal">GHC 0.00</span>
+                                            <span>{{ $company->currency }}&nbsp;<span class="subtotal">0.00</span>
+                                        </span>
                                         </div>
                                         <div class="mb-2 d-flex justify-content-between">
                                             <span>Discount:</span>
-                                            <span class="discount">0.00</span>
+                                            <span>{{ $company->currency ?? 'GHS' }}&nbsp;<span class="discount">0.00</span>
                                         </div>
                                         <div class="mb-2 d-flex justify-content-between">
                                             {{-- <span>Primary Tax:</span> --}}
@@ -353,7 +354,7 @@
                                         </div> --}}
                                         <div class="d-flex justify-content-between">
                                             <span>Total:</span>
-                                            <span class="total">GHC 0.00</span>
+                                            <span>{{ $company->currency ?? 'GHS'}}&nbsp;<span class="total">0.00</span>
                                         </div>
                                         <input type="hidden" id="total_hidden_input" name="total" value="0.00">
                                     </div>

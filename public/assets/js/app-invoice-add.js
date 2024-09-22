@@ -233,8 +233,8 @@ $(document).ready(function() {
       });
 
       // Update the display of subtotal and discount
-      $subtotalDisplay.text(`$${totalSubtotal.toFixed(2)}`);
-      $discountDisplay.text(`$${totalDiscount.toFixed(2)}`);
+      $subtotalDisplay.text(`${totalSubtotal.toFixed(2)}`);
+      $discountDisplay.text(`${totalDiscount.toFixed(2)}`);
 
       // Recalculate the total including taxes
       calculateTotal();
@@ -245,8 +245,8 @@ $(document).ready(function() {
 
   // Function to calculate the final total including taxes
   function calculateTotal() {
-      const subtotal = parseFloat($subtotalDisplay.text().slice(1)) || 0;
-      const discount = parseFloat($discountDisplay.text().slice(1)) || 0;
+      const subtotal = parseFloat($subtotalDisplay.text()) || 0;
+      const discount = parseFloat($discountDisplay.text()) || 0;
       let primaryTaxTotal = 0;
       let secondaryTaxTotal = 0;
       const primaryTaxes = [];
@@ -289,7 +289,7 @@ $(document).ready(function() {
           $taxList.append(`
               <div class="d-flex justify-content-between mb-2">
                   <span class="me-5">${tax.name}</span>
-                  <span>GHC${tax.amount.toFixed(2)}</span>
+                  <span>${tax.amount.toFixed(2)}</span>
               </div>
           `);
       });
@@ -297,7 +297,7 @@ $(document).ready(function() {
           $taxList.append(`
               <div class="d-flex justify-content-between mb-2">
                   <span class="me-5">${tax.name}</span>
-                  <span>GHC${tax.amount.toFixed(2)}</span>
+                  <span>${tax.amount.toFixed(2)}</span>
               </div>
           `);
       });
