@@ -23,11 +23,12 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     //company
+    Route::get('/dashboard', [CompanyController::class, 'userAndCompany'])->name('dashboard');
     Route::get('/company/create', [CompanyController::class, 'create'])->name('company.create');
+    Route::get('/auth/company/create', [CompanyController::class, 'authCompanyCreate'])->name('authCompany.create');
     Route::post('/company', [CompanyController::class, 'store'])->name('company.store');
     Route::patch('/company/{slug}/update', [CompanyController::class, 'update'])->name('company.update');
     Route::delete('/company', [CompanyController::class, 'destroy'])->name('company.destroy');
-    Route::get('/dashboard', [CompanyController::class, 'userAndCompany'])->name('dashboard');
     Route::patch('/company/{slug}/finance', [CompanyController::class, 'financial'])->name('company.financial');
     Route::patch('/company/{slug}/preference', [CompanyController::class, 'preference'])->name('company.preference');
     //business profile

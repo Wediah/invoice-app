@@ -21,6 +21,11 @@ class companyController extends Controller
         $categories = companyCategory::all();
         return view('company.create', compact('categories'));
     }
+    public function authCompanyCreate()
+    {
+        $categories = companyCategory::all();
+        return view('auth.auth-company-create', compact('categories'));
+    }
 
     // public function userAndCompany()
     // {
@@ -48,7 +53,7 @@ class companyController extends Controller
             'address' => 'required|string',
             'gps_address' => 'required|string',
             'logo' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'category' => 'required|string',
+            'category' => 'sometimes|nullable|string',
             'description' => 'required|string|max:255',
             'website' => 'required|string',
         ]);
