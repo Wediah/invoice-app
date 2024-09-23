@@ -131,6 +131,8 @@ class taxController extends Controller
             ->where('company_id', $company->id)
             ->firstOrFail();
 
+        usleep(500000);
+
         $tax->delete();
 
         return redirect()->back()->with('success', 'Tax deleted successfully.');

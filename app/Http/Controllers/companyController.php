@@ -1,4 +1,6 @@
-<?php
+<?php /** @noinspection PhpUndefinedVariableInspection */
+
+/** @noinspection ALL */
 
 namespace App\Http\Controllers;
 
@@ -38,8 +40,7 @@ class companyController extends Controller
     public function userAndCompany()
     {
         $user = auth()->user();
-        $companies = $user->companies()->withCount('invoices')->withCount('catalogs')->withCount('customerInfos')
-            ->get();
+        $companies = $user->companies()->withCount('invoices')->withCount('catalogs')->get();
         return view('company.index', compact('companies'));
     }
 
@@ -221,7 +222,7 @@ class companyController extends Controller
         $deleteCompany = Company::findOrFail($id);
 
         $deleteCompany->delete();
-
+        usleep(500000);
         return redirect()->intended(route('dashboard', absolute: false));
     }
 }

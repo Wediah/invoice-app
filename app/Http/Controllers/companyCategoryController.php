@@ -56,7 +56,7 @@ class companyCategoryController extends Controller
     {
         $category = companyCategory::where('id', $id)->firstOrFail();
         $category->delete();
-
+        usleep(500000);
         return redirect()->back();
     }
 }

@@ -58,7 +58,7 @@ class Company extends Model
      return $this->belongsTo(CompanyCategory::class, 'category', 'id');
     }
 
-    public function customerInfos(): HasMany
+    public function customerInfo(): HasMany
     {
         return $this->hasMany(CustomerInfo::class);
     }
