@@ -110,7 +110,7 @@
                                 <i class="bx bx-detail me-1"></i>Financial Information</a>
                         </li>
                         <li class="nav-item">
-                            <a x-on:click="selected = 'settings-pref'":class="{ 'active': selected === 'settings-pref' }" class="nav-link" >
+                            <a href="#settings-pref" x-on:click="selected = 'settings-pref'":class="{ 'active': selected === 'settings-pref' }" class="nav-link" >
                                 <i class="bx bx-bell me-1"></i>Settings and Preference</a>
                         </li>
 
