@@ -271,6 +271,8 @@ class invoiceController extends Controller
 
         $deleteInvoice->delete();
 
+        usleep(500000);
+
         return redirect()->back()->with('success', 'Invoice deleted successfully');
     }
 

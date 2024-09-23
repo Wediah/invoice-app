@@ -184,6 +184,8 @@ class catalogController extends Controller
 
         $catalog->delete();
 
+        usleep(500000);
+
         return redirect()->back();
     }
 

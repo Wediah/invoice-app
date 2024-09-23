@@ -62,13 +62,13 @@
                                         </a>
 
                                     </div>
-                                    <div>
-                                        <a class="badge bg-label-primary"  href="#">
-                                              <h4 class="mb-1">{{ $company->customerInfos_count }}</h4>
-                                        <span>Customers</span>
-                                        </a>
+{{--                                    <div>--}}
+{{--                                        <a class="badge bg-label-primary"  href="#">--}}
+{{--                                              <h4 class="mb-1">{{ $customerCount }}</h4>--}}
+{{--                                        <span>Customers</span>--}}
+{{--                                        </a>--}}
 
-                                    </div>
+{{--                                    </div>--}}
                                 </div>
                                 <div class="mt-auto d-flex align-items-center justify-content-center">
                                     <a  href="{{ route('company.profile', ['slug' => $company->slug]) }} "

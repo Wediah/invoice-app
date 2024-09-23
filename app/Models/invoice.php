@@ -46,8 +46,8 @@ class invoice extends Model
         return $this->belongsTo(paymentTerms::class, 'term_id');
     }
 
-    public function customerInfo(): HasOne
+    public function customerInfo(): HasMany
     {
-        return $this->hasOne(customerInfo::class);
+        return $this->hasMany(customerInfo::class);
     }
 }
