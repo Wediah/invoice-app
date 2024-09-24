@@ -1,6 +1,41 @@
 <x-masterLayout>
     @section('title', $invoice->customerInfo->customer_name. ' - Invoice')
 
+    @push('styles')
+        <style>
+            /* Normal styles */
+            body {
+                font-family: Arial, sans-serif;
+                padding: 20px;
+            }
+
+            .no-print {
+                background-color: white;
+                padding: 10px;
+            }
+
+            /* Print styles */
+            @media print {
+                body {
+                    font-size: 12pt;
+                    background: none;
+                }
+
+                header, footer {
+                    display: none;
+                }
+
+                .no-print {
+                    display: none;
+                }
+
+                .page-break {
+                    page-break-before: always;
+                }
+            }
+        </style>
+    @endpush
+
     <div class="pt-4 container-xxl flex-grow-1 container-p-y">
         <div class="row invoice-preview">
             <!-- Invoice -->
@@ -183,18 +218,21 @@
             <!-- /Invoice -->
 
             <!-- Invoice Actions -->
-            <div class="col-xl-3 col-md-4 col-12 invoice-actions">
+            <div class="col-xl-3 col-md-4 col-12 invoice-actions no-print bg-transparent">
                 <div class="card">
                     <div class="card-body">
-                        <a href="{{ route('invoice.download', $invoice->id) }}">
-                            <button class="mb-3 btn btn-primary d-grid w-100">Download</button>
-                        </a>
-                        <a class="mb-3 btn btn-label-secondary d-grid w-100" target="_blank"
-                            href="./app-invoice-print.html">
-                            Print
-                        </a>
+                        <button onclick="window.print()" class="mb-3 btn btn-primary d-grid w-100">Download</button>
+                        <button onclick="window.print()" class="mb-3 btn btn-secondary d-grid w-100">Print</button>
                         <a href="{{ route('invoice.edit', ['id' => $invoice->id]) }}" class="mb-3 btn btn-label-secondary d-grid w-100">
                             Edit Invoice
+                        </a>
+                        <a href="{{ route('invoice.index', ['slug' => $invoice->company->slug]) }}" class="mb-3 btn
+                        btn-label-secondary d-grid w-100">
+                            All Invoices
+                        </a>
+                        <a href="{{ route('invoice.create', ['slug' => $invoice->company->slug]) }}" class="mb-3 btn
+                        btn-label-secondary d-grid w-100">
+                            Create New Invoice
                         </a>
                     </div>
                 </div>

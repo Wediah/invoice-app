@@ -70,7 +70,7 @@
             @include('sections.aside')
             <!-- / Menu -->
             <div class="layout-page">
-                <nav class="layout-navbar navbar navbar-expand-xl align-items-center bg-navbar-theme"
+                <nav class="layout-navbar navbar navbar-expand-xl align-items-center bg-navbar-theme no-print"
                     id="layout-navbar">
                     <div class="container-fluid">
                         <div class="layout-menu-toggle navbar-nav align-items-xl-center me-3 me-xl-0 d-xl-none">
@@ -508,7 +508,7 @@
 
 
     </div>
-    <footer class="mt-auto content-footer footer bg-footer-theme">
+    <footer class="mt-auto content-footer footer bg-footer-theme no-print">
         <div
             class="{{ !empty($containerNav) ? $containerNav : 'container-fluid' }} d-flex flex-wrap justify-content-between py-2 flex-md-row flex-column">
             <div class="mb-2 mb-md-0">
