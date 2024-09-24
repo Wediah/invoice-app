@@ -105,7 +105,7 @@
                         </div>
                     </div>
                     <hr class="my-0" />
-                    <div class="">
+                    <div class="card-body">
                         <div class="p-0 row p-sm-3">
                             <h6 class="pb-2">Invoice To:</h6>
                             <div class="mb-4 col-xl-6 col-md-12 col-sm-5 col-12 mb-xl-0 mb-md-4 mb-sm-0">
@@ -234,7 +234,7 @@
                         </table>
                     </div>
 
-                    <div class="">
+                    <div class="card-body">
                         <div class="row">
                             <div class="col-12">
                                 <span class="fw-semibold">Note:</span>
