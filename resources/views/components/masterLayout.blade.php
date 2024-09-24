@@ -478,8 +478,6 @@
                                             </li>
                                         </ul>
                                     @endauth
-
-
                                 </li>
                                 <!--/ User -->
                             </ul>
@@ -493,21 +491,14 @@
                         </div>
                     </div>
                 </nav>
-
-
                 <div class="content-wrapper">
-
                     {{ $slot }}
-
-
                 </div>
 
             </div>
         </div>
-
-
-
     </div>
+
     <footer class="mt-auto content-footer footer bg-footer-theme no-print">
         <div
             class="{{ !empty($containerNav) ? $containerNav : 'container-fluid' }} d-flex flex-wrap justify-content-between py-2 flex-md-row flex-column">
