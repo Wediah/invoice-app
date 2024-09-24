@@ -6,12 +6,10 @@
             /* Normal styles */
             body {
                 font-family: Arial, sans-serif;
-                padding: 20px;
             }
 
             .no-print {
                 background-color: white;
-                padding: 10px;
             }
 
             /* Print styles */
@@ -19,10 +17,25 @@
                 body {
                     font-size: 12pt;
                     background: none;
+                    box-shadow: none;
+                    border:none;
+                    border-radius: 0;
+                    page-break-inside: avoid;
+                    page-break-before: avoid;
+                    page-break-after: avoid;
                 }
 
                 header, footer {
                     display: none;
+                }
+
+                * {
+                    margin: 0;
+                    padding: 0;
+                    box-shadow: none;
+                    page-break-inside: avoid;
+                    page-break-before: avoid;
+                    page-break-after: avoid;
                 }
 
                 .no-print {
@@ -30,15 +43,18 @@
                 }
 
                 .page-break {
-                    page-break-before: always;
+                    page-break-before: avoid;
+                }
+
+                .printed {
+                    background: none;
+                    box-shadow: none;
                 }
             }
         </style>
     @endpush
-
-    <div class="pt-4 container-xxl flex-grow-1 container-p-y">
+    <div class="pt-4 container-xxl flex-grow-1 container-p-y printed">
         <div class="row invoice-preview">
-            <!-- Invoice -->
             <div class="mb-4 col-xl-9 col-md-8 col-12 mb-md-0">
                 <div class="card invoice-preview-card">
                     <div class="card-body">
@@ -103,7 +119,7 @@
                                     $taxRate = 0; // Initialize total price variable
                                     $totalPrice = 0; // Initialize total price variable
                                     $totalTax = 0; // Initialize total tax variable
-                                    //                                $discountRate = $invoice->discount / 100;
+                                    //$discountRate = $invoice->discount / 100;
                                     $totalPrimaryTax = 0;
                                     $totalSecondaryTax = 0;
                                     $primaryTax = 0;
@@ -143,15 +159,15 @@
                                         </p>
                                     </td>
                                     <td class="px-4 py-5">
-                                        <div class="d-flex justify-content-between">
+                                        <div class="d-flex gap-5 justify-content-between">
                                             <p>Subtotal:</p>
                                             <p class="mb-2 fw-semibold">GH₵{{ number_format($totalPrice, 2) }}</p>
                                         </div>
-                                        <div class="d-flex justify-content-between">
+                                        <div class="d-flex gap-5 justify-content-between">
                                             <p>Discount:</p>
                                             <p class="mb-2 fw-semibold">GH₵{{ number_format($totalDiscount, 2) }}</p>
                                         </div>
-                                        <div class="d-flex justify-content-between">
+                                        <div class="d-flex gap-5 justify-content-between">
                                             <p>Tax(es)</p>
                                             <p class="mb-2 fw-semibold"></p>
                                         </div>
@@ -174,13 +190,13 @@
                                                 @endphp
                                                 <div>
                                                     @if ($tax->type == 'PRIMARY')
-                                                        <div class="d-flex justify-content-between">
+                                                        <div class="d-flex gap-5 justify-content-between">
                                                             <p>{{ $tax->tax_name }}({{ $tax->tax_percentage }}%):</p>
                                                             <p class="mb-2 fw-semibold">
                                                                 GH₵{{ number_format($primaryTax, 2) }}</p>
                                                         </div>
                                                     @else
-                                                        <div class="d-flex justify-content-between">
+                                                        <div class="d-flex gap-5 justify-content-between">
                                                             <p>{{ $tax->tax_name }}({{ $tax->tax_percentage }}%):</p>
                                                             <p class="mb-2 fw-semibold">
                                                                 GH₵{{ number_format($secondaryTax, 2) }}
@@ -195,7 +211,7 @@
                                             // Calculate the final total price after adding the tax
                                             $finalTotalPrice = $totalPrice + $totalTax;
                                         @endphp
-                                        <div class="d-flex justify-content-between">
+                                        <div class="d-flex gap-5 justify-content-between">
                                             <p class="mb-0">Total:</p>
                                             <p class="mb-0 fw-semibold">GH₵{{ number_format($finalTotalPrice, 2) }}</p>
                                         </div>

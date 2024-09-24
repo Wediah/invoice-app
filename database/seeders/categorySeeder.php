@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\companyCategory;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
@@ -14,9 +15,6 @@ class categorySeeder extends Seeder
      */
     public function run(): void
     {
-        DB::table('company_categories')->insert([
-            'name' => Str::random(10),
-            'slug' => Str::random(10),
-        ]);
+        CompanyCategory::factory()->count(20)->create();
     }
 }
