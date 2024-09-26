@@ -61,10 +61,10 @@ Route::middleware('auth')->group(function () {
     Route::get('/{slug}/unpaid-invoices', [InvoiceController::class, 'unpaidInvoices'])->name('invoice.allunpaid');
     Route::post('/{slug}/invoice', [invoiceController::class, 'store'])->name('invoice.store');
     Route::get('/{slug}/invoice', [invoiceController::class, 'create'])->name('invoice.create');
-    Route::get('/invoice/{id}', [invoiceController::class, 'show'])->name('invoice.show')->withTrashed();
+    Route::get('{slug}/invoice/{id}', [invoiceController::class, 'show'])->name('invoice.show')->withTrashed();
     Route::get('/get-price', [invoiceController::class, 'getPrice'])->name('getPrice');
     Route::delete('/invoice/{id}/delete', [invoiceController::class, 'destroy'])->name('invoice.delete');
-    Route::get('/invoice/{id}/edit', [invoiceController::class, 'edit'])->name('invoice.edit');
+    Route::get('{slug}/invoice/{id}/edit', [invoiceController::class, 'edit'])->name('invoice.edit');
     Route::patch('/invoice/{id}/paid', [invoiceController::class, 'paidInvoice'])->name('invoice.paid');
     Route::patch('/invoice/{id}/unpaid', [invoiceController::class, 'unpaidInvoice'])->name('invoice.unpaid');
     Route::patch('/invoice/{id}/update', [invoiceController::class, 'update'])->name('invoice.update');

@@ -98,14 +98,16 @@
 
                                     <td>
                                         <div class="d-flex align-items-center">
-                                            <a href="{{ route('invoice.edit', ['id' => $invoice->id]) }}"
+                                            <a href="{{ route('invoice.edit', ['slug' => $company->slug, 'id' =>
+                                            $invoice->id]) }}"
                                                 data-bs-toggle="tooltip" class="text-body" data-bs-placement="top"
                                                 title="" data-bs-original-title="Edit Invoice"
                                                 aria-label="Edit Invoice">
                                                 <i class="bx bx-edit"></i>
                                             </a>
 
-                                            <a href="{{ route('invoice.show', ['id' => $invoice->id]) }}"
+                                            <a href="{{ route('invoice.show', ['slug' => $company->slug, 'id' =>
+                                            $invoice->id]) }}"
                                                 data-bs-toggle="tooltip" class="text-body" data-bs-placement="top"
                                                 title="" data-bs-original-title="Preview Invoice"
                                                 aria-label="Preview Invoice"><i class="mx-1 bx bx-show"></i>

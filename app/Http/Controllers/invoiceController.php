@@ -159,32 +159,34 @@ class invoiceController extends Controller
 
         $this->extracted($request, $invoice);
 
-        return redirect()->route('invoice.show', $invoice->id)->with('success', 'Product added to cart successfully!');
+        return redirect()->route('invoice.show',['slug' => $company->slug, 'id' => $invoice->id])->with('success', 'Product added to cart successfully!');
 //        return redirect()->back()->with('success', 'Invoice Created Successfully');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show($id)
+    public function show($slug, $id)
     {
         $user = Auth::user();
+        $company = Company::where('slug', $slug)->firstOrFail();
         $invoice = invoice::with('catalogs', 'taxes', 'customerInfo')->findOrFail($id);
 
-        return view('invoice.show', compact('invoice', 'user'));
+        return view('invoice.show', compact('invoice', 'user', 'company'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id): Factory|Application|View|\Illuminate\Contracts\Foundation\Application
+    public function edit($slug,string $id): Factory|Application|View|\Illuminate\Contracts\Foundation\Application
     {
+        $companySlug = Company::where('slug', $slug)->firstOrFail();
         $invoice = invoice::with('company')->where('id', $id)->firstOrFail();
         $company = $invoice->company;
         $catalogs = $company->catalogs;
         $taxes = $company->taxes;
 
-        return view('invoice.edit', compact('invoice', 'company', 'catalogs', 'taxes'));
+        return view('invoice.edit', compact('invoice', 'company', 'catalogs', 'taxes', 'companySlug'));
     }
 
     public function paidInvoice(string $id): RedirectResponse
