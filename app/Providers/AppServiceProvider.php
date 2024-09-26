@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Models\Company;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
@@ -24,7 +25,12 @@ class AppServiceProvider extends ServiceProvider
         View::composer('sections.aside', function ($view) {
             $user = auth()->user();
             $companies = $user ? $user->companies : collect();
-            $view->with('companies', $companies);
+
+            $currentSlug = Route::current()->parameter('slug');
+            $currentCompany  = $companies->firstWhere('slug', $currentSlug);
+
+            $view->with('companies', $companies)
+                ->with('currentCompany', $currentCompany);
         });
     }
 }

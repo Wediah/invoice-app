@@ -1,4 +1,4 @@
-<x-masterLayout>
+<x-secondaryLayout>
     @section('title', 'Your Companies')
 
     <div class="container-xxl flex-grow-1 container-p-y">
@@ -90,4 +90,4 @@
 
 
     <!--/ Connection Cards -->
-</x-masterLayout>
+</x-secondaryLayout>
