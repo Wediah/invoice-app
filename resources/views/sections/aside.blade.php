@@ -38,22 +38,22 @@
             </a>
             <ul class="menu-sub">
                 <li class="menu-item">
-                    <a href="{{ route('invoice.index',['slug'=>$companies->first()->slug]) }}" class="menu-link">
+                    <a href="{{ route('invoice.index',['slug'=>$currentCompany->slug]) }}" class="menu-link">
                         <div data-i18n="List">List</div>
                     </a>
                 </li>
                 <li class="menu-item">
-                    <a href="{{ route('invoice.create',['slug'=>$companies->first()->slug]) }}" class="menu-link">
+                    <a href="{{ route('invoice.create',['slug'=>$currentCompany->slug]) }}" class="menu-link">
                         <div data-i18n="Create New">Create New</div>
                     </a>
                 </li>
                 <li class="menu-item">
-                    <a href="{{ route('invoice.allunpaid', ['slug' => $companies->first()->slug]) }}" class="menu-link">
+                    <a href="{{ route('invoice.allunpaid', ['slug' => $currentCompany->slug]) }}" class="menu-link">
                         <div data-i18n="Edit">Pending</div>
                     </a>
                 </li>
                 <li class="menu-item">
-                    <a href="{{ route('invoice.allpaid', ['slug' => $companies->first()->slug]) }}" class="menu-link">
+                    <a href="{{ route('invoice.allpaid', ['slug' => $currentCompany->slug]) }}" class="menu-link">
                         <div data-i18n="Add">Paid</div>
                     </a>
                 </li>
@@ -67,19 +67,19 @@
             <ul class="menu-sub">
                 @if($companies->isNotEmpty())
                     <li class="menu-item">
-                        <a href="{{ route('catalog.index', ['slug' => $companies->first()->slug]) }}" class="menu-link">
+                        <a href="{{ route('catalog.index', ['slug' => $currentCompany->slug]) }}" class="menu-link">
                             <div data-i18n="List">List</div>
                         </a>
                     </li>
                @endif
                 <li class="menu-item">
-                    <a href="{{ route('catalog.inStock', ['slug' => $companies->first()->slug]) }}"
+                    <a href="{{ route('catalog.inStock', ['slug' => $currentCompany->slug]) }}"
                        class="menu-link">
                         <div data-i18n="Active">In-Stock</div>
                     </a>
                 </li>
                 <li class="menu-item">
-                    <a href="{{ route('catalog.outOfStock', ['slug' => $companies->first()->slug]) }}"
+                    <a href="{{ route('catalog.outOfStock', ['slug' => $currentCompany->slug]) }}"
                        class="menu-link">
                         <div data-i18n="Icons">Out Of Stock</div>
                     </a>
@@ -102,18 +102,18 @@
             </a>
             <ul class="menu-sub">
                 <li class="menu-item">
-                    <a href="{{ route('tax.index',['slug'=>$companies->first()->slug]) }}" class="menu-link">
+                    <a href="{{ route('tax.index',['slug'=>$currentCompany->slug]) }}" class="menu-link">
                         <div data-i18n="List">List</div>
                     </a>
                 </li>
 
                 <li class="menu-item">
-                    <a href="{{ route('tax.primary',['slug'=>$companies->first()->slug]) }}" class="menu-link">
+                    <a href="{{ route('tax.primary',['slug'=>$currentCompany->slug]) }}" class="menu-link">
                         <div data-i18n="Edit">Primary</div>
                     </a>
                 </li>
                 <li class="menu-item">
-                    <a href="{{ route('tax.secondary',['slug'=>$companies->first()->slug]) }}" class="menu-link">
+                    <a href="{{ route('tax.secondary',['slug'=>$currentCompany->slug]) }}" class="menu-link">
                         <div data-i18n="Add">Secondary</div>
                     </a>
                 </li>

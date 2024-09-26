@@ -270,7 +270,7 @@
         </div>
     </div>
 
-    <div class="pt-0 print-only">
+    <div class="pt-0 mt-0 print-only">
         <div class="card-body">
             <div  class="p-sm-3 row">
                 <div class="gap-2 d-flex svg-illustration align-items-baseline">
