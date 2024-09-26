@@ -1,4 +1,4 @@
-<x-masterLayout>
+<x-secondaryLayout>
     @push('styles')
         <style>
             .blabel {
@@ -166,7 +166,7 @@
 
 
                                     </div>
-                                  
+
                                     <div class="mb-4 col-sm-6">
                                         <label for="website" class="form-label blabel">Website URL</label>
 
@@ -263,4 +263,4 @@
             };
         }
     </script>
-</x-masterLayout>
+</x-secondaryLayout>
