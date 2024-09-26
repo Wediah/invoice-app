@@ -61,7 +61,7 @@
     @stack('styles')
 </head>
 <body>
-<nav class="navbar bg-body-tertiary">
+{{-- <nav class="navbar bg-body-tertiary">
     <div class="container-fluid">
         <a href="javascript:void" class="app-brand-link">
             <img src="{{ asset('assets/img/pages/logo.png') }}" alt="logo logo" width="20%">
@@ -73,9 +73,63 @@
             <button class="btn btn-outline-success" type="submit">Search</button>
         </form>
     </div>
-</nav>
+</nav> --}}
 
-{{ $slot }}
 
+
+<div class="layout-wrapper layout-content-navbar">
+    <div class="container app-brand demo" >
+        <a href="javascript:void" class="app-brand-link">
+            <img src="{{ asset('assets/img/pages/logo.png') }}" alt="logo logo" width="60px" >
+    
+            <span class="app-brand-text demo menu-text fw-bold ms-2" style="font-size: 24px">Apollo</span>
+        </a>
+    
+       
+    </div>
+        <div class="layout-page">
+            @include('sections.nav')
+        </div>
+    
+</div>
+<div>
+    
+</div>
+
+    {{ $slot }}
+
+
+    <script src="{{ asset('assets/vendor/libs/jquery/jquery.js') }}"></script>
+    <script src="{{ asset('assets/vendor/libs/popper/popper.js') }}"></script>
+    <script src="{{ asset('assets/vendor/js/bootstrap.js') }}"></script>
+    <script src="{{ asset('assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.js') }}"></script>
+
+    <script src="{{ asset('assets/vendor/libs/hammer/hammer.js') }}"></script>
+
+    <script src="{{ asset('assets/vendor/libs/i18n/i18n.js') }}"></script>
+    <script src="{{ asset('assets/vendor/libs/typeahead-js/typeahead.js') }}"></script>
+
+    <script src="{{ asset('assets/vendor/js/menu.js') }}"></script>
+    <!-- endbuild -->
+
+    <!-- Vendors JS -->
+    <script src="{{ asset('assets/vendor/libs/autosize/autosize.js') }}"></script>
+    <script src="{{ asset('assets/vendor/libs/cleavejs/cleave.js') }}"></script>
+    <script src="{{ asset('assets/vendor/libs/cleavejs/cleave-phone.js') }}"></script>
+    <script src="{{ asset('assets/vendor/libs/moment/moment.js') }}"></script>
+    <script src="{{ asset('assets/vendor/libs/flatpickr/flatpickr.js') }}"></script>
+    <script src="{{ asset('assets/vendor/libs/select2/select2.js') }}"></script>
+    <script src="{{ asset('assets/vendor/libs/jquery-repeater/jquery-repeater.js') }}"></script>
+    <script src="{{ asset('assets/js/forms-selects.js') }}"></script>
+
+    <script src="{{ asset('assets/vendor/libs/formvalidation/dist/js/FormValidation.min.js') }}"></script>
+    <!-- Main JS -->
+    <script src="{{ asset('assets/js/main.js') }}"></script>
+
+    <!-- Page JS -->
+    <script src="{{ asset('assets/js/form-layouts.js') }}"></script>
+    <script src="{{ asset('assets/js/forms-extras.js') }}"></script>
+    <script src="{{ asset('assets/js/app-invoice-add.js') }}"></script>
+    <script src="{{ asset('assets/js/pages-auth.js') }}"></script>
 </body>
 </html>
