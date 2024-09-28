@@ -36,7 +36,6 @@
             enctype="multipart/form-data">
             @csrf
             <div class="row invoice-add">
-
                 <!-- Invoice Add-->
                 <div class="mb-4 col-lg-9 col-12 mb-lg-0">
                     <div class="card invoice-preview-card">
