@@ -243,10 +243,10 @@
                     <div class="card-body">
                         <button onclick="window.print()" class="mb-3 btn btn-primary d-grid w-100">Download</button>
                         <button onclick="window.print()" class="mb-3 btn btn-secondary d-grid w-100">Print</button>
-                        {{-- <a href="{{ route('invoice.edit', ['slug' => $company->slug, 'id' => $invoice->id]) }}"
+                        <a href="{{ route('invoice.edit', ['slug' => $company->slug, 'id' => $invoice->id]) }}"
                             class="mb-3 btn btn-label-secondary d-grid w-100">
                             Edit Invoice
-                        </a> --}}
+                        </a>
                         <a href="{{ route('invoice.index', ['slug' => $invoice->company->slug]) }}"
                             class="mb-3 btn btn-label-secondary d-grid w-100">
                             All Invoices
