@@ -44,7 +44,8 @@
                             <td>
                                 <div class="d-flex gap-2 items-center">
                                     <i class='bx bx-send'></i>
-                                    <a href="{{ route('invoice.show', ['id' => $invoice->id]) }}">
+                                    <a href="{{ route('invoice.show', ['slug' => $company->slug, 'id' => $invoice->id])
+                                    }}">
                                         <i class='bx bx-show'></i>
                                     </a>
                                     <div class="btn-group">
@@ -72,7 +73,9 @@
                                             </li>
                                             <li><button class="dropdown-item" type="button">Download</button></li>
                                             <li>
-                                                <a class="dropdown-item" href="{{ route('invoice.edit', ['id' =>
+                                                <a class="dropdown-item" href="{{ route('invoice.edit', ['slug' =>
+                                                $company->slug,
+                                                'id' =>
                                                 $invoice->id]) }}">
                                                     Edit
                                                 </a>
