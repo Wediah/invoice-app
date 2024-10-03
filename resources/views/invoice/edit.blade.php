@@ -129,7 +129,8 @@
                                                             <input type="text" class="form-control no-border"
                                                                 name="customer_name" placeholder="Enter Customer Name"
                                                                 aria-label="Enter Customer Name"
-                                                                aria-describedby="basic-addon11" value="" />
+                                                                aria-describedby="basic-addon11"
+                                                                   value="{{$invoice->customerInfo->customer_name}}" />
                                                         </div>
                                                         <div class="mb-0 col">
                                                             <label for="customer_email" class="form-label">Customer
@@ -137,7 +138,8 @@
                                                             <input type="text" class="form-control no-border"
                                                                 name="customer_email" placeholder="Enter Customer Email"
                                                                 aria-label="Enter Customer Email"
-                                                                aria-describedby="basic-addon11" value="" />
+                                                                aria-describedby="basic-addon11"
+                                                                   value="{{$invoice->customerInfo->customer_email}}" />
                                                         </div>
                                                     </div>
                                                     <div class="mb-3 row g-4">
@@ -148,7 +150,8 @@
                                                                 name="customer_address"
                                                                 placeholder="Enter Customer Address"
                                                                 aria-label="Enter Enter Customer Address"
-                                                                aria-describedby="basic-addon11" value="" />
+                                                                aria-describedby="basic-addon11"
+                                                                   value="{{$invoice->customerInfo->customer_address}}" />
                                                         </div>
                                                         <div class="mb-0 col">
                                                             <label for="customer_mobile" class="form-label">Customer
@@ -157,7 +160,8 @@
                                                                 placeholder="Enter Customer Mobile"
                                                                 aria-label="Enter Customer Mobile"
                                                                 name="customer_mobile"
-                                                                aria-describedby="basic-addon11" value="" />
+                                                                aria-describedby="basic-addon11"
+                                                                   value="{{$invoice->customerInfo->customer_mobile}}" />
                                                         </div>
                                                     </div>
                                                     <div class="mb-3 row g-4">
@@ -168,7 +172,8 @@
                                                                 name="customer_phone"
                                                                 placeholder="Enter Customer Phone"
                                                                 aria-label="Enter Customer Phone"
-                                                                aria-describedby="basic-addon11" value="" />
+                                                                aria-describedby="basic-addon11"
+                                                                   value="{{$invoice->customerInfo->customer_phone}}" />
                                                         </div>
                                                         {{-- <div class="mb-0 col">
                                                             <label for="fax_number" class="form-label">Fax
@@ -210,100 +215,141 @@
                             </div>
 
                             <hr class="mx-n4" />
-
                             <div class="source-item py-sm-3">
                                 <div class="mb-3" data-repeater-list="group-a">
                                     <div class="pt-0 repeater-wrapper pt-md-4" data-repeater-item>
-                                        <div class="border rounded d-flex position-relative pe-0">
-                                            <div class="p-3 m-0 row w-100">
-                                                <div class="mb-3 col-md-4 col-12 mb-md-0 ps-md-0">
-                                                    <p class="mb-2 repeater-title">Item</p>
-                                                    <select name="group-a[0][catalog_id]"
-                                                        class="mb-2 catalog_id form-select item-detailsX">
-                                                        <option selected disabled>Select Item</option>
-                                                        @foreach ($catalogs as $catalog)
-                                                            <option value="{{ $catalog->id }}">
-                                                                {{ $catalog->name }}
-                                                            </option>
-                                                        @endforeach
-                                                    </select>
-                                                </div>
+{{--                                        <div class="border rounded d-flex position-relative pe-0">--}}
+{{--                                            <div class="p-3 m-0 row w-100">--}}
+{{--                                                <div class="mb-3 col-md-4 col-12 mb-md-0 ps-md-0">--}}
+{{--                                                    <p class="mb-2 repeater-title">Item</p>--}}
+{{--                                                    <select--}}
+{{--                                                        name="group-a[0][catalog_id]"--}}
+{{--                                                        class="mb-2 catalog_id form-select item-detailsX" multiple--}}
+{{--                                                    >--}}
+{{--                                                        <option selected disabled>Select Item</option>--}}
+{{--                                                        @foreach ($catalogs as $catalog)--}}
+{{--                                                            <option value="{{ $catalog->id }}">--}}
+{{--                                                                {{ $catalog->name }}--}}
+{{--                                                            </option>--}}
+{{--                                                        @endforeach--}}
+{{--                                                    </select>--}}
+{{--                                                </div>--}}
 
-                                                <div class="col-md-3 col-12 pe-0">
-                                                    <p class="mb-2 repeater-title">Unit Cost</p>
-                                                    <div class="input-group">
-                                                        <span class="input-group-text">{{ $company->currency ?? 'GHS' }}</span>
-                                                        <input type="number" name="price"
-                                                            class="form-control invoice-item-price " required
-                                                            readonly />
+{{--                                                <div class="col-md-3 col-12 pe-0">--}}
+{{--                                                    <p class="mb-2 repeater-title">Unit Cost</p>--}}
+{{--                                                    <div class="input-group">--}}
+{{--                                                        <span class="input-group-text">{{ $company->currency ?? 'GHS' }}</span>--}}
+{{--                                                        <input type="number" name="price"--}}
+{{--                                                            class="form-control invoice-item-price " required--}}
+{{--                                                            readonly />--}}
+{{--                                                    </div>--}}
+
+{{--                                                </div>--}}
+{{--                                                <div class="mb-3 col-md-2 col-12 mb-md-0">--}}
+{{--                                                    <p class="mb-2 repeater-title">Qty</p>--}}
+{{--                                                    <input type="number" name="group-a[0][quantity]"--}}
+{{--                                                        class="form-control quantity invoice-item-qty" min="1"--}}
+{{--                                                        required />--}}
+{{--                                                </div>--}}
+{{--                                                <div class="col-md-3 col-12 pe-0">--}}
+{{--                                                    <p class="mb-2 repeater-title">Sub Total</p>--}}
+{{--                                                    <div class="input-group">--}}
+{{--                                                        <span class="input-group-text">{{ $company->currency ?? 'GHS'}}</span>--}}
+{{--                                                        <input type="number" name="total[]"--}}
+{{--                                                            class="form-control invoice-item-sub_total "--}}
+{{--                                                            aria-label="Amount " required readonly />--}}
+{{--                                                    </div>--}}
+{{--                                                    <div>--}}
+{{--                                                        <span>Discount:</span>--}}
+{{--                                                        <span class="discount me-2">0%</span>--}}
+
+{{--                                                    </div>--}}
+{{--                                                </div>--}}
+{{--                                            </div>--}}
+{{--                                            <div--}}
+{{--                                                class="p-2 d-flex flex-column align-items-center justify-content-between border-start">--}}
+
+{{--                                                <div>--}}
+{{--                                                    <button style="border: none;background:none" id="hide-repeater"--}}
+{{--                                                        data-bs-toggle="tooltip"--}}
+{{--                                                        title="To hide this row, Please clear quantity first"--}}
+{{--                                                        data-bs-placement="top" data-repeater-delete>--}}
+{{--                                                        <i class="cursor-pointer bx bx-x fs-4 text-muted">--}}
+{{--                                                        </i>--}}
+{{--                                                    </button>--}}
+{{--                                                </div>--}}
+
+
+{{--                                                <div class="dropdown">--}}
+
+{{--                                                    <i class="cursor-pointer bx bx-cog bx-xs text-muted more-options-dropdown"--}}
+{{--                                                        role="button" id="dropdownMenuButton"--}}
+{{--                                                        data-bs-toggle="dropdown" data-bs-auto-close="outside"--}}
+{{--                                                        aria-expanded="false">--}}
+{{--                                                    </i>--}}
+
+
+{{--                                                    <div class="p-3 dropdown-menu dropdown-menu-end w-px-300"--}}
+{{--                                                        aria-labelledby="dropdownMenuButton">--}}
+{{--                                                        <div class="row g-3">--}}
+{{--                                                            <div class="col-12">--}}
+{{--                                                                <label for="discount_percent[]"--}}
+{{--                                                                    class="form-label">Discount(%)</label>--}}
+{{--                                                                <input type="number" class="form-control"--}}
+{{--                                                                    id="discountInput" min="1"--}}
+{{--                                                                    name="group-a[0][discount_percent]"--}}
+{{--                                                                    max="100" />--}}
+{{--                                                            </div>--}}
+
+{{--                                                        </div>--}}
+{{--                                                        <div class="my-3 dropdown-divider"></div>--}}
+{{--                                                        <button type="button"--}}
+{{--                                                            class="btn btn-label-primary btn-apply-changes">Apply--}}
+{{--                                                        </button>--}}
+{{--                                                    </div>--}}
+{{--                                                </div>--}}
+{{--                                            </div>--}}
+{{--                                        </div>--}}
+                                        @foreach ($invoice->catalogs as $index => $catalog)
+                                            <div class="border rounded d-flex position-relative pe-0 repeater-wrapper">
+                                                <div class="p-3 m-0 row w-100">
+                                                    <div class="mb-3 col-md-4 col-12 mb-md-0 ps-md-0">
+                                                        <p class="mb-2 repeater-title">Item</p>
+                                                        <select name="group-a[{{ $index }}][catalog_id]" class="mb-2 catalog_id form-select item-detailsX" data-index="{{ $index }}">
+                                                            <option selected disabled>Select Item</option>
+                                                            @foreach ($allCatalogs as $item)
+                                                                <option value="{{ $item->id }}" {{ $catalog->id == $item->id ? 'selected' : '' }}>
+                                                                    {{ $item->name }}
+                                                                </option>
+                                                            @endforeach
+                                                        </select>
                                                     </div>
 
-                                                </div>
-                                                <div class="mb-3 col-md-2 col-12 mb-md-0">
-                                                    <p class="mb-2 repeater-title">Qty</p>
-                                                    <input type="number" name="group-a[0][quantity]"
-                                                        class="form-control quantity invoice-item-qty" min="1"
-                                                        required />
-                                                </div>
-                                                <div class="col-md-3 col-12 pe-0">
-                                                    <p class="mb-2 repeater-title">Sub Total</p>
-                                                    <div class="input-group">
-                                                        <span class="input-group-text">{{ $company->currency ?? 'GHS'}}</span>
-                                                        <input type="number" name="total[]"
-                                                            class="form-control invoice-item-sub_total "
-                                                            aria-label="Amount " required readonly />
-                                                    </div>
-                                                    <div>
-                                                        <span>Discount:</span>
-                                                        <span class="discount me-2">0%</span>
-
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div
-                                                class="p-2 d-flex flex-column align-items-center justify-content-between border-start">
-
-                                                <div>
-                                                    <button style="border: none;background:none" id="hide-repeater"
-                                                        data-bs-toggle="tooltip"
-                                                        title="To hide this row, Please clear quantity first"
-                                                        data-bs-placement="top" data-repeater-delete>
-                                                        <i class="cursor-pointer bx bx-x fs-4 text-muted">
-                                                        </i>
-                                                    </button>
-                                                </div>
-
-
-                                                <div class="dropdown">
-
-                                                    <i class="cursor-pointer bx bx-cog bx-xs text-muted more-options-dropdown"
-                                                        role="button" id="dropdownMenuButton"
-                                                        data-bs-toggle="dropdown" data-bs-auto-close="outside"
-                                                        aria-expanded="false">
-                                                    </i>
-
-
-                                                    <div class="p-3 dropdown-menu dropdown-menu-end w-px-300"
-                                                        aria-labelledby="dropdownMenuButton">
-                                                        <div class="row g-3">
-                                                            <div class="col-12">
-                                                                <label for="discount_percent[]"
-                                                                    class="form-label">Discount(%)</label>
-                                                                <input type="number" class="form-control"
-                                                                    id="discountInput" min="1"
-                                                                    name="group-a[0][discount_percent]"
-                                                                    max="100" />
-                                                            </div>
-
+                                                    <div class="col-md-3 col-12 pe-0">
+                                                        <p class="mb-2 repeater-title">Unit Cost</p>
+                                                        <div class="input-group">
+                                                            <span class="input-group-text">{{ $company->currency ?? 'GHS' }}</span>
+                                                            <input type="number" name="group-a[{{ $index }}][price]" class="form-control invoice-item-price" data-index="{{ $index }}" readonly />
                                                         </div>
-                                                        <div class="my-3 dropdown-divider"></div>
-                                                        <button type="button"
-                                                            class="btn btn-label-primary btn-apply-changes">Apply
-                                                        </button>
+                                                    </div>
+
+                                                    <div class="mb-3 col-md-2 col-12 mb-md-0">
+                                                        <p class="mb-2 repeater-title">Qty</p>
+                                                        <input type="number" name="group-a[{{ $index }}][quantity]" class="form-control quantity invoice-item-qty" min="1" data-index="{{ $index }}" required />
+                                                    </div>
+
+                                                    <div class="col-md-3 col-12 pe-0">
+                                                        <p class="mb-2 repeater-title">Sub Total</p>
+                                                        <div class="input-group">
+                                                            <span class="input-group-text">{{ $company->currency ?? 'GHS' }}</span>
+                                                            <input type="number" name="group-a[{{ $index }}][total]" class="form-control invoice-item-sub_total" data-index="{{ $index }}" required readonly />
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
+                                        @endforeach
+
+
                                     </div>
                                 </div>
                                 <div class="row">
@@ -366,7 +412,8 @@
                                 <div class="col-12">
                                     <div class="mb-3">
                                         <label for="note" class="form-label fw-semibold">Note:</label>
-                                        <textarea class="form-control" rows="2" id="note" placeholder="Invoice note" name="notes"></textarea>
+                                        <textarea class="form-control" rows="2" id="note"
+                                            name="notes">{{ $invoice->notes }}</textarea>
                                     </div>
                                 </div>
                             </div>
@@ -385,15 +432,16 @@
                     <div class="mb-5 card">
                         <div class="card-body">
                             <h6 class="mb-2">Taxes</h6>
-                            @foreach ($taxes as $tax)
+                            @foreach ($allTaxes as $tax)
                                 <div class="gap-2 mb-2 d-flex justify-content-between align-items-center">
                                     <label for="tax-{{ $tax->id }}"
-                                        class="mb-0 badge bg-label-{{ $tax->type === 'SECONDARY' ? 'warning' : 'primary' }} text-wrap">
+                                           class="mb-0 badge bg-label-{{ $tax->type === 'SECONDARY' ? 'warning' : 'primary' }} text-wrap">
                                         {{ $tax->tax_name }} {{ $tax->tax_percentage }}%
                                     </label>
                                     <label class="switch switch-primary">
                                         <input type="checkbox" class="switch-input" id="tax-{{ $tax->id }}"
-                                            name="tax_ids[]" value="{{ $tax->id }}" />
+                                               name="tax_ids[]" value="{{ $tax->id }}"
+                                            {{ in_array($tax->id, $invoiceTaxes) ? 'checked' : '' }} />
                                         <span class="switch-toggle-slider">
                                             <span class="switch-on"><i class="bx bx-check"></i></span>
                                             <span class="switch-off"><i class="bx bx-x"></i></span>
@@ -402,6 +450,7 @@
                                     </label>
                                 </div>
                             @endforeach
+
                         </div>
                     </div>
                     <div class="mb-4 card">

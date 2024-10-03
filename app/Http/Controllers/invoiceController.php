@@ -180,13 +180,14 @@ class invoiceController extends Controller
      */
     public function edit($slug,string $id): Factory|Application|View|\Illuminate\Contracts\Foundation\Application
     {
-        $companySlug = Company::where('slug', $slug)->firstOrFail();
-        $invoice = invoice::with('company')->where('id', $id)->firstOrFail();
-        $company = $invoice->company;
-        $catalogs = $company->catalogs;
-        $taxes = $company->taxes;
+        $company = Company::where('slug', $slug)->firstOrFail();
+        $invoice = invoice::with('company', 'taxes')->where('id', $id)->firstOrFail();
+        $allCatalogs = $company->catalogs;
+        $invoiceCatalogs = $company->catalogs->pluck('id')->toArray();
+        $allTaxes = $company->taxes;
+        $invoiceTaxes = $invoice->taxes->pluck('id')->toArray();
 
-        return view('invoice.edit', compact('invoice', 'company', 'catalogs', 'taxes', 'companySlug'));
+        return view('invoice.edit', compact('invoice', 'company', 'allCatalogs', 'invoiceCatalogs', 'allTaxes', 'invoiceTaxes'));
     }
 
     public function paidInvoice(string $id): RedirectResponse
@@ -214,10 +215,9 @@ class invoiceController extends Controller
     public function update(Request $request, string $id)
     {
         $invoice = invoice::findOrFail($id);
-
         $user_id = Auth::id();
-
         $company_id = $invoice->company_id;
+        $company = $invoice->company;
 
         $validatedData = $request->validate([
             'customer_name' => 'required|string|max:255',
@@ -261,7 +261,7 @@ class invoiceController extends Controller
 
         $this->extracted($request, $invoice);
 
-        return redirect()->route('invoice.show', $invoice->id)->with('success', 'Invoice updated successfully!');
+        return redirect()->route('invoice.show',['slug' => $company->slug, 'id' => $invoice->id])->with('success', 'Invoice updated successfully!');
     }
 
     /**

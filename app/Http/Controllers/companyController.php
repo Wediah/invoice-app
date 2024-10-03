@@ -50,7 +50,7 @@ class companyController extends Controller
         $validated = request()->validate([
             'name' => 'required|string|unique:companies,name',
             'email' => 'required|string|unique:companies,email',
-            'phone' => 'required|string|unique:companies,phone',
+            'phone' => 'required|string',
             'address' => 'required|string',
             'gps_address' => 'required|string',
             'logo' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
