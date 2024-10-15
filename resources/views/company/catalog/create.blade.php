@@ -25,7 +25,7 @@
     </style>
 @endpush
     <div class="container-xxl flex-grow-1 container-p-y">
-        
+
         <h4 class="py-3 mb-4 breadcrumb-wrapper">
             <span class="text-muted fw-light"><a href="{{ route('catalog.index', ['slug' => $company->slug]) }} " style="color: #A8B1BB">All Catalog</a>
                 /</span>
