@@ -57,6 +57,7 @@ class invoiceController extends Controller
         $catalogs = $company->catalogs;
         $taxes = $company->taxes;
         $latestInvoice = invoice::where('company_id', $company_id)
+            ->where('invoice_number', 'NOT REGEXP', '^UP')
             ->orderBy('created_at', 'desc')
             ->first();
 
@@ -68,21 +69,12 @@ class invoiceController extends Controller
             $latestNumber = $company->invoice_numbering;
         }
 
-        $invoiceSuffix = $latestNumber += 1;
+        $invoiceSuffix = ++$latestNumber;
         $invoiceNumber = strtoupper($company->invoice_prefix) . '-' . $invoiceSuffix;
+
         return view('invoice.create', compact('company', 'catalogs', 'user', 'taxes', 'latestInvoice', 'invoiceNumber'));
     }
 
-    // public function getPrice(Request $request)
-    // {
-    //     $catalog = Catalog::find($request->id);
-
-    //     if ($catalog) {
-    //         return response()->json(['price' => $catalog->price]);
-    //     } else {
-    //         return response()->json(['error' => 'Catalog not found'], 404);
-    //     }
-    // }
     public function getPrice(Request $request)
 {
     $itemId = $request->id;
@@ -123,6 +115,7 @@ class invoiceController extends Controller
         ]);
 
         $latestInvoice = invoice::where('company_id', $company_id)
+            ->where('invoice_number', 'NOT REGEXP', '^UP')
             ->orderBy('created_at', 'desc')
             ->first();
 
@@ -134,7 +127,7 @@ class invoiceController extends Controller
             $latestNumber = $company->invoice_numbering;
         }
 
-        $invoiceSuffix = $latestNumber += 1;
+        $invoiceSuffix = ++$latestNumber;
         $invoiceNumber = strtoupper($company->invoice_prefix) . '-' . $invoiceSuffix;
 
         $invoice = Invoice::create([
@@ -223,7 +216,6 @@ class invoiceController extends Controller
             'customer_name' => 'required|string|max:255',
             'catalog_id.*' => 'required|exists:catalogs,id',
             'quantity.*' => 'required|integer|min:1',
-            'tax_id.*' => 'required|exists:taxes,id',
             'discount_percent.*' => 'numeric|min:0',
             'customer_email' => 'string|email|nullable|max:255',
             'customer_phone' => 'string|nullable|max:255',
@@ -231,8 +223,6 @@ class invoiceController extends Controller
             'customer_mobile' => 'string|nullable|max:255',
             'due_date' => 'string|nullable|max:255',
             'notes' => 'string|nullable|max:255',
-            'total' => 'required|numeric|regex:/^\d+(\.\d{1,2})?$/',
-            'salesperson' => 'required|string|max:255'
         ]);
 
         $latestInvoiceNumber = $invoice->invoice_number;
