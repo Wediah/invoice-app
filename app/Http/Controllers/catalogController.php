@@ -69,6 +69,7 @@ class catalogController extends Controller
                 [
                     'stock_name' => 'required|max:255|string',
                     'stock_description' => 'required|string|min:5|max:300',
+                    'unit_of_measurement' => 'required|max:255|string',
                     'stock_price' => 'required|string',
 
                 ]
@@ -91,12 +92,14 @@ class catalogController extends Controller
             $stock_name = $prop['stock_name'];
             $stock_price = $prop['stock_price'];
             $stock_description = $prop['stock_description'];
+            $stock_unit_of_measurement = $prop['stock_unit_of_measurement'];
 
 
             $stockData = new Catalog();
             $stockData->company_id = $company_id;
             $stockData->name = $stock_name;
             $stockData->description = $stock_description;
+            $stockData->unit_of_measurement = $stock_unit_of_measurement;
             $stockData->price = $stock_price;
             $stockData->save();
 
@@ -142,6 +145,7 @@ class catalogController extends Controller
         $validatedData = $request->validate([
             'stock_name' => 'sometimes|max:255|string',
             'stock_description' => 'sometimes|string|min:5|max:300',
+            'unit_of_measurement' => 'sometimes|max:255|string',
             'stock_price' => 'sometimes|string',
             //            'catalog_images.*' => 'sometimes|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
