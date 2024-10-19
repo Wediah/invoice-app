@@ -121,16 +121,16 @@ class companyController extends Controller
     {
         $company = Company::where('slug', $slug)->first();
         $validated = request()->validate([
-            'account_number' => 'string',
-            'bank_name' => 'string',
-            'bank_branch' => 'string',
-            'swift_code' => 'string',
-            'merchant_network' => 'string',
-            'merchant_number' => 'string',
-            'merchant_id' => 'string',
-            'merchant_name' => 'string',
-            'currency' => 'string',
-            'tax_identification_number' => 'string'
+            'account_number' => 'sometimes|nullable|string',
+            'bank_name' => 'sometimes|nullable|string',
+            'bank_branch' => 'sometimes|nullable|string',
+            'swift_code' => 'sometimes|nullable|string',
+            'merchant_network' => 'sometimes|nullable|string',
+            'merchant_number' => 'sometimes|nullable|string',
+            'merchant_id' => 'sometimes|nullable|string',
+            'merchant_name' => 'sometimes|nullable|string',
+            'currency' => 'sometimes|nullable|string',
+            'tax_identification_number' => 'sometimes|nullable|string'
         ]);
 
         $financialData = array(
@@ -157,8 +157,8 @@ class companyController extends Controller
         $company = Company::where('slug', $slug)->first();
 
         $Data = request()->validate([
-            'invoice_prefix' => 'string',
-            'invoice_numbering' => 'string|min:2'
+            'invoice_prefix' => 'nullable',
+            'invoice_numbering' => 'sometimes|nullable|numeric',
         ]);
 
         $validatedData = [

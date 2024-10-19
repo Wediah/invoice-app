@@ -25,6 +25,10 @@
                 opacity: 1;
             }
 
+            .epmty-field-color {
+                color: #ff5b5c !important;
+            }
+
             .error-2 {
                 color: #ff5b5c
             }
@@ -88,11 +92,12 @@
                                             </div>
                                         </dd>
                                         <dt class="mb-2 col-sm-6 mb-sm-0 text-md-end">
-                                            <span class="fw-normal">Due Date:</span>
+                                            <span class="fw-normal due-date-label">Due Date:</span>
                                         </dt>
                                         <dd class="col-sm-6 d-flex justify-content-md-end">
                                             <div class="w-px-150">
-                                                <input type="date" name="due_date" class="form-control date-picker"
+                                                <input type="date" name="due_date"
+                                                    class="form-control date-picker due-date-input"
                                                     placeholder="YYYY-MM-DD" required />
                                             </div>
                                         </dd>
@@ -128,7 +133,8 @@
                                                             <input type="text" class="form-control no-border"
                                                                 name="customer_name" placeholder="Enter Customer Name"
                                                                 aria-label="Enter Customer Name"
-                                                                aria-describedby="basic-addon11" value="" />
+                                                                aria-describedby="basic-addon11" required
+                                                                value="{{ old('customer_name') }}" />
                                                         </div>
                                                         <div class="mb-0 col">
                                                             <label for="customer_email" class="form-label">Customer
@@ -136,7 +142,8 @@
                                                             <input type="text" class="form-control no-border"
                                                                 name="customer_email" placeholder="Enter Customer Email"
                                                                 aria-label="Enter Customer Email"
-                                                                aria-describedby="basic-addon11" value="" />
+                                                                aria-describedby="basic-addon11"
+                                                                value="{{ old('customer_email') }}" />
                                                         </div>
                                                     </div>
                                                     <div class="mb-3 row g-4">
@@ -147,7 +154,8 @@
                                                                 name="customer_address"
                                                                 placeholder="Enter Customer Address"
                                                                 aria-label="Enter Enter Customer Address"
-                                                                aria-describedby="basic-addon11" value="" />
+                                                                aria-describedby="basic-addon11"
+                                                                value="{{ old('customer_address') }}" />
                                                         </div>
                                                         <div class="mb-0 col">
                                                             <label for="customer_mobile" class="form-label">Customer
@@ -156,7 +164,8 @@
                                                                 placeholder="Enter Customer Mobile"
                                                                 aria-label="Enter Customer Mobile"
                                                                 name="customer_mobile"
-                                                                aria-describedby="basic-addon11" value="" />
+                                                                aria-describedby="basic-addon11" required
+                                                                value="{{ old('customer_mobile') }}" />
                                                         </div>
                                                     </div>
                                                     <div class="mb-3 row g-4">
@@ -167,7 +176,8 @@
                                                                 name="customer_phone"
                                                                 placeholder="Enter Customer Phone"
                                                                 aria-label="Enter Customer Phone"
-                                                                aria-describedby="basic-addon11" value="" />
+                                                                aria-describedby="basic-addon11"
+                                                                value="{{ old('customer_phone') }}" />
                                                         </div>
                                                         {{-- <div class="mb-0 col">
                                                             <label for="fax_number" class="form-label">Fax
@@ -200,7 +210,7 @@
                                 <h5 class="pb-2">Invoice To:</h5>
 
                                 <div id="displayArea" class="mb-4 col-md-12 col-sm-5 col-12 mb-sm-0 ">
-                                    <p class="mb-1 error-2">Customer Name: :</p>
+                                    <p class="mb-1 error-2">Customer Name:</p>
                                     <p class="mb-1 error-2">Customer Email:</p>
                                     <p class="mb-1 error-2">Customer Address:</p>
                                     <p class="mb-1 error-2">Customer Mobile:</p>
@@ -228,12 +238,14 @@
                                                             </option>
                                                         @endforeach
                                                     </select>
+
                                                 </div>
 
                                                 <div class="col-md-3 col-12 pe-0">
                                                     <p class="mb-2 repeater-title">Unit Cost</p>
                                                     <div class="input-group">
-                                                        <span class="input-group-text">{{ $company->currency ?? 'GHS' }}</span>
+                                                        <span
+                                                            class="input-group-text">{{ $company->currency ?? 'GHS' }}</span>
                                                         <input type="number" name="price"
                                                             class="form-control invoice-item-price " required
                                                             readonly />
@@ -244,15 +256,17 @@
                                                     <p class="mb-2 repeater-title">Qty</p>
                                                     <input type="number" name="group-a[0][quantity]"
                                                         class="form-control quantity invoice-item-qty" min="1"
-                                                        required />
+                                                        required value="{{ old('quantity') }}" />
                                                 </div>
                                                 <div class="col-md-3 col-12 pe-0">
                                                     <p class="mb-2 repeater-title">Sub Total</p>
                                                     <div class="input-group">
-                                                        <span class="input-group-text">{{ $company->currency ?? 'GHS'}}</span>
+                                                        <span
+                                                            class="input-group-text">{{ $company->currency ?? 'GHS' }}</span>
                                                         <input type="number" name="total[]"
                                                             class="form-control invoice-item-sub_total "
-                                                            aria-label="Amount " required readonly />
+                                                            aria-label="Amount " required readonly
+                                                            value="{{ old('total') ?? 0 }}" />
                                                     </div>
                                                     <div>
                                                         <span>Discount:</span>
@@ -335,12 +349,13 @@
                                     <div class="invoice-calculations">
                                         <div class="mb-2 d-flex justify-content-between">
                                             <span class="me-5">Subtotal:</span>
-                                            <span>{{ $company->currency }}&nbsp;<span class="subtotal">0.00</span>
-                                        </span>
+                                            <span>{{ $company->currency ?? 'GHS' }}&nbsp;<span class="subtotal">0.00</span>
+                                            </span>
                                         </div>
                                         <div class="mb-2 d-flex justify-content-between">
                                             <span>Discount:</span>
-                                            <span>{{ $company->currency ?? 'GHS' }}&nbsp;<span class="discount">0.00</span>
+                                            <span>{{ $company->currency ?? 'GHS' }}&nbsp;<span
+                                                    class="discount">0.00</span>
                                         </div>
                                         <div class="mb-2 d-flex justify-content-between">
                                             {{-- <span>Primary Tax:</span> --}}
@@ -353,7 +368,8 @@
                                         </div> --}}
                                         <div class="d-flex justify-content-between">
                                             <span>Total:</span>
-                                            <span>{{ $company->currency ?? 'GHS'}}&nbsp;<span class="total">0.00</span>
+                                            <span>{{ $company->currency ?? 'GHS' }}&nbsp;<span
+                                                    class="total">0.00</span>
                                         </div>
                                         <input type="hidden" id="total_hidden_input" name="total" value="0.00">
                                     </div>
@@ -386,6 +402,10 @@
                     <div class="mb-5 card">
                         <div class="card-body">
                             <h6 class="mb-2">Taxes</h6>
+                            @forelse ($taxes as $tax)
+                            @empty
+                                <span class="mb-2 app-brand-text h6 fw-bold">No Taxes Added</span>
+                            @endforelse
                             @foreach ($taxes as $tax)
                                 <div class="gap-2 mb-2 d-flex justify-content-between align-items-center">
                                     <label for="tax-{{ $tax->id }}"
@@ -477,6 +497,33 @@
     <!-- /Offcanvas -->
     </div>
     <!-- / Content -->
-    <script></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const inputs = document.querySelectorAll('.due-date-input'); // Select all inputs with this class
+            const labels = document.querySelectorAll('.due-date-label'); // Select all labels with this class
+
+            inputs.forEach((input, index) => {
+                const label = labels[index]; // Match label with its corresponding input
+
+                // Initialize label color on page load
+                if (!input.value) {
+                    label.classList.add('epmty-field-color');
+                } else {
+                    label.classList.add('normal-color');
+                }
+
+                // Add event listener for each input to check its value
+                input.addEventListener('input', function() {
+                    if (!input.value) {
+                        label.classList.add('epmty-field-color');
+                        label.classList.remove('normal-color');
+                    } else {
+                        label.classList.remove('epmty-field-color');
+                        label.classList.add('normal-color');
+                    }
+                });
+            });
+        });
+    </script>
 
 </x-masterLayout>

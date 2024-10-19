@@ -64,6 +64,40 @@
                 .page-break {
                     page-break-before: avoid;
                 }
+
+
+                /* water mark effect */
+                /* Only apply this style when printing */
+                @media print {
+                    .watermark {
+                        position: fixed;
+                        top: 50%;
+                        left: 50%;
+                        transform: translate(-50%, -50%);
+                        opacity: 0.1;
+                        /* Semi-transparent */
+                        z-index: -1;
+                        /* Behind the content */
+                        width: 50%;
+                        height: auto;
+                    }
+
+                    .watermark img {
+                        width: 100%;
+                        /* Ensures the image scales properly */
+                        height: auto;
+                    }
+
+                    /* General print settings */
+                    .print-only {
+                        display: block !important;
+                    }
+
+                    /* Hide elements that you don't want in the printout */
+                    .no-print {
+                        display: none !important;
+                    }
+                }
             }
         </style>
     @endpush
@@ -89,7 +123,7 @@
 
                     </div>
                     <hr class="my-0" />
-                    <div class="card-body" >
+                    <div class="card-body">
                         <div class="p-0 rounded row p-sm-3" style="background: #f3f4f4;
 ">
                             <div class="mb-4 col-xl-6 col-md-12 col-sm-5 col-12 mb-xl-0 mb-md-4 mb-sm-0">
@@ -149,10 +183,15 @@
                                     @endphp
                                     <tr>
                                         <td class="text-nowrap col-4 " scope="row">
-                                            <strong>{{ $catalog->name }}</strong> </td>
+                                            <strong>{{ $catalog->name }}</strong>
+                                        </td>
                                         <td class="col-2">{{ $catalog->pivot->quantity }}</td>
-                                        <td class="col-3">GH₵{{ number_format($catalog->price, 2) }}</td>
-                                        <td class="col-3">GH₵{{ number_format($subtotal, 2) }}</td>
+                                        <td class="col-3">
+                                            {{ $company->currency ?? 'GHS' }}&nbsp;{{ number_format($catalog->price, 2) }}
+                                        </td>
+                                        <td class="col-3">
+                                            {{ $company->currency ?? 'GHS' }}&nbsp;{{ number_format($subtotal, 2) }}
+                                        </td>
                                     </tr>
                                 @endforeach
                                 <tr>
@@ -165,16 +204,19 @@
                                     <td class="px-4 py-5">
                                         <div class="gap-5 d-flex justify-content-between">
                                             <p>Subtotal:</p>
-                                            <p class="mb-2 fw-semibold">GH₵{{ number_format($totalPrice, 2) }}</p>
+                                            <span
+                                                class="mb-2 fw-semibold">{{ $company->currency ?? 'GHS' }}&nbsp;{{ number_format($totalPrice, 2) }}</span>
                                         </div>
                                         <div class="gap-5 d-flex justify-content-between">
                                             <p>Discount:</p>
-                                            <p class="mb-2 fw-semibold">GH₵{{ number_format($totalDiscount, 2) }}</p>
+                                            <p class="mb-2 fw-semibold">
+                                                {{ $company->currency ?? 'GHS' }}&nbsp;{{ number_format($totalDiscount, 2) }}
+                                            </p>
                                         </div>
-                                        <div class="gap-5 d-flex justify-content-between">
+                                        {{-- <div class="gap-5 d-flex justify-content-between">
                                             <p>Tax(es)</p>
                                             <p class="mb-2 fw-semibold"></p>
-                                        </div>
+                                        </div> --}}
                                         <div>
                                             @foreach ($invoice->taxes as $tax)
                                                 @php
@@ -197,13 +239,14 @@
                                                         <div class="gap-5 d-flex justify-content-between">
                                                             <p>{{ $tax->tax_name }}({{ $tax->tax_percentage }}%):</p>
                                                             <p class="mb-2 fw-semibold">
-                                                                GH₵{{ number_format($primaryTax, 2) }}</p>
+                                                                {{ $company->currency ?? 'GHS' }}&nbsp;{{ number_format($primaryTax, 2) }}
+                                                            </p>
                                                         </div>
                                                     @else
                                                         <div class="gap-5 d-flex justify-content-between">
                                                             <p>{{ $tax->tax_name }}({{ $tax->tax_percentage }}%):</p>
                                                             <p class="mb-2 fw-semibold">
-                                                                GH₵{{ number_format($secondaryTax, 2) }}
+                                                                {{ $company->currency ?? 'GHS' }}&nbsp;{{ number_format($secondaryTax, 2) }}
                                                             </p>
                                                         </div>
                                                     @endif
@@ -217,7 +260,9 @@
                                         @endphp
                                         <div class="gap-5 d-flex justify-content-between">
                                             <p class="mb-0">Total:</p>
-                                            <p class="mb-0 fw-semibold">GH₵{{ number_format($finalTotalPrice, 2) }}</p>
+                                            <p class="mb-0 fw-semibold">
+                                                {{ $company->currency ?? 'GHS' }}&nbsp;{{ number_format($finalTotalPrice, 2) }}
+                                            </p>
                                         </div>
                                     </td>
                                 </tr>
@@ -243,10 +288,10 @@
                     <div class="card-body">
                         <button onclick="window.print()" class="mb-3 btn btn-primary d-grid w-100">Download</button>
                         <button onclick="window.print()" class="mb-3 btn btn-secondary d-grid w-100">Print</button>
-                        <a href="{{ route('invoice.edit', ['slug' => $company->slug, 'id' => $invoice->id]) }}"
+                        {{-- <a href="{{ route('invoice.edit', ['slug' => $company->slug, 'id' => $invoice->id]) }}"
                             class="mb-3 btn btn-label-secondary d-grid w-100">
                             Edit Invoice
-                        </a>
+                        </a> --}}
                         <a href="{{ route('invoice.index', ['slug' => $invoice->company->slug]) }}"
                             class="mb-3 btn btn-label-secondary d-grid w-100">
                             All Invoices
@@ -261,13 +306,16 @@
             <!-- /Invoice Actions -->
         </div>
     </div>
+
+
+    {{-- Print  --}}
     <div class="pt-0 mt-0 print-only">
         <div class="card-body">
             <div class="p-sm-3 row">
                 <div class="col-xl-6 col-md-12 col-sm-5 col-12 mb-xl-0 mb-md-4 mb-sm-0">
-                    <img src="{{ asset('storage/company_logo') }}/{{ $invoice->company->logo }}"
-                        alt="company logo" class="w-20 h-20 rounded" style="width: auto; height: 50px;">
-                        
+                    <img src="{{ asset('storage/company_logo') }}/{{ $invoice->company->logo }}" alt="company logo"
+                        class="w-20 h-20 rounded" style="width: auto; height: 50px;">
+
                 </div>
                 <div class="col-xl-6 col-md-12 col-sm-7 col-12 text-end">
                     <span class="mb-2 app-brand-text h5 fw-bold">{{ $invoice->company->name }}</span>
@@ -277,27 +325,27 @@
                     <p class="mb-0">{{ $invoice->company->phone }}</p>
                 </div>
             </div>
-   
-   
+
+
         </div>
         <hr class="my-0" />
         <div class="card-body">
-                           <div class="p-0 row p-sm-3">
-                               <div class="mb-4 col-xl-6 col-md-12 col-sm-5 col-12 mb-xl-0 mb-md-4 mb-sm-0">
-                                   <h6 class="pb-2">Invoice To:</h6>
-                                   <p class="mb-1">{{ $invoice->customerInfo->customer_name }}</p>
-                                   <p class="mb-1">{{ $invoice->customerInfo->customer_email }}</p>
-                                   <p class="mb-1">{{ $invoice->customerInfo->customer_address }}</p>
-                                   <p class="mb-1">{{ $invoice->customerInfo->customer_mobile }}</p>
-                               </div>
-                               <div class="col-xl-6 col-md-12 col-sm-7 col-12 text-end">
-                                   <h6 class="pb-2">Invoice Details:</h6>
-                                   <p class="mb-1">Invoice Number: {{ $invoice->invoice_number }}</p>
-                                   <p class="mb-1">Issue Date: {{ $invoice->created_at->format('Y-m-d') }}</p>
-                                   <p class="mb-1">Due Date: {{ $invoice->due_date }}</p>
-                               </div>
-                           </div>
-                       </div>
+            <div class="p-0 row p-sm-3">
+                <div class="mb-4 col-xl-6 col-md-12 col-sm-5 col-12 mb-xl-0 mb-md-4 mb-sm-0">
+                    <h6 class="pb-2">Invoice To:</h6>
+                    <p class="mb-1">{{ $invoice->customerInfo->customer_name }}</p>
+                    <p class="mb-1">{{ $invoice->customerInfo->customer_email }}</p>
+                    <p class="mb-1">{{ $invoice->customerInfo->customer_address }}</p>
+                    <p class="mb-1">{{ $invoice->customerInfo->customer_mobile }}</p>
+                </div>
+                <div class="col-xl-6 col-md-12 col-sm-7 col-12 text-end">
+                    <h6 class="pb-2">Invoice Details:</h6>
+                    <p class="mb-1">Invoice Number: {{ $invoice->invoice_number }}</p>
+                    <p class="mb-1">Issue Date: {{ $invoice->created_at->format('Y-m-d') }}</p>
+                    <p class="mb-1">Due Date: {{ $invoice->due_date }}</p>
+                </div>
+            </div>
+        </div>
         <div class="px-4 table-responsive">
             <table class="table">
                 <thead>
@@ -310,110 +358,123 @@
                 </thead>
                 <tbody>
                     @php
-                    $taxRate = 0; // Initialize total price variable
-                    $totalPrice = 0; // Initialize total price variable
-                    $totalTax = 0; // Initialize total tax variable
-                    //$discountRate = $invoice->discount / 100;
-                    $totalPrimaryTax = 0;
-                    $totalSecondaryTax = 0;
-                    $primaryTax = 0;
-                    $secondaryTax = 0;
-                    $newTotalPrice = 0;
-                    $totalDiscount = 0;
+                        $taxRate = 0; // Initialize total price variable
+                        $totalPrice = 0; // Initialize total price variable
+                        $totalTax = 0; // Initialize total tax variable
+                        //$discountRate = $invoice->discount / 100;
+                        $totalPrimaryTax = 0;
+                        $totalSecondaryTax = 0;
+                        $primaryTax = 0;
+                        $secondaryTax = 0;
+                        $newTotalPrice = 0;
+                        $totalDiscount = 0;
                     @endphp
                     @foreach ($invoice->catalogs as $catalog)
-                    @php
-                    //calculate rate on each item
-                    $discountRate = $catalog->pivot->discount_percent / 100;
-   
-                    // Calculate subtotal for this catalog item
-                    $subtotalBeforeDiscount = $catalog->pivot->quantity * $catalog->price;
-   
-                    //calculate the subtotal after discount is applied
-                    $subtotal = $subtotalBeforeDiscount - $subtotalBeforeDiscount * $discountRate;
-   
-                    // Add subtotal to total price
-                    $totalPrice += $subtotal;
-   
-                    // Calculate the discount amount
-                    $totalDiscount += $subtotalBeforeDiscount * $discountRate;
-                    @endphp
-                    <tr>
-                        <td class="text-nowrap col-4 " scope="row"><strong>{{ $catalog->name }}</strong> </td>
-                        <td class="col-2">{{ $catalog->pivot->quantity }}</td>
-                        <td class="col-3">GH₵{{ number_format($catalog->price, 2) }}</td>
-                        <td class="col-3">GH₵{{ number_format($subtotal, 2) }}</td>
-                    </tr>
+                        @php
+                            //calculate rate on each item
+                            $discountRate = $catalog->pivot->discount_percent / 100;
+
+                            // Calculate subtotal for this catalog item
+                            $subtotalBeforeDiscount = $catalog->pivot->quantity * $catalog->price;
+
+                            //calculate the subtotal after discount is applied
+                            $subtotal = $subtotalBeforeDiscount - $subtotalBeforeDiscount * $discountRate;
+
+                            // Add subtotal to total price
+                            $totalPrice += $subtotal;
+
+                            // Calculate the discount amount
+                            $totalDiscount += $subtotalBeforeDiscount * $discountRate;
+                        @endphp
+                        <tr>
+                            <td class="text-nowrap col-4 " scope="row"><strong>{{ $catalog->name }}</strong> </td>
+                            <td class="col-2">{{ $catalog->pivot->quantity }}</td>
+                            <td class="col-3">
+                                {{ $company->currency ?? 'GHS' }}&nbsp;{{ number_format($catalog->price, 2) }}</td>
+                            <td class="col-3">
+                                {{ $company->currency ?? 'GHS' }}&nbsp;{{ number_format($subtotal, 2) }}</td>
+                        </tr>
                     @endforeach
-                    <tr>
-                        <td colspan="3" class="px-4 py-5 align-top">
-                            <p class="mb-2">
-                                <span class="me-1 fw-semibold">Salesperson:</span>
-                                <span>{{ $invoice->salesperson }}</span>
-                            </p>
-                        </td>
-                        <td class="px-4 py-5">
-                            <div class="gap-5 d-flex justify-content-between">
-                                <p>Subtotal:</p>
-                                <p class="mb-2 fw-semibold">GH₵{{ number_format($totalPrice, 2) }}</p>
-                            </div>
-                            <div class="gap-5 d-flex justify-content-between">
-                                <p>Discount:</p>
-                                <p class="mb-2 fw-semibold">GH₵{{ number_format($totalDiscount, 2) }}</p>
-                            </div>
-                            <div class="gap-5 d-flex justify-content-between">
-                                <p>Tax(es)</p>
-                                <p class="mb-2 fw-semibold"></p>
-                            </div>
-                            <div>
-                                @foreach ($invoice->taxes as $tax)
-                                @php
-                                //calculate the taxes
-                                if ($tax->type === 'PRIMARY') {
-                                $primaryTax = $totalPrice * ($tax->tax_percentage / 100);
-                                $totalPrimaryTax += $primaryTax;
-                                } else {
-                                $secondaryTax =
-                                ($totalPrimaryTax + $totalPrice) * ($tax->tax_percentage / 100);
-                                $totalSecondaryTax += $secondaryTax;
-                                }
-   
-                                //total tax
-                                $totalTax = $totalPrimaryTax + $totalSecondaryTax;
-                                @endphp
-                                <div>
-                                    @if ($tax->type == 'PRIMARY')
-                                    <div class="gap-5 d-flex justify-content-between">
-                                        <p>{{ $tax->tax_name }}({{ $tax->tax_percentage }}%):</p>
-                                        <p class="mb-2 fw-semibold">
-                                            GH₵{{ number_format($primaryTax, 2) }}</p>
-                                    </div>
-                                    @else
-                                    <div class="gap-5 d-flex justify-content-between">
-                                        <p>{{ $tax->tax_name }}({{ $tax->tax_percentage }}%):</p>
-                                        <p class="mb-2 fw-semibold">
-                                            GH₵{{ number_format($secondaryTax, 2) }}
-                                        </p>
-                                    </div>
-                                    @endif
-   
-                                </div>
-                                @endforeach
-                            </div>
-                            @php
-                            // Calculate the final total price after adding the tax
-                            $finalTotalPrice = $totalPrice + $totalTax;
-                            @endphp
-                            <div class="gap-5 d-flex justify-content-between">
-                                <p class="mb-0">Total:</p>
-                                <p class="mb-0 fw-semibold">GH₵{{ number_format($finalTotalPrice, 2) }}</p>
-                            </div>
-                        </td>
-                    </tr>
+
                 </tbody>
             </table>
+            <div class="pt-3 d-flex justify-content-between">
+                <div>
+                    <p class="mb-2">
+                        <span class="me-1 fw-semibold">Salesperson:</span>
+                        <span>{{ $invoice->salesperson }}</span>
+                    </p>
+                </div>
+                <div>
+                    <div class=" d-flex justify-content-between">
+                        <p>Subtotal:</p>
+                        <p class="mb-2 fw-semibold">
+                            {{ $company->currency ?? 'GHS' }}&nbsp;{{ number_format($totalPrice, 2) }}</p>
+                    </div>
+                    <div class=" d-flex justify-content-between">
+                        <p>Discount:</p>
+                        <p class="mb-2 fw-semibold">
+                            {{ $company->currency ?? 'GHS' }}&nbsp;{{ number_format($totalDiscount, 2) }}</p>
+                    </div>
+                    {{-- <div class="gap-5 d-flex justify-content-between">
+                            <p>Tax(es)</p>
+                            <p class="mb-2 fw-semibold"></p>
+                        </div> --}}
+                    <div>
+                        @foreach ($invoice->taxes as $tax)
+                            @php
+                                //calculate the taxes
+                                if ($tax->type === 'PRIMARY') {
+                                    $primaryTax = $totalPrice * ($tax->tax_percentage / 100);
+                                    $totalPrimaryTax += $primaryTax;
+                                } else {
+                                    $secondaryTax = ($totalPrimaryTax + $totalPrice) * ($tax->tax_percentage / 100);
+                                    $totalSecondaryTax += $secondaryTax;
+                                }
+
+                                //total tax
+                                $totalTax = $totalPrimaryTax + $totalSecondaryTax;
+                            @endphp
+                            <div>
+                                @if ($tax->type == 'PRIMARY')
+                                    <div class="gap-5 d-flex justify-content-between">
+                                        <p>{{ $tax->tax_name }}({{ $tax->tax_percentage }}%):</p>
+                                        <p class="mb-2 fw-semibold">
+                                            {{ $company->currency ?? 'GHS' }}&nbsp;{{ number_format($primaryTax, 2) }}
+                                        </p>
+                                    </div>
+                                @else
+                                    <div class=" d-flex justify-content-between">
+                                        <p>{{ $tax->tax_name }}({{ $tax->tax_percentage }}%):</p>
+                                        <p class="mb-2 fw-semibold">
+                                            {{ $company->currency ?? 'GHS' }}&nbsp;{{ number_format($secondaryTax, 2) }}
+                                        </p>
+                                    </div>
+                                @endif
+
+                            </div>
+                        @endforeach
+                    </div>
+                    @php
+                        // Calculate the final total price after adding the tax
+                        $finalTotalPrice = $totalPrice + $totalTax;
+                    @endphp
+                    <div class=" d-flex justify-content-between">
+                        <p class="mb-0">Total:</p>
+                        <p class="mb-0 fw-semibold">
+                            {{ $company->currency ?? 'GHS' }}&nbsp;{{ number_format($finalTotalPrice, 2) }}
+                        </p>
+                    </div>
+                </div>
+
+
+            </div>
+            <!-- Add watermark logo in the background -->
+            <div class="watermark">
+                <img src="{{ asset('storage/company_logo') }}/{{ $invoice->company->logo }}" alt="Watermark Logo" />
+            </div>
         </div>
-   
+
         <div class="card-body">
             <div class="row">
                 <div class="col-12">
@@ -423,5 +484,5 @@
             </div>
         </div>
     </div>
-   
+
 </x-masterLayout>

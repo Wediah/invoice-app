@@ -90,7 +90,7 @@
                                                         <div class="input-group">
                                                             <span class="input-group-text">{{ $company->currency ?? 'GHC' }}</span>
 
-                                                            <input type="number" id="form-repeater-1-1"
+                                                            <input type="number" id="form-repeater-1-1" step="0.01"
                                                                 class="form-control {{ $errors->first('stock_price') ? ' form-error' : '' }}"
                                                                 placeholder="Enter the price of your item/service"
                                                                 name="stock_price"  />

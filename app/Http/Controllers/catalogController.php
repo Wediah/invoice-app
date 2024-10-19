@@ -92,14 +92,14 @@ class catalogController extends Controller
             $stock_name = $prop['stock_name'];
             $stock_price = $prop['stock_price'];
             $stock_description = $prop['stock_description'];
-            $stock_unit_of_measurement = $prop['stock_unit_of_measurement'];
+            $unit_of_measurement = $prop['unit_of_measurement'];
 
 
             $stockData = new Catalog();
             $stockData->company_id = $company_id;
             $stockData->name = $stock_name;
             $stockData->description = $stock_description;
-            $stockData->unit_of_measurement = $stock_unit_of_measurement;
+            $stockData->unit_of_measurement = $unit_of_measurement;
             $stockData->price = $stock_price;
             $stockData->save();
 

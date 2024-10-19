@@ -77,7 +77,7 @@
                                             </div>
                                         </div>
                                     </td>
-                                    <td class="text-center"> GHS{{ number_format((float) $invoice->total, 2) }}</td>
+                                    <td class="text-center">{{ $company->currency ?? 'GHS' }}&nbsp;{{ number_format((float) $invoice->total, 2) }}</td>
                                     <td class="text-center">
 
                                         {{ $invoice->created_at->format('jS M, Y') }}
@@ -98,13 +98,13 @@
 
                                     <td>
                                         <div class="d-flex align-items-center">
-                                            <a href="{{ route('invoice.edit', ['slug' => $company->slug, 'id' =>
+                                            {{-- <a href="{{ route('invoice.edit', ['slug' => $company->slug, 'id' =>
                                             $invoice->id]) }}"
                                                 data-bs-toggle="tooltip" class="text-body" data-bs-placement="top"
                                                 title="" data-bs-original-title="Edit Invoice"
                                                 aria-label="Edit Invoice">
                                                 <i class="bx bx-edit"></i>
-                                            </a>
+                                            </a> --}}
 
                                             <a href="{{ route('invoice.show', ['slug' => $company->slug, 'id' =>
                                             $invoice->id]) }}"
