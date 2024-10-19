@@ -159,6 +159,7 @@ class catalogController extends Controller
 
         $catalogData = array(
             'company_id' => $company_id,
+            'unit_of_measurement' => $validatedData['unit_of_measurement'] ?? $catalog->unit_of_measurement,
             'name' => $validatedData['stock_name'] ?? $catalog->name,
             'description' => $validatedData['stock_description'] ?? $catalog->description,
             'price' => $validatedData['stock_price'] ?? $catalog->price,

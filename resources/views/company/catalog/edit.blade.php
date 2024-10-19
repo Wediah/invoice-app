@@ -61,6 +61,16 @@
                                 <p class="error">{{ $message }}</p>
                             @enderror
                             </div>
+                            <div class="form-password-toggle">
+                                <label class="form-label" for="basic-default-password12">Edit Unit Of Measurement</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control" placeholder="Unit of Measurement"
+                                        aria-label="Amount (to the nearest Cedi)" name="unit_of_measurement" value="{{ $catalog->unit_of_measurement }}" />
+                                </div>
+                                @error('unit_of_measurement')
+                                <p class="error">{{ $message }}</p>
+                            @enderror
+                            </div>
 
                             <div class="form-group">
                                 <label class="form-label" for="basic-default-password12">Edit Stock Description</label>
