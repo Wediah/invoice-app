@@ -33,8 +33,8 @@
     <div class="container-xxl flex-grow-1 container-p-y">
         <form method="POST" action="{{ route('invoice.update', ['id' => $invoice->id]) }}" class="mt-10 space-y-6"
             enctype="multipart/form-data">
-          @csrf
-          @method('PATCH')
+            @csrf
+            @method('PATCH')
             <div class="row invoice-add">
                 <!-- Invoice Add-->
                 <div class="mb-4 col-lg-9 col-12 mb-lg-0">
@@ -75,7 +75,7 @@
                                         <dd class="col-sm-6 d-flex justify-content-md-end">
                                             <div class="w-px-150">
                                                 <input type="text" class="form-control" disabled readonly
-                                                value="{{ $invoice->invoice_number }}" />
+                                                    value="{{ $invoice->invoice_number }}" />
                                             </div>
                                         </dd>
                                         <dt class="mb-2 col-sm-6 mb-sm-0 text-md-end">
@@ -84,7 +84,7 @@
                                         <dd class="col-sm-6 d-flex justify-content-md-end">
                                             <div class="w-px-150">
                                                 <input type="text" class="form-control date-picker" disabled readonly
-                                                value="{{ $invoice->created_at->format('d-m-Y') }}"/>
+                                                    value="{{ $invoice->created_at->format('d-m-Y') }}" />
                                             </div>
                                         </dd>
                                         <dt class="mb-2 col-sm-6 mb-sm-0 text-md-end">
@@ -93,7 +93,8 @@
                                         <dd class="col-sm-6 d-flex justify-content-md-end">
                                             <div class="w-px-150">
                                                 <input type="date" name="due_date" class="form-control date-picker"
-                                                    placeholder="YYYY-MM-DD" value="{{ $invoice->due_date }}" required />
+                                                    placeholder="YYYY-MM-DD" value="{{ $invoice->due_date }}"
+                                                    required />
                                             </div>
                                         </dd>
                                     </dl>
@@ -129,7 +130,7 @@
                                                                 name="customer_name" placeholder="Enter Customer Name"
                                                                 aria-label="Enter Customer Name"
                                                                 aria-describedby="basic-addon11"
-                                                                   value="{{$invoice->customerInfo->customer_name}}" />
+                                                                value="{{ $invoice->customerInfo->customer_name }}" />
                                                         </div>
                                                         <div class="mb-0 col">
                                                             <label for="customer_email" class="form-label">Customer
@@ -138,7 +139,7 @@
                                                                 name="customer_email" placeholder="Enter Customer Email"
                                                                 aria-label="Enter Customer Email"
                                                                 aria-describedby="basic-addon11"
-                                                                   value="{{$invoice->customerInfo->customer_email}}" />
+                                                                value="{{ $invoice->customerInfo->customer_email }}" />
                                                         </div>
                                                     </div>
                                                     <div class="mb-3 row g-4">
@@ -150,7 +151,7 @@
                                                                 placeholder="Enter Customer Address"
                                                                 aria-label="Enter Enter Customer Address"
                                                                 aria-describedby="basic-addon11"
-                                                                   value="{{$invoice->customerInfo->customer_address}}" />
+                                                                value="{{ $invoice->customerInfo->customer_address }}" />
                                                         </div>
                                                         <div class="mb-0 col">
                                                             <label for="customer_mobile" class="form-label">Customer
@@ -160,7 +161,7 @@
                                                                 aria-label="Enter Customer Mobile"
                                                                 name="customer_mobile"
                                                                 aria-describedby="basic-addon11"
-                                                                   value="{{$invoice->customerInfo->customer_mobile}}" />
+                                                                value="{{ $invoice->customerInfo->customer_mobile }}" />
                                                         </div>
                                                     </div>
                                                     <div class="mb-3 row g-4">
@@ -172,16 +173,9 @@
                                                                 placeholder="Enter Customer Phone"
                                                                 aria-label="Enter Customer Phone"
                                                                 aria-describedby="basic-addon11"
-                                                                   value="{{$invoice->customerInfo->customer_phone}}" />
+                                                                value="{{ $invoice->customerInfo->customer_phone }}" />
                                                         </div>
-                                                        {{-- <div class="mb-0 col">
-                                                            <label for="fax_number" class="form-label">Fax
-                                                                Number</label>
-                                                            <input type="text" class="form-control no-border"
-                                                                name="fax_number" placeholder="Enter fax number"
-                                                                aria-label="Enter fax number"
-                                                                aria-describedby="basic-addon11" value="" />
-                                                        </div> --}}
+                                                      
                                                     </div>
                                                 </div>
                                                 <div class="modal-footer d-flex justify-content-between">
@@ -205,296 +199,174 @@
                                 <h5 class="pb-2">Invoice To:</h5>
 
                                 <div id="displayArea" class="mb-4 col-md-12 col-sm-5 col-12 mb-sm-0 ">
-                                    <p class="mb-1 ">Customer Name:&nbsp;{{ $invoice->customerInfo->customer_email }}</p>
-                                    <p class="mb-1 ">Customer Email:&nbsp;{{$invoice->customerInfo->customer_address }}</p>
-                                    <p class="mb-1 ">Customer Address:&nbsp;{{ $invoice->customerInfo->customer_phone }}</p>
-                                    <p class="mb-1 ">Customer Mobile:&nbsp;{{ $invoice->customerInfo->customer_mobile }}</p>
+                                    <p class="mb-1 ">Customer Name:&nbsp;{{ $invoice->customerInfo->customer_name }}
+                                    </p>
+                                    <p class="mb-1 ">Customer
+                                        Email:&nbsp;{{$invoice->customerInfo->customer_email }}</p>
+                                    <p class="mb-1 ">Customer
+                                        Address:&nbsp;{{ $invoice->customerInfo->customer_address }}</p>
+                                    <p class="mb-1 ">Customer
+                                        Mobile:&nbsp;{{ $invoice->customerInfo->customer_phone }}</p>
                                 </div>
 
                             </div>
 
                             <hr class="mx-n4" />
-{{--                            <div class="source-item py-sm-3">--}}
-{{--                                <div class="mb-3" data-repeater-list="group-a">--}}
-{{--                                    <div class="pt-0 repeater-wrapper pt-md-4" data-repeater-item>--}}
-{{--                                        @foreach ($invoice->catalogs as $index => $catalog)--}}
-{{--                                            <div class="border rounded d-flex position-relative pe-0 repeater-wrapper">--}}
-{{--                                                <div class="p-3 m-0 row w-100">--}}
-{{--                                                    <div class="mb-3 col-md-4 col-12 mb-md-0 ps-md-0">--}}
-{{--                                                        <p class="mb-2 repeater-title">Item</p>--}}
-{{--                                                        <select name="group-a[{{ $index }}][catalog_id]" class="mb-2 catalog_id form-select item-detailsX" data-index="{{ $index }}">--}}
-{{--                                                            <option selected disabled>Select Item</option>--}}
-{{--                                                            @foreach ($allCatalogs as $item)--}}
-{{--                                                                <option value="{{ $item->id }}" {{ $catalog->id == $item->id ? 'selected' : '' }}>--}}
-{{--                                                                    {{ $item->name }}--}}
-{{--                                                                </option>--}}
-{{--                                                            @endforeach--}}
-{{--                                                        </select>--}}
-{{--                                                    </div>--}}
-
-{{--                                                    <div class="col-md-3 col-12 pe-0">--}}
-{{--                                                        <p class="mb-2 repeater-title">Unit Cost</p>--}}
-{{--                                                        <div class="input-group">--}}
-{{--                                                            <span class="input-group-text">{{ $company->currency ?? 'GHS' }}</span>--}}
-{{--                                                            <input type="number" name="group-a[{{ $index }}][price]" class="form-control invoice-item-price" data-index="{{ $index }}" readonly />--}}
-{{--                                                        </div>--}}
-{{--                                                    </div>--}}
-
-{{--                                                    <div class="mb-3 col-md-2 col-12 mb-md-0">--}}
-{{--                                                        <p class="mb-2 repeater-title">Qty</p>--}}
-{{--                                                        <input type="number" name="group-a[{{ $index }}][quantity]"--}}
-{{--                                                               class="form-control quantity invoice-item-qty" min="1"--}}
-{{--                                                               data-index="{{ $index }}" value="{{--}}
-{{--                                                               $catalog->pivot->quantity--}}
-{{--                                                                }}" required />--}}
-{{--                                                    </div>--}}
-
-{{--                                                    <div class="col-md-3 col-12 pe-0">--}}
-{{--                                                        <p class="mb-2 repeater-title">Sub Total</p>--}}
-{{--                                                        <div class="input-group">--}}
-{{--                                                            <span class="input-group-text">{{ $company->currency ?? 'GHS'}}</span>--}}
-{{--                                                            <input type="number" name="total[]"--}}
-{{--                                                                   class="form-control invoice-item-sub_total "--}}
-{{--                                                                   aria-label="Amount " required readonly />--}}
-{{--                                                        </div>--}}
-{{--                                                        <div>--}}
-{{--                                                            <span>Discount:</span>--}}
-{{--                                                            <span class="discount me-2">{{--}}
-{{--                                                            $catalog->pivot->discount_percent }}</span>--}}
-
-{{--                                                        </div>--}}
-{{--                                                    </div>--}}
-{{--                                                </div>--}}
-{{--                                                <div--}}
-{{--                                                    class="p-2 d-flex flex-column align-items-center justify-content-between border-start">--}}
-
-{{--                                                    <div>--}}
-{{--                                                        <button style="border: none;background:none" id="hide-repeater"--}}
-{{--                                                                data-bs-toggle="tooltip"--}}
-{{--                                                                title="To hide this row, Please clear quantity first"--}}
-{{--                                                                data-bs-placement="top" data-repeater-delete>--}}
-{{--                                                            <i class="cursor-pointer bx bx-x fs-4 text-muted">--}}
-{{--                                                            </i>--}}
-{{--                                                        </button>--}}
-{{--                                                    </div>--}}
-
-
-{{--                                                    <div class="dropdown">--}}
-
-{{--                                                        <i class="cursor-pointer bx bx-cog bx-xs text-muted more-options-dropdown"--}}
-{{--                                                           role="button" id="dropdownMenuButton"--}}
-{{--                                                           data-bs-toggle="dropdown" data-bs-auto-close="outside"--}}
-{{--                                                           aria-expanded="false">--}}
-{{--                                                        </i>--}}
-
-
-{{--                                                        <div class="p-3 dropdown-menu dropdown-menu-end w-px-300"--}}
-{{--                                                             aria-labelledby="dropdownMenuButton">--}}
-{{--                                                            <div class="row g-3">--}}
-{{--                                                                <div class="col-12">--}}
-{{--                                                                    <label for="discount_percent[]"--}}
-{{--                                                                           class="form-label">Discount(%)</label>--}}
-{{--                                                                    <input type="number" class="form-control"--}}
-{{--                                                                           id="discountInput" min="1"--}}
-{{--                                                                           name="group-a[0][discount_percent]"--}}
-{{--                                                                           value="{{ $catalog->pivot->discount_percent }}"--}}
-{{--                                                                           max="100" />--}}
-{{--                                                                </div>--}}
-
-{{--                                                            </div>--}}
-{{--                                                            <div class="my-3 dropdown-divider"></div>--}}
-{{--                                                            <button type="button"--}}
-{{--                                                                    class="btn btn-label-primary btn-apply-changes">Apply--}}
-{{--                                                            </button>--}}
-{{--                                                        </div>--}}
-{{--                                                    </div>--}}
-{{--                                                </div>--}}
-{{--                                            </div>--}}
-{{--                                        @endforeach--}}
-
-
-{{--                                    </div>--}}
-{{--                                </div>--}}
-{{--                                <div class="row">--}}
-{{--                                    <div class="col-12">--}}
-{{--                                        <button type="button" class="btn btn-primary" data-repeater-create>Add--}}
-{{--                                            Item--}}
-{{--                                        </button>--}}
-
-{{--                                    </div>--}}
-{{--                                </div>--}}
-{{--                            </div>--}}
 
                             <div class="px-4 table-responsive">
-                            <table class="table">
-                                <thead>
-                                <tr>
-                                    <th scope="col-4">Item/Service</th>
-                                    <th scope="col-2">QTY</th>
-                                    <th scope="col-3">Unit</th>
-                                    <th scope="col-3">Price</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                @php
-                                    $taxRate = 0; // Initialize total price variable
-                                    $totalPrice = 0; // Initialize total price variable
-                                    $totalTax = 0; // Initialize total tax variable
-                                    //$discountRate = $invoice->discount / 100;
-                                    $totalPrimaryTax = 0;
-                                    $totalSecondaryTax = 0;
-                                    $primaryTax = 0;
-                                    $secondaryTax = 0;
-                                    $newTotalPrice = 0;
-                                    $totalDiscount = 0;
-                                @endphp
-                                @foreach ($invoice->catalogs as $index => $catalog)
-                                    @php
-                                        //calculate rate on each item
-                                        $discountRate = $catalog->pivot->discount_percent / 100;
-
-                                        // Calculate subtotal for this catalog item
-                                        $subtotalBeforeDiscount = $catalog->pivot->quantity * $catalog->price;
-
-                                        //calculate the subtotal after discount is applied
-                                        $subtotal = $subtotalBeforeDiscount - $subtotalBeforeDiscount * $discountRate;
-
-                                        // Add subtotal to total price
-                                        $totalPrice += $subtotal;
-
-                                        // Calculate the discount amount
-                                        $totalDiscount += $subtotalBeforeDiscount * $discountRate;
-                                    @endphp
-                                    <tr>
-                                        <td class="text-nowrap col-4 " scope="row"><strong>{{ $catalog->name
-                                        }}</strong><input name="group-a[{{ $index }}][catalog_id]" value={{ $catalog->id }} hidden/> </td>
-                                        <td class="col-2">{{ $catalog->pivot->quantity }} <input name="group-a[{{ $index }}][quantity]" value={{
-                                        $catalog->pivot->quantity }}" hidden
-                                        /> </td>
-                                        <td class="col-3">GH₵{{ number_format($catalog->price, 2) }}
-                                            <input name="group-a[{{ $index }}][quantity]" value={{ $catalog->price }} hidden/></td>
-                                        <td class="col-3">GH₵{{ number_format($subtotal, 2) }}</td>
-                                        <input name="group-a[0][discount_percent]" value={{ $catalog->pivot->discount_percent }} hidden/>
-                                    </tr>
-                                @endforeach
-                                <tr>
-                                    <td colspan="3" class="px-4 py-5 align-top">
-                                        <p class="mb-2">
-                                            <span class="me-1 fw-semibold">Salesperson:</span>
-                                            <span>{{ $invoice->salesperson }}</span>
-                                        </p>
-                                    </td>
-                                    <td class="px-4 py-5">
-                                        <div class="gap-5 d-flex justify-content-between">
-                                            <p>Subtotal:</p>
-                                            <p class="mb-2 fw-semibold">GH₵{{ number_format($totalPrice, 2) }}</p>
-                                        </div>
-                                        <div class="gap-5 d-flex justify-content-between">
-                                            <p>Discount:</p>
-                                            <p class="mb-2 fw-semibold">GH₵{{ number_format($totalDiscount, 2) }}</p>
-                                        </div>
-                                        <div class="gap-5 d-flex justify-content-between">
-                                            <p>Tax(es)</p>
-                                            <p class="mb-2 fw-semibold"></p>
-                                        </div>
-                                        <div>
-                                            @foreach ($invoice->taxes as $tax)
-                                                @php
-                                                    //calculate the taxes
-                                                    if ($tax->type === 'PRIMARY') {
-                                                    $primaryTax = $totalPrice * ($tax->tax_percentage / 100);
-                                                    $totalPrimaryTax += $primaryTax;
-                                                    } else {
-                                                    $secondaryTax =
-                                                    ($totalPrimaryTax + $totalPrice) * ($tax->tax_percentage / 100);
-                                                    $totalSecondaryTax += $secondaryTax;
-                                                    }
-
-                                                    //total tax
-                                                    $totalTax = $totalPrimaryTax + $totalSecondaryTax;
-                                                @endphp
-                                                <div>
-                                                    @if ($tax->type == 'PRIMARY')
-                                                        <div class="gap-5 d-flex justify-content-between">
-                                                            <p>{{ $tax->tax_name }}({{ $tax->tax_percentage }}%):</p>
-                                                            <p class="mb-2 fw-semibold">
-                                                                GH₵{{ number_format($primaryTax, 2) }}</p>
-                                                        </div>
-                                                    @else
-                                                        <div class="gap-5 d-flex justify-content-between">
-                                                            <p>{{ $tax->tax_name }}({{ $tax->tax_percentage }}%):</p>
-                                                            <p class="mb-2 fw-semibold">
-                                                                GH₵{{ number_format($secondaryTax, 2) }}
-                                                            </p>
-                                                        </div>
-                                                    @endif
-
-                                                </div>
-                                            @endforeach
-                                        </div>
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col-4">Item/Service</th>
+                                            <th scope="col-2">QTY</th>
+                                            <th scope="col-2">UOM</th>
+                                            <th scope="col-3">Unit Price</th>
+                                            <th scope="col-3">Sub Total</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
                                         @php
-                                            // Calculate the final total price after adding the tax
-                                            $finalTotalPrice = $totalPrice + $totalTax;
+                                            $taxRate = 0; // Initialize total price variable
+                                            $totalPrice = 0; // Initialize total price variable
+                                            $totalTax = 0; // Initialize total tax variable
+                                            //$discountRate = $invoice->discount / 100;
+                                            $totalPrimaryTax = 0;
+                                            $totalSecondaryTax = 0;
+                                            $primaryTax = 0;
+                                            $secondaryTax = 0;
+                                            $newTotalPrice = 0;
+                                            $totalDiscount = 0;
                                         @endphp
-                                        <div class="gap-5 d-flex justify-content-between">
-                                            <p class="mb-0">Total:</p>
-                                            <p class="mb-0 fw-semibold">GH₵{{ number_format($finalTotalPrice, 2) }}</p>
+                                        @foreach ($invoice->catalogs as $index => $catalog)
+                                            @php
+                                                //calculate rate on each item
+                                                $discountRate = $catalog->pivot->discount_percent / 100;
+
+                                                // Calculate subtotal for this catalog item
+                                                $subtotalBeforeDiscount = $catalog->pivot->quantity * $catalog->price;
+
+                                                //calculate the subtotal after discount is applied
+                                                $subtotal =
+                                                    $subtotalBeforeDiscount - $subtotalBeforeDiscount * $discountRate;
+
+                                                // Add subtotal to total price
+                                                $totalPrice += $subtotal;
+
+                                                // Calculate the discount amount
+                                                $totalDiscount += $subtotalBeforeDiscount * $discountRate;
+                                            @endphp
+                                            <tr>
+                                                <td class="text-nowrap col-4 " scope="row">
+                                                    <strong>{{ $catalog->name }}</strong>
+                                                    <input name="group-a[{{ $index }}][catalog_id]"
+                                                        value="{{ $catalog->id }}" hidden />
+                                                </td>
+                                                <td class="col-2">{{ $catalog->pivot->quantity }}
+                                                    <input name="group-a[{{ $index }}][quantity]"
+                                                        value="{{ $catalog->pivot->quantity }}" hidden />
+                                                </td>
+                                                <td class="col-2">{{ $catalog->unit_of_measurement }}
+                                                    <input name="group-a[{{ $index }}][unit_of_measurement]"
+                                                        value="{{ $catalog->unit_of_measurement }}" hidden />
+                                                </td>
+
+                                                <td class="col-3">GH₵{{ number_format($catalog->price, 2) }}
+                                                    <input name="group-a[{{ $index }}][price]"
+                                                        value="{{ $catalog->price }}" hidden />
+                                                </td>
+                                                <td class="col-3">GH₵{{ number_format($subtotal, 2) }}</td>
+                                                <td>
+                                                    <input name="group-a[0][discount_percent]"
+                                                        value="{{ $catalog->pivot->discount_percent }}" hidden />
+                                                </td>
+                                            </tr>
+                                        @endforeach
+                                     
+                                    </tbody>
+                                </table>
+
+                                <div class="row py-sm-3 mt-4">
+                                    <div class="mb-3 col-md-6 mb-md-0">
+                                        <div class="mb-3 d-flex align-items-center">
+                                            <label for="salesperson"
+                                                class="form-label me-1 fw-semibold">Salesperson: <span>{{ $invoice->salesperson }}</span></label>
+                                                
+
+    
                                         </div>
-                                    </td>
-                                </tr>
-                                </tbody>
-                            </table>
-                        </div>
+                                    </div>
+                                    <div class="col-md-6 d-flex justify-content-end ">
+                                        <!-- Totals Display -->
+                                        <div class="invoice-calculations">
+                                            <div class="mb-2 d-flex justify-content-between">
+                                                <span class="me-5">Subtotal:</span>
+                                                <span>{{ $company->currency ?? 'GHS' }}&nbsp;<span class="fw-semibold">{{ number_format($totalPrice, 2) }}</span>
+                                            </span>
+                                            </div>
+                                            <div class="mb-2 d-flex justify-content-between">
+                                                <span>Discount:</span>
+                                                <span>{{ $company->currency ?? 'GHS' }}&nbsp;<span class="fw-semibold">{{ number_format($totalDiscount, 2) }}</span>
+                                            </div>
+                                          
+                                            <div class="mb-2">
+                                                 @foreach ($invoice->taxes as $tax)
+                                                        @php
+                                                            //calculate the taxes
+                                                            if ($tax->type === 'PRIMARY') {
+                                                                $primaryTax =
+                                                                    $totalPrice * ($tax->tax_percentage / 100);
+                                                                $totalPrimaryTax += $primaryTax;
+                                                            } else {
+                                                                $secondaryTax =
+                                                                    ($totalPrimaryTax + $totalPrice) *
+                                                                    ($tax->tax_percentage / 100);
+                                                                $totalSecondaryTax += $secondaryTax;
+                                                            }
 
-{{--                            <hr class="my-4 mx-n4" />--}}
+                                                            //total tax
+                                                            $totalTax = $totalPrimaryTax + $totalSecondaryTax;
+                                                        @endphp
+                                                        <div>
+                                                            @if ($tax->type == 'PRIMARY')
+                                                                <div class="gap-5 d-flex justify-content-between">
+                                                                    <span>{{ $tax->tax_name }}({{ $tax->tax_percentage }}%):
+                                                                    </span>
+                                                                    <span class="mb-2 fw-semibold">
+                                                                        GH₵{{ number_format($primaryTax, 2) }}</span>
+                                                                </div>
+                                                            @else
+                                                                <div class="gap-5 d-flex justify-content-between">
+                                                                    <span>{{ $tax->tax_name }}({{ $tax->tax_percentage }}%):
+                                                                    </span>
+                                                                    <span class="mb-2 fw-semibold">
+                                                                        GH₵{{ number_format($secondaryTax, 2) }}
+                                                                    </span>
+                                                                </div>
+                                                            @endif
 
-{{--                            <div class="row py-sm-3">--}}
-{{--                                <div class="mb-3 col-md-6 mb-md-0">--}}
-{{--                                    <div class="mb-3 d-flex align-items-center">--}}
-{{--                                        <label for="salesperson"--}}
-{{--                                            class="form-label me-1 fw-semibold">Salesperson:</label>--}}
-{{--                                        <input type="text" hidden="" name="salesperson"--}}
-{{--                                        value="{{ $invoice->salesperson }}" >--}}
-{{--                                        <p class="mb-1">{{ $invoice->salesperson }}</p>--}}
+                                                        </div>
+                                                    @endforeach
+                                            </div>
+                                            <div class="d-flex justify-content-between">
+                                                @php
+                                                // Calculate the final total price after adding the tax
+                                                $finalTotalPrice = $totalPrice + $totalTax;
+                                            @endphp
+                                                <span>Total:</span>
+                                                <span>{{ $company->currency ?? 'GHS'}}&nbsp;<span class="total">{{ number_format($finalTotalPrice, 2) }}</span>
+                                            </div>
+                                        </div>
+    
+                                    </div>
+                                </div>
+                            </div>
 
-{{--                                    </div>--}}
-{{--                                </div>--}}
-{{--                                <div class="col-md-6 d-flex justify-content-end ">--}}
-{{--                                    <!-- Totals Display -->--}}
-{{--                                    <div class="invoice-calculations">--}}
-{{--                                        <div class="mb-2 d-flex justify-content-between">--}}
-{{--                                            <span class="me-5">Subtotal:</span>--}}
-{{--                                            <span>{{ $company->currency }}&nbsp;<span class="subtotal">0.00</span>--}}
-{{--                                        </span>--}}
-{{--                                        </div>--}}
-{{--                                        <div class="mb-2 d-flex justify-content-between">--}}
-{{--                                            <span>Discount:</span>--}}
-{{--                                            <span>{{ $company->currency ?? 'GHS' }} </span>&nbsp;<span class="discount">0--}}
-{{--                                                    .00</span>--}}
-{{--                                        </div>--}}
-{{--                                        <div class="mb-2 d-flex justify-content-between">--}}
-{{--                                            <div id="tax-list"></div>--}}
-{{--                                        </div>--}}
-
-{{--                                        <div class="d-flex justify-content-between">--}}
-{{--                                            <span>Total:</span>--}}
-{{--                                            <span>{{ $company->currency ?? 'GHS'}}</span>&nbsp;<span class="total">0--}}
-{{--                                                .00</span>--}}
-{{--                                        </div>--}}
-{{--                                        <input type="hidden" id="total_hidden_input" name="total" value="0.00">--}}
-{{--                                    </div>--}}
-
-{{--                                </div>--}}
-{{--                            </div>--}}
-
-{{--                            <hr class="my-4" />--}}
 
                             <div class="row">
                                 <div class="col-12">
                                     <div class="mb-3">
                                         <label for="note" class="form-label fw-semibold">Note:</label>
-                                        <textarea class="form-control" rows="2" id="note"
-                                            name="notes">{{ $invoice->notes }}</textarea>
+                                        <textarea class="form-control" rows="2" id="note" name="notes">{{ $invoice->notes }}</textarea>
                                     </div>
                                 </div>
                             </div>
@@ -506,45 +378,13 @@
                 <!-- Invoice Actions -->
                 <div class="col-lg-3 col-12 invoice-actions">
 
-
-
-
-{{--                    --}}{{-- List all taxes here and let users toggle to apply tax --}}
-{{--                    <div class="mb-5 card">--}}
-{{--                        <div class="card-body">--}}
-{{--                            <h6 class="mb-2">Taxes</h6>--}}
-{{--                            @foreach ($allTaxes as $tax)--}}
-{{--                                <div class="gap-2 mb-2 d-flex justify-content-between align-items-center">--}}
-{{--                                    <label for="tax-{{ $tax->id }}"--}}
-{{--                                           class="mb-0 badge bg-label-{{ $tax->type === 'SECONDARY' ? 'warning' : 'primary' }} text-wrap">--}}
-{{--                                        {{ $tax->tax_name }} {{ $tax->tax_percentage }}%--}}
-{{--                                    </label>--}}
-{{--                                    <label class="switch switch-primary">--}}
-{{--                                        <input type="checkbox" class="switch-input" id="tax-{{ $tax->id }}"--}}
-{{--                                               name="tax_ids[]" value="{{ $tax->id }}"--}}
-{{--                                            {{ in_array($tax->id, $invoiceTaxes) ? 'checked' : '' }} />--}}
-{{--                                        <span class="switch-toggle-slider">--}}
-{{--                                            <span class="switch-on"><i class="bx bx-check"></i></span>--}}
-{{--                                            <span class="switch-off"><i class="bx bx-x"></i></span>--}}
-{{--                                        </span>--}}
-{{--                                        <span class="switch-label"></span>--}}
-{{--                                    </label>--}}
-{{--                                </div>--}}
-{{--                            @endforeach--}}
-
-{{--                        </div>--}}
-{{--                    </div>--}}
                     <div class="mb-4 card">
                         <div class="card-body">
 
                             <div class="my-3 d-flex">
                                 <button type="submit" class="btn btn-label-success w-100">Save Invoice</button>
                             </div>
-{{--                            <span class="btn btn-primary d-grid w-100" data-bs-toggle="offcanvas"--}}
-{{--                                data-bs-target="#sendInvoiceOffcanvas">--}}
-{{--                                <span class="d-flex align-items-center justify-content-center text-nowrap"><i--}}
-{{--                                        class="bx bx-paper-plane bx-xs me-3"></i>Send Invoice</span>--}}
-{{--                            </span>--}}
+                     
 
                         </div>
                     </div>

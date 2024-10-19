@@ -55,7 +55,8 @@
                                         <thead>
                                             <tr>
                                                 <th class="mb-3 col-lg-6 col-xl-4 col-12">Stock Name<br></th>
-                                                <th class="mb-3 col-lg-6 col-xl-4 col-12">Stock Price</th>
+                                                <th class="mb-3 col-md-6 col-lg-4 col-xl-2">Stock Price</th>
+                                                <th class="mb-3 col-lg-6 col-xl-2">Unit of Measure</th>
                                                 <th class="mb-3 col-lg-6 col-xl-2 col-12">Stock Description</th>
                                                 {{-- <th class="mb-3 col-lg-6 col-xl-3 col-12" data-bs-toggle="tooltip"
                                                     data-bs-offset="0,4" data-bs-placement="top" data-bs-html="true"
@@ -83,11 +84,11 @@
 
                                                 </td>
 
-                                                <td class="mb-3 col-lg-6 col-xl-4 col-12">
+                                                <td class="mb-3 ">
 
                                                     <div>
                                                         <div class="input-group">
-                                                            <span class="input-group-text">GHC</span>
+                                                            <span class="input-group-text">{{ $company->currency ?? 'GHC' }}</span>
 
                                                             <input type="number" id="form-repeater-1-1"
                                                                 class="form-control {{ $errors->first('stock_price') ? ' form-error' : '' }}"
@@ -101,9 +102,26 @@
                                                         <span class="error">{{ $message }}</span>
                                                     @enderror
                                                 </td>
+
+                                                <td class="mb-3 ">
+
+                                                    <div>
+                                                        <div class="input-group">
+
+                                                            <input type="text" id="form-repeater-1-1"
+                                                                class="form-control {{ $errors->first('unit_of_measurement') ? ' form-error' : '' }}"
+                                                                placeholder="Enter the Unit of Measurement"
+                                                                name="unit_of_measurement"  />
+
+                                                        </div>
+                                                    </div>
+
+                                                    @error('unit_of_measurement')
+                                                        <span class="error">{{ $message }}</span>
+                                                    @enderror
+                                                </td>
                                                 <td class="mb-3 col-lg-6 col-xl-4 col-12">
                                                     <div class="input-group">
-                                                        <span class="input-group-text">Brief Description</span>
                                                         <textarea name="stock_description" class="form-control" aria-label="With textarea"
                                                             placeholder="Describe your item/service" {{ $errors->first('stock_description') ? ' form-error' : '' }}>
                                                         </textarea>
@@ -197,6 +215,9 @@
                                     aria-label="Email: activate to sort column ascending">Price</th>
                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="2"
                                     colspan="1" style="width: 124px;"
+                                    aria-label="Date: activate to sort column ascending">Unit Of Measurement</th>
+                                <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="2"
+                                    colspan="1" style="width: 124px;"
                                     aria-label="Date: activate to sort column ascending">Description</th>
                                 <th class="sorting" tabindex="0" aria-controls="DataTables_Table_0" rowspan="1"
                                     colspan="1" style="width: 161px;"
@@ -213,6 +234,7 @@
                                 <tr class="odd">
                                     <td valign="top" class="">{{ $catalog->name }}</td>
                                     <td valign="top" class="">GH₵{{ number_format($catalog->price, 2) }}</td>
+                                    <td valign="top" class="">{{ $catalog->unit_of_measurement }}</td>
                                     <td valign="top" class="">{{ $catalog->description }}</td>
                                     <td><span class="badge bg-label-primary me-1">{{ $catalog->status }}</span></td>
 
