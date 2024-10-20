@@ -152,7 +152,7 @@ class invoiceController extends Controller
 
         $this->extracted($request, $invoice);
 
-        return redirect()->route('invoice.show',['slug' => $company->slug, 'id' => $invoice->id])->with('success', 'Product added to cart successfully!');
+        return redirect()->route('invoice.show',['slug' => $company->slug, 'id' => $invoice->id])->with('success', 'Invoice Created Successfully!');
 //        return redirect()->back()->with('success', 'Invoice Created Successfully');
     }
 
