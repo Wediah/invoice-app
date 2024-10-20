@@ -19,7 +19,7 @@
             /* Print styles */
             @media print {
                 body {
-                    font-size: 12pt;
+                    font-size: 12px;
                     background: transparent none;
                     box-shadow: none;
                     width: 100%;
