@@ -146,7 +146,7 @@
                     <p class="fw-bold underline mb-0">Taxes</p>
                     @foreach ($invoice->taxes->sortBy('type') as $tax)
                     <div class="d-flex justify-content-between mb-0">
-                        <p class="mb-0">{{ $tax->tax_name }} :</p>
+                        <p class="mb-0">{{ $tax->tax_name }}&nbsp;({{ $tax->tax_percentage }}%) :</p>
 
                         <p class="mb-0 fw-semibold"> {{ $company->currency ?? 'GHS' }} {{ number_format($tax->pivot->tax_amount, 2) }}</p>
                     </div>
