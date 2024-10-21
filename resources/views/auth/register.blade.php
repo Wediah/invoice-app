@@ -1,6 +1,16 @@
 <x-guest-layout>
 
+<style>
+      input::-webkit-outer-spin-button,
+            input::-webkit-inner-spin-button {
+                -webkit-appearance: none;
+                margin: 0;
+            }
 
+            input[type="number"] {
+                -moz-appearance: textfield;
+            }
+</style>
     <div class="authentication-inner row m-0">
         <!-- /Left Text -->
         <div class="d-none d-lg-flex col-lg-7 col-xl-8 align-items-center">

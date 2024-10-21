@@ -108,8 +108,14 @@ $(function () {
           return new bootstrap.Tooltip(tooltipTriggerEl);
         });
       },
-      hide: function (e) {
-        $(this).slideUp();
+      hide: function (deleteElement) {
+        $(this).slideUp(deleteElement);
+        // Remove the row from DOM after animation
+        setTimeout(() => {
+          $(this).remove();
+          // Update calculations after removing the row
+          updateCalculations();
+        }, 500);
       }
     });
   }
