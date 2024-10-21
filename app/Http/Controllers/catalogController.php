@@ -68,7 +68,7 @@ class catalogController extends Controller
 
                 [
                     'stock_name' => 'required|max:255|string',
-                    'stock_description' => 'required|string|min:5|max:300',
+                    'stock_description' => 'sometimes|nullable|min:5|max:300',
                     'unit_of_measurement' => 'required|max:255|string',
                     'stock_price' => 'required|string',
 

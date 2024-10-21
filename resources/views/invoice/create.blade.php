@@ -263,10 +263,11 @@
                                                     <div class="input-group">
                                                         <span
                                                             class="input-group-text">{{ $company->currency ?? 'GHS' }}</span>
-                                                        <input type="number" name="total[]"
-                                                            class="form-control invoice-item-sub_total "
-                                                            aria-label="Amount " required readonly
-                                                            value="{{ old('total') ?? 0 }}" />
+                                                        <input type="number" name="group-a[0][item-sub_total]"
+                                                            class="form-control invoice-item-sub_total"
+                                                            aria-label="Amount" required readonly
+                                                            value="{{ old('item-sub_total') ?? 0 }}" />
+
                                                     </div>
                                                     <div>
                                                         <span>Discount:</span>
@@ -349,7 +350,8 @@
                                     <div class="invoice-calculations">
                                         <div class="mb-2 d-flex justify-content-between">
                                             <span class="me-5">Subtotal:</span>
-                                            <span>{{ $company->currency ?? 'GHS' }}&nbsp;<span class="subtotal">0.00</span>
+                                            <span>{{ $company->currency ?? 'GHS' }}&nbsp;<span
+                                                    class="subtotal">0.00</span>
                                             </span>
                                         </div>
                                         <div class="mb-2 d-flex justify-content-between">
@@ -372,6 +374,14 @@
                                                     class="total">0.00</span>
                                         </div>
                                         <input type="hidden" id="total_hidden_input" name="total" value="0.00">
+                                        <input type="hidden" id="subtotal_hidden_input" name="subtotal"
+                                            value="0.00">
+                                        <input type="hidden" id="subtotalAfterDiscount_hidden_input"
+                                            name="subtotalAfterDiscount" value="0.00">
+                                        <input type="hidden" id="discount_total_hidden_input" name="total_discount"
+                                            value="0.00">
+                                        <input type="hidden" id="tax_total_hidden_input" name="tax_total"
+                                            value="0.00">
                                     </div>
 
                                 </div>
@@ -431,11 +441,11 @@
                             <div class="my-3 d-flex">
                                 <button type="submit" class="btn btn-label-success w-100">Save Invoice</button>
                             </div>
-                            <span class="btn btn-primary d-grid w-100" data-bs-toggle="offcanvas"
+                            {{-- <span class="btn btn-primary d-grid w-100" data-bs-toggle="offcanvas"
                                 data-bs-target="#sendInvoiceOffcanvas">
                                 <span class="d-flex align-items-center justify-content-center text-nowrap"><i
                                         class="bx bx-paper-plane bx-xs me-3"></i>Send Invoice</span>
-                            </span>
+                            </span> --}}
 
                         </div>
                     </div>
@@ -448,7 +458,7 @@
 
     <!-- Offcanvas -->
     <!-- Send Invoice Sidebar -->
-    <div class="offcanvas offcanvas-end" id="sendInvoiceOffcanvas" aria-hidden="true">
+    {{-- <div class="offcanvas offcanvas-end" id="sendInvoiceOffcanvas" aria-hidden="true">
         <div class="offcanvas-header border-bottom">
             <h6 class="offcanvas-title">Send Invoice</h6>
             <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas"
@@ -492,7 +502,7 @@
                 </div>
             </form>
         </div>
-    </div>
+    </div> --}}
     <!-- /Send Invoice Sidebar -->
     <!-- /Offcanvas -->
     </div>

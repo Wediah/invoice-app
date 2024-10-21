@@ -28,10 +28,7 @@ class Company extends Model
         return $this->belongsTo(User::class);
     }
 
-    public function category(): HasMany
-    {
-        return $this->hasMany(Category::class);
-    }
+
 
     public function catalogs(): HasMany
     {
@@ -53,10 +50,7 @@ class Company extends Model
         return $this->hasMany(PaymentTerms::class);
     }
 
-    public function companyCategory(): BelongsTo
-    {
-     return $this->belongsTo(CompanyCategory::class, 'category', 'id');
-    }
+  
 
     public function customerInfo(): HasMany
     {

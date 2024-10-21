@@ -144,7 +144,10 @@
     {{-- Print  --}}
     <div class="pt-0 mt-0 print-only">
         @include('partials.invoice-details')
-
+            <!-- Add watermark logo in the background -->
+            <div class="watermark">
+                <img src="{{ asset('storage/company_logo') }}/{{ $invoice->company->logo }}" alt="Watermark Logo" />
+            </div>
     </div>
 
 </x-masterLayout>

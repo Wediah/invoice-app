@@ -11,8 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('taxes', function (Blueprint $table) {
+        Schema::create('payment_terms', function (Blueprint $table) {
+            $table->id();
+            $table->string('name');
+            $table->foreignId('company_id')->references('id')->on('companies')->cascadeOnDelete();
+            $table->timestamps();
             $table->softDeletes();
+
         });
     }
 
@@ -21,8 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('taxes', function (Blueprint $table) {
-            $table->dropSoftDeletes();
-        });
+        Schema::dropIfExists('payment_terms');
     }
 };

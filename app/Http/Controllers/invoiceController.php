@@ -2,20 +2,21 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Tax;
 use App\invoiceStatus;
 use App\Models\Catalog;
 use App\Models\Company;
-use App\Models\customerInfo;
 use App\Models\invoice;
-use Illuminate\Contracts\View\Factory;
-use Illuminate\Contracts\View\View;
-use Illuminate\Foundation\Application;
-use Illuminate\Http\RedirectResponse;
+use App\Models\customerInfo;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Barryvdh\DomPDF\Facade\Pdf as PDF;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\RedirectResponse;
+use Barryvdh\DomPDF\Facade\Pdf as PDF;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Foundation\Application;
 
 class invoiceController extends Controller
 {
@@ -60,7 +61,7 @@ class invoiceController extends Controller
         return view('invoice.create', compact('company', 'catalogs', 'user', 'taxes', 'invoiceNumber'));
     }
 
-        /**
+    /**
      * Generate a unique invoice number.
      */
     private function generateInvoiceNumber($company): string
@@ -81,30 +82,30 @@ class invoiceController extends Controller
     }
 
     public function getPrice(Request $request)
-{
-    $itemId = $request->id;
-    $item = Catalog::find($itemId);  // Assuming 'Catalog' is your model name
+    {
+        $itemId = $request->id;
+        $item = Catalog::find($itemId);  // Assuming 'Catalog' is your model name
 
-    if ($item) {
-        return response()->json(['price' => $item->price]);  // Assuming 'price' is the attribute for the price
-    } else {
-        return response()->json(['error' => 'Item not found'], 404);
+        if ($item) {
+            return response()->json(['price' => $item->price]);  // Assuming 'price' is the attribute for the price
+        } else {
+            return response()->json(['error' => 'Item not found'], 404);
+        }
     }
-}
 
 
-  
-     /**
+
+    /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request, $slug)
     {
         $company = Company::where('slug', $slug)->firstOrFail();
-
         $validatedData = $request->validate([
             'customer_name' => 'required|string|max:255',
             'catalog_id.*' => 'required|exists:catalogs,id',
             'quantity.*' => 'required|integer|min:1',
+            'item-sub_total.*' => 'required', //items selected total
             'tax_id.*' => 'required|exists:taxes,id',
             'discount_percent.*' => 'numeric|nullable|min:0',
             'customer_email' => 'string|email|nullable|max:255',
@@ -113,25 +114,42 @@ class invoiceController extends Controller
             'customer_mobile' => 'string|nullable|max:255',
             'due_date' => 'required|string|max:255',
             'notes' => 'string|nullable|max:255',
+            'subtotal' => 'required|numeric',
+            'subtotalAfterDiscount' => 'required|numeric',
+            'total_discount' => 'required|numeric',
+            'tax_total' => 'required|numeric',
             'total' => 'required|numeric|regex:/^\d+(\.\d{1,2})?$/',
             'salesperson' => 'required|string|max:255'
         ]);
 
         try {
-            DB::transaction(function () use ($validatedData, $company, $request) {
+            // Initialize $invoice outside the closure
+            $invoice = null;
+
+            DB::transaction(function () use ($validatedData, $company, $request, &$invoice) {
                 $user_id = Auth::id();
                 $invoiceNumber = $this->generateInvoiceNumber($company);
 
+                // Create the invoice
                 $invoice = Invoice::create([
                     'user_id' => $user_id,
                     'company_id' => $company->id,
                     'invoice_number' => $invoiceNumber,
                     'due_date' => $validatedData['due_date'],
                     'notes' => $validatedData['notes'],
-                    'total' => $validatedData['total'],
+                    'subtotal' => $validatedData['subtotal'],
+                    'subtotalAfterDiscount' => $validatedData['subtotalAfterDiscount'],
+                    'tax_total' => $validatedData['tax_total'],
+                    'discount_total' => $validatedData['total_discount'],
+                    'final_total' => $validatedData['total'],
                     'salesperson' => $validatedData['salesperson'],
                 ]);
 
+                if (!$invoice) {
+                    throw new \Exception('Failed to create invoice');
+                }
+
+                // Create customer info linked to the invoice
                 CustomerInfo::create([
                     'invoice_id' => $invoice->id,
                     'company_id' => $company->id,
@@ -145,18 +163,25 @@ class invoiceController extends Controller
                 $this->attachItemsAndTaxes($request, $invoice);
             });
 
-            return redirect()->route('invoice.show', ['slug' => $company->slug, 'id' => $invoice->id])
-                ->with('success', 'Invoice Created Successfully!');
+            // After the transaction, $invoice should now contain the created invoice instance
+            if ($invoice) {
+                return redirect()->route('invoice.show', ['slug' => $company->slug, 'id' => $invoice->id])
+                    ->with('success', 'Invoice Created Successfully!');
+            } else {
+                return redirect()->back()->with('error', 'Failed to create invoice. Please try again.');
+            }
         } catch (\Exception $e) {
             Log::error('Error creating invoice: ' . $e->getMessage());
             return redirect()->back()->with('error', 'Failed to create invoice. Please try again.');
         }
     }
+
     /**
      * Attach items and taxes to an invoice.
      */
     private function attachItemsAndTaxes(Request $request, $invoice): void
     {
+        // Attach Items to Invoice
         $items = $request->input('group-a', []);
         $processedItems = [];
 
@@ -164,16 +189,50 @@ class invoiceController extends Controller
             $processedItems[$item['catalog_id']] = [
                 'quantity' => $item['quantity'],
                 'discount_percent' => $item['discount_percent'],
+                'total' => $item['item-sub_total'],
             ];
         }
 
+
         $invoice->catalogs()->attach($processedItems);
+
+        $primaryTaxTotal = 0;
+        $secondaryTaxes = [];
 
         $taxIds = $request->input('tax_ids', []);
         if (is_array($taxIds)) {
-            $invoice->taxes()->attach($taxIds);
+            // First pass: Calculate primary taxes
+            foreach ($taxIds as $taxId) {
+                $tax = Tax::find($taxId);
+                if ($tax && $tax->type == 'PRIMARY') {
+                    $taxAmount = $invoice->subtotalAfterDiscount * ($tax->tax_percentage / 100);
+                    $primaryTaxTotal += $taxAmount;
+                  
+                    $invoice->taxes()->attach($taxId, [
+                        'tax_type' => $tax->type,
+                        'tax_percentage' => $tax->tax_percentage,
+                        'tax_amount' => $taxAmount
+                    ]);
+                } elseif ($tax && $tax->type == 'SECONDARY') {
+                    $secondaryTaxes[] = $tax;
+                }
+            }
+
+            // Second pass: Calculate and attach secondary taxes
+            $baseForSecondary = $invoice->subtotalAfterDiscount + $primaryTaxTotal;
+            foreach ($secondaryTaxes as $tax) {
+                $taxAmount = $baseForSecondary * ($tax->tax_percentage / 100);
+               
+                $invoice->taxes()->attach($tax->id, [
+                    'tax_type' => $tax->type,
+                    'tax_percentage' => $tax->tax_percentage,
+                    'tax_amount' => $taxAmount
+                ]);
+            }
         }
     }
+
+
     /**
      * Display the specified resource.
      */
@@ -189,7 +248,7 @@ class invoiceController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit($slug,string $id): Factory|Application|View|\Illuminate\Contracts\Foundation\Application
+    public function edit($slug, string $id): Factory|Application|View|\Illuminate\Contracts\Foundation\Application
     {
         $company = Company::where('slug', $slug)->firstOrFail();
         $invoice = invoice::with('company', 'taxes')->where('id', $id)->firstOrFail();
@@ -220,7 +279,7 @@ class invoiceController extends Controller
     }
 
 
-   /**
+    /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, string $id)
@@ -291,9 +350,9 @@ class invoiceController extends Controller
      * @param $invoice
      * @return void
      */
- 
 
-  /**
+
+    /**
      * Download the invoice as a PDF.
      */
     public function downloadPDF($id): \Illuminate\Http\Response

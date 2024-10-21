@@ -16,6 +16,8 @@ return new class extends Migration
             $table->foreignId('catalog_id')->constrained('catalogs')->onDelete('cascade');
             $table->string('image_path');
             $table->timestamps();
+            $table->softDeletes();
+
         });
     }
 
