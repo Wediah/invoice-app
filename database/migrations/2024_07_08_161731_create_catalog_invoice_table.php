@@ -21,6 +21,7 @@ return new class extends Migration
                 ->constrained()
                 ->onDelete('cascade'); // Cascade delete when the catalog is deleted
             $table->integer('quantity'); // Quantity of items
+            $table->decimal('total', 15, 2)->nullable();
             $table->decimal('discount_percent', 8, 2)->nullable(); // Discount field (nullable)
             $table->timestamps(); // Created at and updated at timestamps
             $table->softDeletes();

@@ -27,6 +27,7 @@ return new class extends Migration
 
             // Fields for storing computed values
             $table->decimal('subtotal', 15, 2)->nullable();
+            $table->decimal('subtotalAfterDiscount', 15, 2)->nullable();
             $table->decimal('discount_total', 15, 2)->nullable();
             $table->decimal('primary_tax_total', 15, 2)->nullable();
             $table->decimal('secondary_tax_total', 15, 2)->nullable();

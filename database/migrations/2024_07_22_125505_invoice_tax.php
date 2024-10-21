@@ -15,10 +15,11 @@ return new class extends Migration
             $table->id();
             $table->foreignId('invoice_id')->constrained()->onDelete('cascade');
             $table->foreignId('tax_id')->constrained()->onDelete('cascade');
-            $table->integer('tax-percentage')->nullable();
+            $table->enum('tax_type', ['primary', 'secondary']);
+            $table->decimal('tax_percentage', 5, 2)->nullable();
+            $table->decimal('tax_amount', 15, 2)->nullable();
             $table->timestamps();
             $table->softDeletes();
-
         });
     }
 

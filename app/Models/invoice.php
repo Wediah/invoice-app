@@ -25,12 +25,12 @@ class invoice extends Model
 
     public function catalogs(): BelongsToMany
     {
-        return $this->belongsToMany(catalog::class)->withPivot('quantity', 'discount_percent')->withTimestamps();
+        return $this->belongsToMany(catalog::class)->withPivot('quantity', 'discount_percent','total')->withTimestamps();
     }
 
     public function taxes(): BelongsToMany
     {
-        return $this->belongsToMany(tax::class)->withPivot('tax_id')->withTimestamps();
+        return $this->belongsToMany(tax::class)->withPivot('tax_id','tax_type', 'tax_percentage', 'tax_amount')->withTimestamps();
     }
 
     public function paymentTerms(): BelongsTo
