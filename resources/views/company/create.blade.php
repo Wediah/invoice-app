@@ -193,17 +193,16 @@
                                             <p class="error">{{ $message }}</p>
                                         @enderror
                                     </div>
+                                    
                                     <div class="mb-4 col-md-6">
-                                        <label for="category" class="form-label blabel">Company Category</label>
-
-                                        <div class="input-group input-group-merge">
-
-                                            <select name="category" id="category">
+                                        <label class="form-label" for="category">Company Category</label>
+                                        <div class="input-group">
+                                            <select name="category" class="form-control">
+                                                <option value="">Select Category</option>
                                                 @foreach ($categories as $category)
-                                                    <option value="{{ $category->id }}">{{ $category->name }}
-                                                    </option>
+                                                <option value="{{ $category->id }}">{{ $category->name }}
+                                                </option>
                                                 @endforeach
-
                                             </select>
                                         </div>
                                         @error('category')
