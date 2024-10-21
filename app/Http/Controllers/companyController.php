@@ -40,8 +40,12 @@ class companyController extends Controller
 
     public function userAndCompany()
     {
+       
+
         $user = auth()->user();
         $companies = $user->companies()->withCount('invoices')->withCount('catalogs')->get();
+
+        // dd($companies);
         return view('company.index', compact('companies'));
     }
 
@@ -68,7 +72,7 @@ class companyController extends Controller
             'phone' => $validated['phone'],
             'address' => $validated['address'],
             'gps_address' => $validated['gps_address'],
-            // 'company_category_id' => $validated['category'],
+            'company_category_id' => $validated['category'],
             'description' => $validated['description'],
             'website' => $validated['website'],
         ];

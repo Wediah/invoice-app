@@ -42,7 +42,8 @@
                                     {{-- <a href="javascript:;" class="me-1"><span class="badge bg-label-secondary"></span></a> --}}
                                     <a href="javascript:;">
                                         <span class="badge bg-label-warning">
-                                            {{ optional($company->companyCategory)->name ?? 'No Category' }}
+                                            {{-- {{ optional($company->company_category_id) ?? 'No Category' }} --}}
+                                            {{ $company->category->name ?? 'No Category Selected' }}
                                         </span>
                                     </a>
                                 </div>

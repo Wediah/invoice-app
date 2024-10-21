@@ -61,7 +61,7 @@
             <div class="col-6 form-group">
                 <label class="form-label" for="category">Company Category</label>
                 <div class="input-group">
-                    <select name="company_category_id" class="form-control">
+                    <select name="category" class="form-control">
                         <option value="">Select Category</option>
                         @foreach ($categories as $category)
                             <option value="{{ $category->id }}"

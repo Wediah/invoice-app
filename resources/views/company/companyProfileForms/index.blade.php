@@ -21,7 +21,7 @@
                                     height="110" width="110" alt="User avatar" />
                                 <div class="text-center user-info">
                                     <h5 class="mb-2">{{ $company->name }}</h5>
-                                    <span class="badge bg-label-secondary">{{ $company->category }}</span>
+                                    <span class="badge bg-label-secondary">{{ $company->category->name ?? 'No Category Selected'}}</span>
                                 </div>
                             </div>
                         </div>
