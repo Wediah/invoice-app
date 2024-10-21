@@ -15,11 +15,17 @@ return new class extends Migration
         schema::create("invoice_customer_info", function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(invoice::class);
+            $table->foreignId('company_id')->references('id')->on('companies')->onDelete('cascade');
             $table->string("customer_name");
             $table->string("customer_email");
             $table->string("customer_address");
             $table->string("customer_mobile");
             $table->string("customer_phone");
+
+            $table->timestamps();
+            $table->softDeletes();
+
+
         });
     }
 

@@ -2,30 +2,19 @@
 
 namespace App\Models;
 
-use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\SoftDeletes;
 
-class companyCategory extends Model
+class CompanyCategory extends Model
 {
-    use HasFactory, Sluggable, softDeletes;
+    use HasFactory;
 
-    public $guarded = [];
 
-    public function sluggable(): array
+    protected $fillable = ['name'];
+
+
+    public function companies()
     {
-        return [
-            'slug' => [
-                'source' => 'name'
-            ]
-        ];
-    }
-
-    public function companies(): HasMany
-    {
-        return $this->hasMany(company::class);
+        return $this->hasMany(Company::class);
     }
 }

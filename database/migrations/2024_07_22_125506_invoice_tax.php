@@ -15,8 +15,10 @@ return new class extends Migration
             $table->id();
             $table->foreignId('invoice_id')->constrained()->onDelete('cascade');
             $table->foreignId('tax_id')->constrained()->onDelete('cascade');
-            $table->integer('tax-percentage');
+            $table->integer('tax-percentage')->nullable();
             $table->timestamps();
+            $table->softDeletes();
+
         });
     }
 

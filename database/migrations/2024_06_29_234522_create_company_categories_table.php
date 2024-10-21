@@ -11,18 +11,15 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::table('companies', function (Blueprint $table) {
-            $table->string('email')->after('name');
+        Schema::create('company_categories', function (Blueprint $table) {
+            $table->id();
+            $table->string('name')->unique(); // Category name
+            $table->timestamps();
         });
     }
-
-    /**
-     * Reverse the migrations.
-     */
+    
     public function down(): void
     {
-        Schema::table('companies', function (Blueprint $table) {
-            $table->dropColumn('email');
-        });
+        Schema::dropIfExists('company_categories');
     }
 };

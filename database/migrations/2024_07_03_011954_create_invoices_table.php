@@ -1,5 +1,6 @@
 <?php
 
+use App\invoiceStatus;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -14,12 +15,26 @@ return new class extends Migration
         Schema::create('invoices', function (Blueprint $table) {
             $table->id();
             $table->string('invoice_number')->unique();
-            $table->foreignId('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->foreignId('company_id')->references('id')->on('companies')->onDelete('cascade');
-//            $table->foreignId('catalog_id')->references('id')->on('catalogs')->onDelete('cascade');
-//            $table->integer('quantity')->default(1);
-            $table->string('customer_name');
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->foreignId('company_id')->constrained()->onDelete('cascade');
+
+            $table->date('due_date');
+            $table->string('salesperson')->nullable();
+            $table->text('notes')->nullable();
+            $table->string('balance')->nullable();
+            $table->string('status')->default(invoiceStatus::UNPAID->value);
+
+
+            // Fields for storing computed values
+            $table->decimal('subtotal', 15, 2)->nullable();
+            $table->decimal('discount_total', 15, 2)->nullable();
+            $table->decimal('primary_tax_total', 15, 2)->nullable();
+            $table->decimal('secondary_tax_total', 15, 2)->nullable();
+            $table->decimal('tax_total', 15, 2)->nullable();
+            $table->decimal('final_total', 15, 2)->nullable();
+
             $table->timestamps();
+            $table->softDeletes();
 
         });
     }

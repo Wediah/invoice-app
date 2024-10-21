@@ -16,11 +16,13 @@ return new class extends Migration
             $table->id();
             $table->foreignId('company_id')->references('id')->on('companies')->onDelete('cascade');
             $table->string('name');
-            $table->string('type');
             $table->string('status')->default(itemStatus::INSTOCK->value);
+            $table->string('unit_of_measurement')->nullable();
             $table->string('description')->nullable();
             $table->string('price');
             $table->timestamps();
+            $table->softDeletes();
+
         });
     }
 

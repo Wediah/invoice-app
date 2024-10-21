@@ -23,6 +23,7 @@ class companyController extends Controller
         $categories = companyCategory::all();
         return view('company.create', compact('categories'));
     }
+
     public function authCompanyCreate()
     {
         $categories = companyCategory::all();
@@ -67,7 +68,7 @@ class companyController extends Controller
             'phone' => $validated['phone'],
             'address' => $validated['address'],
             'gps_address' => $validated['gps_address'],
-            'category' => $validated['category'] ?? 'not known',
+            // 'company_category_id' => $validated['category'],
             'description' => $validated['description'],
             'website' => $validated['website'],
         ];
@@ -174,7 +175,8 @@ class companyController extends Controller
     public function profile($slug): Factory|Application|View|\Illuminate\Contracts\Foundation\Application
     {
         $company = Company::where('slug', $slug)->first();
-        return view('company.companyProfileForms.index', compact('company'));
+        $categories = companyCategory::all();
+        return view('company.companyProfileForms.index', compact('company','categories'));
     }
 
     public function update(Request $request,$slug): RedirectResponse
@@ -201,7 +203,7 @@ class companyController extends Controller
             'email' => $validatedData['email'] ?? $company->email,
             'phone' => $validatedData['phone'] ?? $company->phone,
             'address' => $validatedData['address'] ?? $company->address,
-            'category' => $validatedData['category'] ?? $company->category,
+            'company_category_id' => $validatedData['category'] ?? $company->category,
 //            'other_category' => $validatedData['other_category'] ?? $updateCompany->other_category
         ];
 
