@@ -77,7 +77,7 @@
                                             </div>
                                         </div>
                                     </td>
-                                    <td class="text-center">{{ $company->currency ?? 'GHS' }}&nbsp;{{ number_format((float) $invoice->total, 2) }}</td>
+                                    <td class="text-center">{{ $company->currency ?? 'GHS' }}&nbsp;{{ number_format((float) $invoice->final_total , 2) }}</td>
                                     <td class="text-center">
 
                                         {{ $invoice->created_at->format('jS M, Y') }}

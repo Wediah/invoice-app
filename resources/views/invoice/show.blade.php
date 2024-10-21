@@ -82,7 +82,7 @@
                         /* Semi-transparent */
                         z-index: -1;
                         /* Behind the content */
-                        width: 50%;
+                        width: 100%;
                         height: auto;
                     }
 
