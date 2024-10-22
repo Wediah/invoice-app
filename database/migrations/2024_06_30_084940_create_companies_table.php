@@ -46,6 +46,7 @@ return new class extends Migration
             $table->string('merchant_id')->nullable();
             $table->string('merchant_name')->nullable();
             $table->string('status')->default(companyStatus::PENDING->value);
+            $table->string('invoice_footnote')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

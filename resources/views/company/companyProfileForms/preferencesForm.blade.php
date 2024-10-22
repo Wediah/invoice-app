@@ -26,15 +26,21 @@
                     @enderror
                 </div>
                 </div>
-
+                <div class="form-group">
+                    <label for="invoice_footnote" class="form-label">Invoice Footnote</label>
+                    <textarea class="form-control" rows="2" id="invoice_footnote"
+                              name="invoice_footnote" placeholder="Invoice Footnote">{{ $company->invoice_footnote
+                              }}</textarea>
+                    @error('invoice_footnote')
+                    <p class="error">{{ $message }}</p>
+                    @enderror
+                </div>
             </div>
-
-
         </div>
         <div class="pt-4 float-end">
             <button type="submit"  class="btn btn-success">Submit</button>
 
         </div>
-      
+
     </form>
 </div>
