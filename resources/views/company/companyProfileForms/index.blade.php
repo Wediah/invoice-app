@@ -1,6 +1,4 @@
 <x-masterLayout :company="$company">
-
-
     <div class="container-xxl flex-grow-1 container-p-y">
         <h4 class="mb-0 breadcrumb-wrapper">
             <span class="text-muted fw-light">All Companies /</span>Company Profile
@@ -17,11 +15,13 @@
                     <div class="card-body">
                         <div class="user-avatar-section">
                             <div class=" d-flex align-items-center flex-column">
-                                <img class="my-4 rounded img-fluid" src="{{ asset('storage/company_logo') }}/{{ $company->logo }}"
+                                <img class="my-4 rounded img-fluid"
+                                    src="{{ $company && $company->logo ? asset('storage/company_logo/' . $company->logo) : asset('path/to/default/logo.png') }}"
                                     height="110" width="110" alt="User avatar" />
                                 <div class="text-center user-info">
                                     <h5 class="mb-2">{{ $company->name }}</h5>
-                                    <span class="badge bg-label-secondary">{{ $company->category->name ?? 'No Category Selected'}}</span>
+                                    <span
+                                        class="badge bg-label-secondary">{{ $company->category->name ?? 'No Category Selected' }}</span>
                                 </div>
                             </div>
                         </div>
@@ -110,7 +110,9 @@
                                 <i class="bx bx-detail me-1"></i>Financial Information</a>
                         </li>
                         <li class="nav-item">
-                            <a href="#settings-pref" x-on:click="selected = 'settings-pref'":class="{ 'active': selected === 'settings-pref' }" class="nav-link" >
+                            <a href="#settings-pref"
+                                x-on:click="selected = 'settings-pref'":class="{ 'active': selected === 'settings-pref' }"
+                                class="nav-link">
                                 <i class="bx bx-bell me-1"></i>Settings and Preference</a>
                         </li>
 
@@ -145,7 +147,7 @@
                     </div>
                     <!-- /Project table -->
                     <!-- settings and pref  -->
-                    <div class="mb-4 card" x-show="selected === 'settings-pref'" >
+                    <div class="mb-4 card" x-show="selected === 'settings-pref'">
                         <h5 class="card-header">Settings and preferences</h5>
                         <div class="mb-3 table-responsive">
                             @include('company.companyProfileForms.preferencesForm')
