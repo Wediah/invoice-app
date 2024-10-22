@@ -4,17 +4,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Category;
 use App\Models\Company;
-use App\Models\companyCategory;
-use Cviebrock\EloquentSluggable\Services\SlugService;
-use Illuminate\Contracts\View\Factory;
-use Illuminate\Contracts\View\View;
-use Illuminate\Foundation\Application;
-use Illuminate\Http\RedirectResponse;
+use App\Models\Category;
 use Illuminate\Http\Request;
+use App\Models\companyCategory;
 use Illuminate\Routing\Redirector;
+use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Foundation\Application;
+use Illuminate\Support\Facades\Storage;
+use Cviebrock\EloquentSluggable\Services\SlugService;
 
 class companyController extends Controller
 {
@@ -72,7 +73,7 @@ class companyController extends Controller
             'phone' => $validated['phone'],
             'address' => $validated['address'],
             'gps_address' => $validated['gps_address'],
-            'company_category_id' => $validated['category'],
+            'company_category_id' => $validated['category'] ?? '',
             'description' => $validated['description'],
             'website' => $validated['website'],
         ];
@@ -83,6 +84,7 @@ class companyController extends Controller
             $logo -> storeAs('public/company_logo', $filename);
             $companyData['logo'] = $filename;
         }
+        
 
         Company::firstOrCreate($companyData);
 
@@ -183,45 +185,92 @@ class companyController extends Controller
         return view('company.companyProfileForms.index', compact('company','categories'));
     }
 
-    public function update(Request $request,$slug): RedirectResponse
-    {
-        $company = Company::where('slug', $slug)->first();
+    // public function update(Request $request,$slug): RedirectResponse
+    // {
+    //     $company = Company::where('slug', $slug)->first();
 
-        $validatedData = request()->validate([
-            'name' => 'sometimes|nullable|string',
-            'email' => 'sometimes|nullable|string',
-            'phone' => 'sometimes|nullable|string',
-            'address' => 'sometimes|nullable|string',
-            'logo' => 'sometimes|nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'category' => 'sometimes|nullable|string',
-//            'other_category' => 'sometimes|nullable|string'
-        ]);
+    //     $validatedData = request()->validate([
+    //         'name' => 'sometimes|nullable|string',
+    //         'email' => 'sometimes|nullable|string',
+    //         'phone' => 'sometimes|nullable|string',
+    //         'address' => 'sometimes|nullable|string',
+    //         'logo' => 'sometimes|nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+    //         'category' => 'sometimes|nullable|string',
+    //     ]);
 
-        $updateData = [
-            'user_id' => Auth::id(),
-            'name' => $validatedData['name'] ?? $company->name,
-            'slug' => $company->name == $validatedData['name'] ? $company->slug : SlugService::createSlug
-            (Company::class,
-                'slug',
-                    $validatedData['name']),
-            'email' => $validatedData['email'] ?? $company->email,
-            'phone' => $validatedData['phone'] ?? $company->phone,
-            'address' => $validatedData['address'] ?? $company->address,
-            'company_category_id' => $validatedData['category'] ?? $company->category,
-//            'other_category' => $validatedData['other_category'] ?? $updateCompany->other_category
-        ];
+    //     $updateData = [
+    //         'user_id' => Auth::id(),
+    //         'name' => $validatedData['name'] ?? $company->name,
+    //         'slug' => $company->name == $validatedData['name'] ? $company->slug : SlugService::createSlug
+    //         (Company::class,
+    //             'slug',$validatedData['name']),
+    //         'email' => $validatedData['email'] ?? $company->email,
+    //         'phone' => $validatedData['phone'] ?? $company->phone,
+    //         'address' => $validatedData['address'] ?? $company->address,
+    //         'company_category_id' => $validatedData['category'] ?? $company->category,
+    //     ];
 
-        if($request->hasFile('logo')){
-            $logo = $request->file('logo');
-            $filename = uniqid() . '.' . $logo->getClientOriginalExtension();
-            $logo -> storeAs('public/company_logo', $filename);
-            $updateData['logo'] = $filename;
+    //     if($request->hasFile('logo')){
+    //         $logo = $request->file('logo');
+    //         $filename = uniqid() . '.' . $logo->getClientOriginalExtension();
+    //         $logo -> storeAs('public/company_logo', $filename);
+    //         $updateData['logo'] = $filename;
+    //     }
+
+    //     $company->update($updateData);
+
+    //     // return redirect()->back()->with('company', $company->fresh());
+    //     return redirect()->route('dashboard', $company->slug);
+
+    // }
+
+    public function update(Request $request, $slug): RedirectResponse
+{
+    $company = Company::where('slug', $slug)->firstOrFail();
+
+    $validatedData = $request->validate([
+        'name' => 'sometimes|nullable|string|max:255',
+        'email' => 'sometimes|nullable|email|max:255',
+        'phone' => 'sometimes|nullable|string|max:20',
+        'address' => 'sometimes|nullable|string|max:255',
+        'logo' => 'sometimes|nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        'category' => 'sometimes|nullable|exists:company_categories,id',
+    ]);
+
+    $updateData = [
+        'user_id' => Auth::id(),
+        'name' => $validatedData['name'] ?? $company->name,
+        'email' => $validatedData['email'] ?? $company->email,
+        'phone' => $validatedData['phone'] ?? $company->phone,
+        'address' => $validatedData['address'] ?? $company->address,
+        'company_category_id' => $validatedData['category'] ?? $company->company_category_id,
+    ];
+
+  
+
+    if ($request->hasFile('logo')) {
+        $logo = $request->file('logo');
+        $filename = uniqid() . '.' . $logo->getClientOriginalExtension();
+        $logo->storeAs('public/company_logo', $filename);
+        
+        // Delete old logo if exists
+        if ($company->logo) {
+            Storage::delete('public/company_logo/' . $company->logo);
         }
-
-        $company->update($updateData);
-
-        return redirect()->back();
+        
+        $updateData['logo'] = $filename;
     }
+
+    try {
+        $company->update($updateData);
+        return redirect()->route('company.show', $company->slug)->with('success', 'Company updated successfully');
+    } catch (\Exception $e) {
+        return redirect()->back()->withInput()->with('error', 'Failed to update company: ' . $e->getMessage());
+    }
+}
+
+
+
 
     public function delete(string $id)
     {

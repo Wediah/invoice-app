@@ -510,6 +510,21 @@
                                     <p class="error">{{ $message }}</p>
                                 @enderror
                             </div>
+                            <div class="mb-3">
+                                <label class="form-label" for="category">Company Category</label>
+                                <div class="input-group">
+                                    <select name="category" class="form-control" required>
+                                        <option value="">Select Category</option>
+                                        @foreach ($categories as $category)
+                                        <option value="{{ $category->id }}">{{ $category->name }}
+                                        </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                @error('category')
+                                    <p class="error">{{ $message }}</p>
+                                @enderror
+                            </div>
                             <div class="mb-3 ">
                                 <label for="address" class="form-label blabel">Box Address</label>
     

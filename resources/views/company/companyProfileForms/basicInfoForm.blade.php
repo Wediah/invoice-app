@@ -81,14 +81,6 @@
 
         </div>
 
-        {{--        
-        <x-form.input name="name" label="Name" value="{{ $company->name }}" />
-        <x-form.input name="email" label="Email" value="{{ $company->email }}" /> --}}
-        {{-- <x-form.input name="address" label="Address" value="{{ $company->address }}" /> --}}
-        {{-- <x-form.input name="phone" label="Phone" value="{{ $company->phone }}" /> --}}
-        {{-- <x-form.input name="logo" label="Logo" type="file" value="{{ $company->logo }}" />
-        <x-form.input name="category" label="Industry" value="{{ $company->category }}" /> --}}
-
 
     </form>
 </div>
