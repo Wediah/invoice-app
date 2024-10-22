@@ -160,7 +160,7 @@
                                                         <div class="mb-0 col">
                                                             <label for="customer_mobile" class="form-label">Customer
                                                                 Mobile</label>
-                                                            <input type="text" class="form-control no-border"
+                                                            <input type="tel" class="form-control no-border"
                                                                 placeholder="Enter Customer Mobile"
                                                                 aria-label="Enter Customer Mobile"
                                                                 name="customer_mobile"
@@ -172,7 +172,7 @@
                                                         <div class="mb-0 col-md-6">
                                                             <label for="customer_phone" class="form-label">Customer
                                                                 Phone</label>
-                                                            <input type="text" class="form-control no-border"
+                                                            <input type="tel" class="form-control no-border"
                                                                 name="customer_phone"
                                                                 placeholder="Enter Customer Phone"
                                                                 aria-label="Enter Customer Phone"
@@ -393,7 +393,8 @@
                                 <div class="col-12">
                                     <div class="mb-3">
                                         <label for="note" class="form-label fw-semibold">Note:</label>
-                                        <textarea class="form-control" rows="2" id="note" placeholder="Invoice note" name="notes"></textarea>
+                                        <textarea class="form-control" rows="2" id="note" placeholder="Invoice note"
+                                                  name="notes">{{ $company->invoice_footnote }}</textarea>
                                     </div>
                                 </div>
                             </div>

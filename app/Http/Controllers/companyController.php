@@ -160,11 +160,13 @@ class companyController extends Controller
         $Data = request()->validate([
             'invoice_prefix' => 'nullable',
             'invoice_numbering' => 'sometimes|nullable|numeric',
+            'invoice_footnote' => 'sometimes|nullable|string',
         ]);
 
         $validatedData = [
             'invoice_prefix' => $Data['invoice_prefix'] ?? $company->invoice_prefix,
             'invoice_numbering' => $Data['invoice_numbering'] ?? $company->invoice_numbering,
+            'invoice_footnote' => $Data['invoice_footnote'] ?? $company->invoice_footnote
         ];
 
         $company->update($validatedData);
