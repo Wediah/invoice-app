@@ -29,7 +29,7 @@ class companyController extends Controller
 
     public function authCompanyCreate()
     {
-        $categories = companyCategory::all();
+        $categories = CompanyCategory::all();
         return view('auth.auth-company-create', compact('categories'));
     }
 
