@@ -251,7 +251,7 @@ class invoiceController extends Controller
     public function edit($slug, string $id): Factory|Application|View|\Illuminate\Contracts\Foundation\Application
     {
         $company = Company::where('slug', $slug)->firstOrFail();
-        $invoice = invoice::with('company', 'taxes')->where('id', $id)->firstOrFail();
+        $invoice = Invoice::with('company', 'taxes')->where('id', $id)->firstOrFail();
         $allCatalogs = $company->catalogs;
         $invoiceCatalogs = $company->catalogs->pluck('id')->toArray();
         $allTaxes = $company->taxes;
@@ -262,7 +262,7 @@ class invoiceController extends Controller
 
     public function paidInvoice(string $id): RedirectResponse
     {
-        $paidInvoice = invoice::findOrFail($id);
+        $paidInvoice = Invoice::findOrFail($id);
         $paidInvoice->status = invoiceStatus::PAID->value;
         $paidInvoice->save();
 
@@ -271,7 +271,7 @@ class invoiceController extends Controller
 
     public function unpaidInvoice(string $id): RedirectResponse
     {
-        $unpaidInvoice = invoice::findOrFail($id);
+        $unpaidInvoice = Invoice::findOrFail($id);
         $unpaidInvoice->status = invoiceStatus::UNPAID->value;
         $unpaidInvoice->save();
 

@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
-class invoice extends Model
+class Invoice extends Model
 {
     use HasFactory;
     protected $guarded = [];
@@ -25,7 +25,8 @@ class invoice extends Model
 
     public function catalogs(): BelongsToMany
     {
-        return $this->belongsToMany(catalog::class)->withPivot('quantity', 'discount_percent','total')->withTimestamps();
+        return $this->belongsToMany(Catalog::class)->withPivot('quantity', 'discount_percent','total')
+            ->withTimestamps();
     }
 
     public function taxes(): BelongsToMany
