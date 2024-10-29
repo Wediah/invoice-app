@@ -1,6 +1,6 @@
 <?php
 
-use App\Models\invoice;
+use App\Models\Invoice;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -14,7 +14,7 @@ return new class extends Migration
     {
         schema::create("invoice_customer_info", function (Blueprint $table) {
             $table->id();
-            $table->foreignIdFor(invoice::class);
+            $table->foreignIdFor(Invoice::class);
             $table->foreignId('company_id')->references('id')->on('companies')->onDelete('cascade');
             $table->string("customer_name");
             $table->string("customer_email");
