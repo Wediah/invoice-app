@@ -6,7 +6,7 @@ use App\Models\Tax;
 use App\invoiceStatus;
 use App\Models\Catalog;
 use App\Models\Company;
-use App\Models\invoice;
+use App\Models\Invoice;
 use App\Models\customerInfo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -207,7 +207,7 @@ class invoiceController extends Controller
                 if ($tax && $tax->type == 'PRIMARY') {
                     $taxAmount = $invoice->subtotalAfterDiscount * ($tax->tax_percentage / 100);
                     $primaryTaxTotal += $taxAmount;
-                  
+
                     $invoice->taxes()->attach($taxId, [
                         'tax_type' => $tax->type,
                         'tax_percentage' => $tax->tax_percentage,
@@ -222,7 +222,7 @@ class invoiceController extends Controller
             $baseForSecondary = $invoice->subtotalAfterDiscount + $primaryTaxTotal;
             foreach ($secondaryTaxes as $tax) {
                 $taxAmount = $baseForSecondary * ($tax->tax_percentage / 100);
-               
+
                 $invoice->taxes()->attach($tax->id, [
                     'tax_type' => $tax->type,
                     'tax_percentage' => $tax->tax_percentage,
