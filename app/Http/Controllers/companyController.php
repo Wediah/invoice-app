@@ -55,6 +55,7 @@ class companyController extends Controller
     //starting new company data
     public function store(Request $request): Application|Redirector|\Illuminate\Contracts\Foundation\Application|RedirectResponse
     {
+        // dd($request->all());
         $validated = request()->validate([
             'name' => 'required|string|unique:companies,name',
             'email' => 'required|string|unique:companies,email',
@@ -62,7 +63,7 @@ class companyController extends Controller
             'address' => 'required|string',
             'gps_address' => 'required|string',
             'logo' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'company_category_id' => 'sometimes|nullable|integer',
+            'company_category_id' => 'nullable|integer',
             'description' => 'required|string|max:255',
             'website' => 'required|string',
         ]);
@@ -75,7 +76,7 @@ class companyController extends Controller
             'phone' => $validated['phone'],
             'address' => $validated['address'],
             'gps_address' => $validated['gps_address'],
-            'company_category_id' => $validated['category'] ?: null,
+            'company_category_id' => $validated['company_category_id'] ?: null,
             'description' => $validated['description'],
             'website' => $validated['website'],
         ];
