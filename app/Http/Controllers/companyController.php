@@ -9,7 +9,7 @@ namespace App\Http\Controllers;
 use App\Models\Company;
 use App\Models\Category;
 use Illuminate\Http\Request;
-use App\Models\companyCategory;
+use App\Models\CompanyCategory;
 use Illuminate\Routing\Redirector;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Auth;
