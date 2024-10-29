@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\companyCategory;
+use App\Models\CompanyCategory;
 use Cviebrock\EloquentSluggable\Services\SlugService;
 use Illuminate\Http\Request;
 
@@ -24,20 +24,20 @@ class companyCategoryController extends Controller
             'slug' => SlugService::createSlug(CompanyCategory::class, 'slug', request('name'))
         ];
 
-        companyCategory::firstOrCreate($validatedData);
+        CompanyCategory::firstOrCreate($validatedData);
 
         return redirect()->back();
     }
 
     public function edit($id)
     {
-        $category = companyCategory::where('id', $id)->firstOrFail();
+        $category = CompanyCategory::where('id', $id)->firstOrFail();
         return view('company.companyCategory.edit', compact('category'));
     }
 
     public function update($id, Request $request)
     {
-        $category = companyCategory::where('id', $id)->firstOrFail();
+        $category = CompanyCategory::where('id', $id)->firstOrFail();
 
         $validated = $request->validate([
             'name' => 'sometimes|string'
@@ -54,7 +54,7 @@ class companyCategoryController extends Controller
 
     public function delete($id)
     {
-        $category = companyCategory::where('id', $id)->firstOrFail();
+        $category = CompanyCategory::where('id', $id)->firstOrFail();
         $category->delete();
         usleep(500000);
         return redirect()->back();

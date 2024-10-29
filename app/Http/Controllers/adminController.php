@@ -19,7 +19,7 @@ class adminController extends Controller
     public function storeCategory(Request $request)
     {
         $attributes = request()->validate([
-            'slug' => SlugService::createSlug(category::class, 'slug', request('name')),
+            'slug' => SlugService::createSlug(Category::class, 'slug', request('name')),
             'name' => request('name'),
         ]);
 
@@ -39,7 +39,7 @@ class adminController extends Controller
         $update = Category::findOrFail($id);
 
         $update->update(request()->validate([
-            'slug' => SlugService::createSlug(category::class, 'slug', request('name')),
+            'slug' => SlugService::createSlug(Category::class, 'slug', request('name')),
             'name' => request('name'),
         ]));
 
