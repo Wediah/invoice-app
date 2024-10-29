@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use App\Models\Tax;
-use App\Models\invoice;
+use App\Models\Invoice;
 use App\Models\CompanyCategory;
 use Illuminate\Database\Eloquent\Model;
 use Cviebrock\EloquentSluggable\Sluggable;
