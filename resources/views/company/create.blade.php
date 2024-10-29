@@ -69,7 +69,7 @@
                                     <div class="mb-4 col-md-6">
                                         <label for="name" class="form-label blabel ">Company Name</label>
                                         <input type="text" id="name" name="name" class="form-control"
-                                            value="" placeholder="Enter Company Name" />
+                                            value="{{ old('name') }}" placeholder="Enter Company Name" />
                                         @error('name')
                                             <p class="error">{{ $message }}</p>
                                         @enderror
@@ -77,7 +77,7 @@
                                     <div class="mb-4 col-md-6">
                                         <label for="email" class="form-label blabel">Company Email</label>
                                         <input class="form-control" type="email" id="email" name="email"
-                                            value="" placeholder="Enter Company Email" />
+                                            value="{{ old('email') }}" placeholder="Enter Company Email" />
                                         @error('email')
                                             <p class="error ">{{ $message }}</p>
                                         @enderror
@@ -92,7 +92,7 @@
                                                         (+233)</span>
                                                     <input class="form-control mobile-number" type="tel"
                                                         id="phone" name="phone" placeholder="202 555 0111"
-                                                        value="" />
+                                                        value="{{ old('phone') }}" />
                                                 </div>
                                                 @error('phone')
                                                     <p class="error">{{ $message }}</p>
@@ -111,7 +111,7 @@
                                                         (+233)</span>
                                                     <input class="form-control mobile-number" type="tel"
                                                         id="phone2" name="phone2" placeholder="202 555 0111"
-                                                        value="" />
+                                                        value="{{ old('phone2') }}" />
                                                 </div>
                                                 @error('phone2')
                                                     <p class="error">{{ $message }}</p>
@@ -128,7 +128,7 @@
                                                         (+233)</span>
                                                     <input class="form-control mobile-number" type="tel"
                                                         id="phone3" name="phone3" placeholder="202 555 0111"
-                                                        value="" />
+                                                        value="{{ old('phone3') }}" />
                                                 </div>
                                                 @error('phone3')
                                                     <p class="error">{{ $message }}</p>
@@ -153,7 +153,7 @@
                                                     </span> --}}
                                             <input type="text" id="gps_address" name="gps_address"
                                                 class="form-control" placeholder=" Enter longitude Coordinates"
-                                                value="" />
+                                                value="{{ old('gps_address') }}" />
                                         </div>
                                         @error('gps_address')
                                             <p class="error">{{ $message }}</p>
@@ -172,7 +172,7 @@
                                               </span> --}}
                                             <input type="text" id="website" name="website"
                                                 class="form-control" placeholder="Enter Company Website"
-                                                value="" />
+                                                value="{{ old('website') }}" />
                                         </div>
                                         @error('website')
                                             <p class="error">{{ $message }}</p>
@@ -187,7 +187,7 @@
                                               </span> --}}
                                             <input type="text" id="address" name="address"
                                                 class="form-control" placeholder="Enter Company Address"
-                                                value="" />
+                                                value="{{ old('address') }}" />
                                         </div>
                                         @error('address')
                                             <p class="error">{{ $message }}</p>
