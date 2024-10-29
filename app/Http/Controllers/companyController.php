@@ -1,4 +1,6 @@
-<?php /** @noinspection PhpUndefinedVariableInspection */
+<?php
+
+/** @noinspection PhpUndefinedVariableInspection */
 
 /** @noinspection ALL */
 
@@ -41,7 +43,7 @@ class companyController extends Controller
 
     public function userAndCompany()
     {
-       
+
 
         $user = auth()->user();
         $companies = $user->companies()->withCount('invoices')->withCount('catalogs')->get();
@@ -60,7 +62,7 @@ class companyController extends Controller
             'address' => 'required|string',
             'gps_address' => 'required|string',
             'logo' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-            'category' => 'sometimes|nullable|string',
+            'company_category_id' => 'sometimes|nullable|integer',
             'description' => 'required|string|max:255',
             'website' => 'required|string',
         ]);
@@ -73,18 +75,18 @@ class companyController extends Controller
             'phone' => $validated['phone'],
             'address' => $validated['address'],
             'gps_address' => $validated['gps_address'],
-            'company_category_id' => $validated['category'] ?? '',
+            'company_category_id' => $validated['category'] ?: null,
             'description' => $validated['description'],
             'website' => $validated['website'],
         ];
 
-        if($request->hasFile('logo')){
+        if ($request->hasFile('logo')) {
             $logo = $request->file('logo');
             $filename = uniqid() . '.' . $logo->getClientOriginalExtension();
-            $logo -> storeAs('public/company_logo', $filename);
+            $logo->storeAs('public/company_logo', $filename);
             $companyData['logo'] = $filename;
         }
-        
+
 
         Company::firstOrCreate($companyData);
 
@@ -184,7 +186,7 @@ class companyController extends Controller
     {
         $company = Company::where('slug', $slug)->first();
         $categories = companyCategory::all();
-        return view('company.companyProfileForms.index', compact('company','categories'));
+        return view('company.companyProfileForms.index', compact('company', 'categories'));
     }
 
     // public function update(Request $request,$slug): RedirectResponse
@@ -227,49 +229,49 @@ class companyController extends Controller
     // }
 
     public function update(Request $request, $slug): RedirectResponse
-{
-    $company = Company::where('slug', $slug)->firstOrFail();
+    {
+        $company = Company::where('slug', $slug)->firstOrFail();
 
-    $validatedData = $request->validate([
-        'name' => 'sometimes|nullable|string|max:255',
-        'email' => 'sometimes|nullable|email|max:255',
-        'phone' => 'sometimes|nullable|string|max:20',
-        'address' => 'sometimes|nullable|string|max:255',
-        'logo' => 'sometimes|nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-        'category' => 'sometimes|nullable|exists:company_categories,id',
-    ]);
+        $validatedData = $request->validate([
+            'name' => 'sometimes|nullable|string|max:255',
+            'email' => 'sometimes|nullable|email|max:255',
+            'phone' => 'sometimes|nullable|string|max:20',
+            'address' => 'sometimes|nullable|string|max:255',
+            'logo' => 'sometimes|nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'category' => 'sometimes|nullable|exists:company_categories,id',
+        ]);
 
-    $updateData = [
-        'user_id' => Auth::id(),
-        'name' => $validatedData['name'] ?? $company->name,
-        'email' => $validatedData['email'] ?? $company->email,
-        'phone' => $validatedData['phone'] ?? $company->phone,
-        'address' => $validatedData['address'] ?? $company->address,
-        'company_category_id' => $validatedData['category'] ?? $company->company_category_id,
-    ];
+        $updateData = [
+            'user_id' => Auth::id(),
+            'name' => $validatedData['name'] ?? $company->name,
+            'email' => $validatedData['email'] ?? $company->email,
+            'phone' => $validatedData['phone'] ?? $company->phone,
+            'address' => $validatedData['address'] ?? $company->address,
+            'company_category_id' => $validatedData['category'] ?? $company->company_category_id,
+        ];
 
-  
 
-    if ($request->hasFile('logo')) {
-        $logo = $request->file('logo');
-        $filename = uniqid() . '.' . $logo->getClientOriginalExtension();
-        $logo->storeAs('public/company_logo', $filename);
-        
-        // Delete old logo if exists
-        if ($company->logo) {
-            Storage::delete('public/company_logo/' . $company->logo);
+
+        if ($request->hasFile('logo')) {
+            $logo = $request->file('logo');
+            $filename = uniqid() . '.' . $logo->getClientOriginalExtension();
+            $logo->storeAs('public/company_logo', $filename);
+
+            // Delete old logo if exists
+            if ($company->logo) {
+                Storage::delete('public/company_logo/' . $company->logo);
+            }
+
+            $updateData['logo'] = $filename;
         }
-        
-        $updateData['logo'] = $filename;
-    }
 
-    try {
-        $company->update($updateData);
-        return redirect()->route('company.show', $company->slug)->with('success', 'Company updated successfully');
-    } catch (\Exception $e) {
-        return redirect()->back()->withInput()->with('error', 'Failed to update company: ' . $e->getMessage());
+        try {
+            $company->update($updateData);
+            return redirect()->route('company.show', $company->slug)->with('success', 'Company updated successfully');
+        } catch (\Exception $e) {
+            return redirect()->back()->withInput()->with('error', 'Failed to update company: ' . $e->getMessage());
+        }
     }
-}
 
 
 

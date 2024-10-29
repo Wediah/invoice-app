@@ -30,7 +30,6 @@ class CompanyCategorySeeder extends Seeder
             'Retail',
             'Construction',
             'Transportation',
-            'Hospitality',
             'Real Estate',
             'Entertainment',
             'Agriculture',
