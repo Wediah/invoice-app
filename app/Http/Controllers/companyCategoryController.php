@@ -6,7 +6,7 @@ use App\Models\CompanyCategory;
 use Cviebrock\EloquentSluggable\Services\SlugService;
 use Illuminate\Http\Request;
 
-class companyCategoryController extends Controller
+class CompanyCategoryController extends Controller
 {
     public function create()
     {
