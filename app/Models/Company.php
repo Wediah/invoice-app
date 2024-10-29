@@ -40,7 +40,7 @@ class Company extends Model
 
     public function invoices(): HasMany
     {
-        return $this->hasMany(invoice::class);
+        return $this->hasMany(Invoice::class);
     }
 
     public function taxes(): HasMany

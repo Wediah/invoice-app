@@ -21,6 +21,6 @@ class paymentTerms extends Model
 
     public function invoice(): HasOne
     {
-        return $this->hasOne(invoice::class);
+        return $this->hasOne(Invoice::class);
     }
 }
