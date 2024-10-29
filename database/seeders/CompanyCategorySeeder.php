@@ -2,9 +2,8 @@
 
 namespace Database\Seeders;
 
-use App\Models\CompanyCategory;
-use Illuminate\Database\Seeder;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Illuminate\Database\Seeder;
 
 class CompanyCategorySeeder extends Seeder
 {
@@ -60,7 +59,7 @@ class CompanyCategorySeeder extends Seeder
         ];
     
         foreach ($categories as $category) {
-            CompanyCategory::create(['name' => $category]);
+            \App\Models\CompanyCategory::create(['name' => $category]);
         }
     }
 }
