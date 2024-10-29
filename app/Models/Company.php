@@ -50,14 +50,14 @@ class Company extends Model
         return $this->hasMany(PaymentTerms::class);
     }
 
-  
+
 
     public function customerInfo(): HasMany
     {
         return $this->hasMany(CustomerInfo::class);
     }
 
-    public function category()
+    public function category(): BelongsTo
     {
         return $this->belongsTo(CompanyCategory::class, 'company_category_id');
     }
