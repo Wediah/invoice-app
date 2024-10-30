@@ -31,7 +31,7 @@ class Invoice extends Model
 
     public function taxes(): BelongsToMany
     {
-        return $this->belongsToMany(tax::class)->withPivot('tax_id','tax_type', 'tax_percentage', 'tax_amount')->withTimestamps();
+        return $this->belongsToMany(Tax::class)->withPivot('tax_id','tax_type', 'tax_percentage', 'tax_amount')->withTimestamps();
     }
 
     public function paymentTerms(): BelongsTo
