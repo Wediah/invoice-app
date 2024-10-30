@@ -195,9 +195,9 @@
                                     </div>
                                     
                                     <div class="mb-4 col-md-6">
-                                        <label class="form-label" for="category">Company Category</label>
+                                        <label class="form-label" for="company_category_id">Company Category</label>
                                         <div class="input-group">
-                                            <select name="category" class="form-control">
+                                            <select name="company_category_id" class="form-control">
                                                 <option value="">Select Category</option>
                                                 @foreach ($categories as $category)
                                                 <option value="{{ $category->id }}">{{ $category->name }}
@@ -205,7 +205,7 @@
                                                 @endforeach
                                             </select>
                                         </div>
-                                        @error('category')
+                                        @error('company_category_id')
                                             <p class="error">{{ $message }}</p>
                                         @enderror
                                     </div>
