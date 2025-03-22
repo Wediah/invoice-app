@@ -30,7 +30,12 @@
             }
 
             .error-2 {
-                color: #ff5b5c
+                color: #ff5b5c;
+            }
+            .error{
+                color: #ff5b5c !important;
+                font-size: 12px;
+                display: block;
             }
         </style>
     @endpush
@@ -88,7 +93,7 @@
                                         <dd class="col-sm-6 d-flex justify-content-md-end">
                                             <div class="w-px-150">
                                                 <input type="text" class="form-control date-picker" disabled
-                                                    value="{{ Carbon::now()->toDateString() }}" />
+                                                    value="{{ Carbon::now()->toDateString() }}" required />
                                             </div>
                                         </dd>
                                         <dt class="mb-2 col-sm-6 mb-sm-0 text-md-end">
@@ -107,6 +112,13 @@
 
                             <hr class="my-4 mx-n4" />
                             <div class="col-lg-12 col-md-6 ">
+                                <div class="col-lg-12 col-md-6 ">
+                                    @if(session('error'))
+                                    <div class="error">
+                                        {{ session('error') }}
+                                    </div>
+                                @endif
+                                </div>
                                 <div class="mt-3" style="float: right;">
                                     <!-- Button trigger modal -->
 
@@ -155,20 +167,8 @@
                                                                 placeholder="Enter Customer Address"
                                                                 aria-label="Enter Enter Customer Address"
                                                                 aria-describedby="basic-addon11"
-                                                                value="{{ old('customer_address') }}" />
+                                                                value="{{ old('customer_address') }}" required />
                                                         </div>
-                                                        <div class="mb-0 col">
-                                                            <label for="customer_mobile" class="form-label">Customer
-                                                                Mobile</label>
-                                                            <input type="tel" class="form-control no-border"
-                                                                placeholder="Enter Customer Mobile"
-                                                                aria-label="Enter Customer Mobile"
-                                                                name="customer_mobile"
-                                                                aria-describedby="basic-addon11" required
-                                                                value="{{ old('customer_mobile') }}" />
-                                                        </div>
-                                                    </div>
-                                                    <div class="mb-3 row g-4">
                                                         <div class="mb-0 col-md-6">
                                                             <label for="customer_phone" class="form-label">Customer
                                                                 Phone</label>
@@ -177,7 +177,7 @@
                                                                 placeholder="Enter Customer Phone"
                                                                 aria-label="Enter Customer Phone"
                                                                 aria-describedby="basic-addon11"
-                                                                value="{{ old('customer_phone') }}" />
+                                                                value="{{ old('customer_phone') }}" required />
                                                         </div>
                                                         {{-- <div class="mb-0 col">
                                                             <label for="fax_number" class="form-label">Fax
@@ -188,6 +188,20 @@
                                                                 aria-describedby="basic-addon11" value="" />
                                                         </div> --}}
                                                     </div>
+                                                    <div class="mb-3 row g-4">
+                                                       
+                                                        <div class="mb-0 col-md-6">
+                                                            <label for="customer_mobile" class="form-label">Customer
+                                                                Mobile</label>
+                                                            <input type="tel" class="form-control no-border"
+                                                                placeholder="Enter Customer Mobile"
+                                                                aria-label="Enter Customer Mobile"
+                                                                name="customer_mobile"
+                                                                aria-describedby="basic-addon11" 
+                                                                value="{{ old('customer_mobile') }}" />
+                                                        </div>
+                                                    </div>
+                                               
                                                 </div>
                                                 <div class="modal-footer d-flex justify-content-between">
                                                     <button type="button" class="btn btn-label-secondary"

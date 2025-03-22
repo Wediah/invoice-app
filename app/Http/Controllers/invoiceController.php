@@ -168,11 +168,17 @@ class invoiceController extends Controller
                 return redirect()->route('invoice.show', ['slug' => $company->slug, 'id' => $invoice->id])
                     ->with('success', 'Invoice Created Successfully!');
             } else {
-                return redirect()->back()->with('error', 'Failed to create invoice. Please try again.');
+                throw new \Exception('The invoice was not saved to the database.');
             }
-        } catch (\Exception $e) {
+        }
+        catch (\Exception $e) {
             Log::error('Error creating invoice: ' . $e->getMessage());
-            return redirect()->back()->with('error', 'Failed to create invoice. Please try again.');
+        
+            $userFriendlyMessage = $this->parseSqlException($e);
+        
+            return redirect()->back()
+                ->withInput()
+                ->with('error', $userFriendlyMessage);
         }
     }
 
@@ -364,4 +370,24 @@ class invoiceController extends Controller
 
         return $pdf->download('invoice' . $invoice->invoice_number . '.pdf');
     }
+
+    protected function parseSqlException($exception)
+{
+    if ($exception instanceof \Illuminate\Database\QueryException) {
+        $errorInfo = $exception->errorInfo;
+
+        // Check if it's a NOT NULL constraint violation
+        if (!empty($errorInfo) && $errorInfo[1] == 1048) {
+            preg_match('/Column \'(.*)\' cannot be null/', $errorInfo[2], $matches);
+            if (!empty($matches)) {
+                return 'The "' . $matches[1] . '" field is required.';
+            }
+        }
+
+        // Other SQL errors can be added here
+    }
+
+    // Fallback error message
+    return 'Failed to create invoice. Please check your inputs and try again.';
+}
 }

@@ -17,9 +17,9 @@ return new class extends Migration
             $table->foreignIdFor(Invoice::class);
             $table->foreignId('company_id')->references('id')->on('companies')->onDelete('cascade');
             $table->string("customer_name");
-            $table->string("customer_email");
+            $table->string("customer_email")->nullable();
             $table->string("customer_address");
-            $table->string("customer_mobile");
+            $table->string("customer_mobile")->nullable();
             $table->string("customer_phone");
 
             $table->timestamps();

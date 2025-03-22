@@ -23,13 +23,13 @@
             <p class="mb-1">{{ $invoice->customerInfo->customer_name }}</p>
             <p class="mb-1">{{ $invoice->customerInfo->customer_email }}</p>
             <p class="mb-1">{{ $invoice->customerInfo->customer_address }}</p>
-            <p class="mb-1">{{ $invoice->customerInfo->customer_mobile }}</p>
+            <p class="mb-1">{{ $invoice->customerInfo->customer_phone }}</p>
         </div>
         <div class="col-xl-6 col-md-12 col-sm-7 col-12 text-end font-12">
             <h6 class="pb-2">Invoice Details:</h6>
             <p class="mb-1">Invoice Number: {{ $invoice->invoice_number }}</p>
             <p class="mb-1">Issue Date: {{ $invoice->created_at->format('Y-m-d') }}</p>
-            <p class="mb-1">Due Date: {{ $invoice->due_date }}</p>
+            {{-- <p class="mb-1">Due Date: {{ $invoice->due_date }}</p> --}}
         </div>
     </div>
 </div>
