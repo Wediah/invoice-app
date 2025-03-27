@@ -10,7 +10,6 @@
                     {{-- <span class="text-muted fw-light">UI Elements /</span> --}}
                     Welcome,&nbsp;{{ auth()->user()->first_name }}
                 </h4>
-                <small> this is what you want or now nks niuehr iuji dfielhuiguiefkj</small>
             </div>
 
 
