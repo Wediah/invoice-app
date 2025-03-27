@@ -39,7 +39,7 @@
                         style="width: 1382px;">
                         <thead>
                             <tr>
-                                <th>#ID</th>
+                                <th>Invoice ID</th>
                                 <th>Client</th>
                                 <th>Total</th>
                                 <th class="text-truncate">Issued Date</th>
