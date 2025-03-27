@@ -74,7 +74,7 @@
                 {{-- <h4 class="mb-2">Welcome to Apollo Invoice! 👋</h4> --}}
                 <p class="mb-4">Sign-in to continue your ultimate invoice experience</p>
 
-                <form id="formAuthentication" class="mb-3" action="{{ route('login') }}" method="POST">
+                <form id="formAuthenticationX" class="mb-3" action="{{ route('login') }}" method="POST">
                     @csrf
                     <x-input-error :messages="$errors->get('email')" class="mt-2" />
 
