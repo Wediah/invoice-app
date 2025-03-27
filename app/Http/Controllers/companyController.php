@@ -33,13 +33,7 @@ class companyController extends Controller
         return view('auth.auth-company-create', compact('categories'));
     }
 
-    // public function userAndCompany()
-    // {
-    //     $user = Auth::user();
-    //     $companies = $user->companies()->with('companyCategory')->withCount('invoices', 'catalogs')->get();
-
-    //     return view('company.index', compact('companies'));
-    // }
+   
 
     public function userAndCompany()
     {
