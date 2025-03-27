@@ -156,10 +156,10 @@ class invoiceController extends Controller
                     'invoice_id' => $invoice->id,
                     'company_id' => $company->id,
                     'customer_name' => $validatedData['customer_name'],
-                    'customer_email' => $validatedData['customer_email'],
+                    'customer_email' => $validatedData['customer_email'] ?? null,
                     'customer_phone' => $validatedData['customer_phone'],
                     'customer_address' => $validatedData['customer_address'],
-                    'customer_mobile' => $validatedData['customer_mobile'],
+                    'customer_mobile' => $validatedData['customer_mobile'] ?? null,
                 ]);
                 $this->attachItemsAndTaxes($request, $invoice);
             });
