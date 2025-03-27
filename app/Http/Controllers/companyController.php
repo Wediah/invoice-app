@@ -23,13 +23,13 @@ class companyController extends Controller
 {
     public function create()
     {
-        $categories = CompanyCategory::all();
+       $categories = CompanyCategory::all();
         return view('company.create', compact('categories'));
     }
 
     public function authCompanyCreate()
     {
-        $categories = CompanyCategory::all();
+       $categories = CompanyCategory::all();
         return view('auth.auth-company-create', compact('categories'));
     }
 
