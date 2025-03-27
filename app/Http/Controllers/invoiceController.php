@@ -122,6 +122,8 @@ class invoiceController extends Controller
             'salesperson' => 'required|string|max:255'
         ]);
 
+        // dd($validatedData);
+
         try {
             // Initialize $invoice outside the closure
             $invoice = null;
@@ -144,13 +146,13 @@ class invoiceController extends Controller
                     'final_total' => $validatedData['total'],
                     'salesperson' => $validatedData['salesperson'],
                 ]);
-
+                // dd("invoice create passed");
                 if (!$invoice) {
                     throw new \Exception('Failed to create invoice');
                 }
-
+// dd("entering customer info");
                 // Create customer info linked to the invoice
-                CustomerInfo::create([
+                $customerInfo =   CustomerInfo::create([
                     'invoice_id' => $invoice->id,
                     'company_id' => $company->id,
                     'customer_name' => $validatedData['customer_name'],
@@ -159,7 +161,6 @@ class invoiceController extends Controller
                     'customer_address' => $validatedData['customer_address'],
                     'customer_mobile' => $validatedData['customer_mobile'],
                 ]);
-
                 $this->attachItemsAndTaxes($request, $invoice);
             });
 

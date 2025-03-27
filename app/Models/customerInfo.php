@@ -12,7 +12,16 @@ class customerInfo extends Model
     use HasFactory, softDeletes;
 
     protected $table = 'invoice_customer_info';
-    protected $guarded = [];
+    // protected $guarded = [];
+    protected $fillable = [
+        'invoice_id',
+        'company_id',
+        'customer_name',
+        'customer_email',
+        'customer_address',
+        'customer_mobile',
+        'customer_phone',
+    ];
 
     public function invoice(): BelongsTo
     {
