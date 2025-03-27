@@ -23,7 +23,7 @@ class companyController extends Controller
 {
     public function create()
     {
-        $categories = companyCategory::all();
+        $categories = CompanyCategory::all();
         return view('company.create', compact('categories'));
     }
 
