@@ -29,7 +29,7 @@
                 color: #ff5b5c !important;
             }
 
-            .error-2 {
+            .error-2, .required {
                 color: #ff5b5c;
             }
             .error{
@@ -141,7 +141,10 @@
                                                     <div class="mb-3 row g-4">
                                                         <div class="mb-0 col">
                                                             <label for="customer_name" class="form-label">Customer
-                                                                Name</label>
+                                                                Name
+                                                                <span class="required">&#42;</span>
+                                                            </label>
+                                                            
                                                             <input type="text" class="form-control no-border"
                                                                 name="customer_name" placeholder="Enter Customer Name"
                                                                 aria-label="Enter Customer Name"
@@ -150,7 +153,8 @@
                                                         </div>
                                                         <div class="mb-0 col">
                                                             <label for="customer_email" class="form-label">Customer
-                                                                Email</label>
+                                                                Email
+                                                            </label>
                                                             <input type="text" class="form-control no-border"
                                                                 name="customer_email" placeholder="Enter Customer Email"
                                                                 aria-label="Enter Customer Email"
@@ -161,7 +165,9 @@
                                                     <div class="mb-3 row g-4">
                                                         <div class="mb-0 col">
                                                             <label for="customer_address" class="form-label">Customer
-                                                                Address</label>
+                                                                Address
+                                                                <span class="required">&#42;</span>
+                                                            </label>
                                                             <input type="text" class="form-control no-border"
                                                                 name="customer_address"
                                                                 placeholder="Enter Customer Address"
@@ -171,7 +177,8 @@
                                                         </div>
                                                         <div class="mb-0 col-md-6">
                                                             <label for="customer_phone" class="form-label">Customer
-                                                                Phone</label>
+                                                                Phone  <span class="required">&#42;</span>
+                                                            </label>
                                                             <input type="tel" class="form-control no-border"
                                                                 name="customer_phone"
                                                                 placeholder="Enter Customer Phone"
@@ -191,8 +198,9 @@
                                                     <div class="mb-3 row g-4">
                                                        
                                                         <div class="mb-0 col-md-6">
-                                                            <label for="customer_mobile" class="form-label">Customer
-                                                                Mobile</label>
+                                                            <label for="customer_mobile" class="form-label">
+                                                                Customer Mobile
+                                                            </label>
                                                             <input type="tel" class="form-control no-border"
                                                                 placeholder="Enter Customer Mobile"
                                                                 aria-label="Enter Customer Mobile"
