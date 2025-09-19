@@ -29,10 +29,12 @@
                 color: #ff5b5c !important;
             }
 
-            .error-2, .required {
+            .error-2,
+            .required {
                 color: #ff5b5c;
             }
-            .error{
+
+            .error {
                 color: #ff5b5c !important;
                 font-size: 12px;
                 display: block;
@@ -113,11 +115,11 @@
                             <hr class="my-4 mx-n4" />
                             <div class="col-lg-12 col-md-6 ">
                                 <div class="col-lg-12 col-md-6 ">
-                                    @if(session('error'))
-                                    <div class="error">
-                                        {{ session('error') }}
-                                    </div>
-                                @endif
+                                    @if (session('error'))
+                                        <div class="error">
+                                            {{ session('error') }}
+                                        </div>
+                                    @endif
                                 </div>
                                 <div class="mt-3" style="float: right;">
                                     <!-- Button trigger modal -->
@@ -144,7 +146,7 @@
                                                                 Name
                                                                 <span class="required">&#42;</span>
                                                             </label>
-                                                            
+
                                                             <input type="text" class="form-control no-border"
                                                                 name="customer_name" placeholder="Enter Customer Name"
                                                                 aria-label="Enter Customer Name"
@@ -177,7 +179,7 @@
                                                         </div>
                                                         <div class="mb-0 col-md-6">
                                                             <label for="customer_phone" class="form-label">Customer
-                                                                Phone  <span class="required">&#42;</span>
+                                                                Phone <span class="required">&#42;</span>
                                                             </label>
                                                             <input type="tel" class="form-control no-border"
                                                                 name="customer_phone"
@@ -196,7 +198,7 @@
                                                         </div> --}}
                                                     </div>
                                                     <div class="mb-3 row g-4">
-                                                       
+
                                                         <div class="mb-0 col-md-6">
                                                             <label for="customer_mobile" class="form-label">
                                                                 Customer Mobile
@@ -205,11 +207,11 @@
                                                                 placeholder="Enter Customer Mobile"
                                                                 aria-label="Enter Customer Mobile"
                                                                 name="customer_mobile"
-                                                                aria-describedby="basic-addon11" 
+                                                                aria-describedby="basic-addon11"
                                                                 value="{{ old('customer_mobile') }}" />
                                                         </div>
                                                     </div>
-                                               
+
                                                 </div>
                                                 <div class="modal-footer d-flex justify-content-between">
                                                     <button type="button" class="btn btn-label-secondary"
@@ -251,7 +253,7 @@
                                             <div class="p-3 m-0 row w-100">
                                                 <div class="mb-3 col-md-4 col-12 mb-md-0 ps-md-0">
                                                     <p class="mb-2 repeater-title">Item</p>
-                                                    <select name="group-a[0][catalog_id]"
+                                                    <select  name="group-a[0][catalog_id]"
                                                         class="mb-2 catalog_id form-select item-detailsX">
                                                         <option selected disabled>Select Item</option>
                                                         @foreach ($catalogs as $catalog)
@@ -415,8 +417,7 @@
                                 <div class="col-12">
                                     <div class="mb-3">
                                         <label for="note" class="form-label fw-semibold">Note:</label>
-                                        <textarea class="form-control" rows="2" id="note" placeholder="Invoice note"
-                                                  name="notes">{{ $company->invoice_footnote }}</textarea>
+                                        <textarea class="form-control" rows="2" id="note" placeholder="Invoice note" name="notes">{{ $company->invoice_footnote }}</textarea>
                                     </div>
                                 </div>
                             </div>
@@ -477,6 +478,8 @@
             <!-- /Invoice Actions -->
         </form>
 
+
+
     </div>
 
     <!-- Offcanvas -->
@@ -530,33 +533,39 @@
     <!-- /Offcanvas -->
     </div>
     <!-- / Content -->
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            const inputs = document.querySelectorAll('.due-date-input'); // Select all inputs with this class
-            const labels = document.querySelectorAll('.due-date-label'); // Select all labels with this class
 
-            inputs.forEach((input, index) => {
-                const label = labels[index]; // Match label with its corresponding input
+    @push('scripts')
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const inputs = document.querySelectorAll('.due-date-input'); // Select all inputs with this class
+                const labels = document.querySelectorAll('.due-date-label'); // Select all labels with this class
 
-                // Initialize label color on page load
-                if (!input.value) {
-                    label.classList.add('epmty-field-color');
-                } else {
-                    label.classList.add('normal-color');
-                }
+                inputs.forEach((input, index) => {
+                    const label = labels[index]; // Match label with its corresponding input
 
-                // Add event listener for each input to check its value
-                input.addEventListener('input', function() {
+                    // Initialize label color on page load
                     if (!input.value) {
                         label.classList.add('epmty-field-color');
-                        label.classList.remove('normal-color');
                     } else {
-                        label.classList.remove('epmty-field-color');
                         label.classList.add('normal-color');
                     }
+
+                    // Add event listener for each input to check its value
+                    input.addEventListener('input', function() {
+                        if (!input.value) {
+                            label.classList.add('epmty-field-color');
+                            label.classList.remove('normal-color');
+                        } else {
+                            label.classList.remove('epmty-field-color');
+                            label.classList.add('normal-color');
+                        }
+                    });
                 });
             });
-        });
-    </script>
+        </script>
+
+
+ @endpush
+
 
 </x-masterLayout>

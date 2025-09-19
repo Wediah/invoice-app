@@ -39,52 +39,42 @@
             <tr>
                 <th scope="col-4">Item/Service</th>
                 <th scope="col-2">QTY</th>
-                <th scope="col-2">UOM</th>
                 <th scope="col-3">Unit</th>
+                @if ($invoice->catalogs->contains(fn($catalog) => $catalog->pivot->discount_percent > 0))
+                    <th scope="col-2">Discount</th>
+                @endif
                 <th scope="col-3">Cost</th>
             </tr>
         </thead>
         <tbody>
-            @php
-                $taxRate = 0; // Initialize total price variable
-                $totalPrice = 0; // Initialize total price variable
-                $totalTax = 0; // Initialize total tax variable
-                //$discountRate = $invoice->discount / 100;
-                $totalPrimaryTax = 0;
-                $totalSecondaryTax = 0;
-                $primaryTax = 0;
-                $secondaryTax = 0;
-                $newTotalPrice = 0;
-                $totalDiscount = 0;
-            @endphp
             @foreach ($invoice->catalogs as $catalog)
-                {{-- @php
-                    //calculate rate on each item
-                    $discountRate = $catalog->pivot->discount_percent / 100;
-
-                    // Calculate subtotal for this catalog item
-                    $subtotalBeforeDiscount = $catalog->pivot->quantity * $catalog->price;
-
-                    //calculate the subtotal after discount is applied
-                    $subtotal = $subtotalBeforeDiscount - $subtotalBeforeDiscount * $discountRate;
-
-                    // Add subtotal to total price
-                    $totalPrice += $subtotal;
-
-                    // Calculate the discount amount
-                    $totalDiscount += $subtotalBeforeDiscount * $discountRate;
-                @endphp --}}
                 <tr>
                     <td class="text-nowrap col-4 " scope="row">
                         <strong>{{ $catalog->name }}</strong>
                     </td>
-                    <td class="col-2">{{ $catalog->pivot->quantity }}</td>
-                    <td class="col-2">{{ $catalog->unit_of_measurement }}</td>
-                    <td class="col-3">
+                    <td class="col-2">
+                        {{ $catalog->pivot->quantity }}
+                        (<small>{{ $catalog->unit_of_measurement }}</small>)
+
+                    </td>
+                    <td class="col-2">
                         {{ $company->currency ?? 'GHS' }}&nbsp;{{ number_format($catalog->price, 2) }}
                     </td>
-                    <td class="col-3">
+                    @if ($catalog->pivot->discount_percent > 0)
+                        <td class="col-2">
+
+                            @php
+                                $discountAmount =
+                                    $catalog->pivot->quantity * $catalog->price * ($catalog->pivot->discount_percent / 100);
+                            @endphp
+                            <span>{{ rtrim(rtrim($catalog->pivot->discount_percent, '0'), '.') }}%</span>
+
+                        </td>
+                    @endif
+
+                    <td class="text-nowrap col-3">
                         {{ $company->currency ?? 'GHS' }}&nbsp;{{ number_format($catalog->pivot->total, 2) }}
+
                     </td>
                 </tr>
             @endforeach
@@ -105,63 +95,31 @@
                 <span
                     class="mb-2 fw-semibold">{{ $company->currency ?? 'GHS' }}&nbsp;{{ number_format($invoice->subtotal, 2) }}</span>
             </div>
-            <div class="gap-5 d-flex justify-content-between">
-                <p>Discount:</p>
-                <p class="mb-2 fw-semibold">
-                    {{ $company->currency ?? 'GHS' }}&nbsp;{{ number_format($invoice->discount_total, 2) }}
-                </p>
-            </div>
-            {{-- <div class="gap-5 d-flex justify-content-between">
-                           <p>Tax(es)</p>
-                           <p class="mb-2 fw-semibold"></p>
-                       </div> --}}
-            <div>
-                {{-- @foreach ($invoice->taxes as $tax)
-                    @php
-                        //calculate the taxes
-                        if ($tax->type === 'PRIMARY') {
-                            $primaryTax = $totalPrice * ($tax->tax_percentage / 100);
-                            $totalPrimaryTax += $primaryTax;
-                        } else {
-                            $secondaryTax = ($totalPrimaryTax + $totalPrice) * ($tax->tax_percentage / 100);
-                            $totalSecondaryTax += $secondaryTax;
-                        }
+            @if ($invoice->discount_total > 0)
+                <div class="gap-5 d-flex justify-content-between">
+                    <p>Discount:</p>
+                    <p class="mb-2 fw-semibold">
+                        {{ $company->currency ?? 'GHS' }}&nbsp;{{ number_format($invoice->discount_total, 2) }}
+                    </p>
+                </div>
+            @endif
 
-                        //total tax
-                        $totalTax = $totalPrimaryTax + $totalSecondaryTax;
-                    @endphp
-                    <div class="gap-5 d-flex justify-content-between">
-                        @if ($tax->type == 'PRIMARY')
-                            <p>{{ $tax->tax_name }} ({{ $tax->tax_percentage }}%):</p>
-                            <p class="mb-2 fw-semibold">
-                                {{ $company->currency ?? 'GHS' }}&nbsp;{{ number_format($primaryTax, 2) }}
-                            </p>
-                        @elseif ($tax->type == 'SECONDARY')
-                            <p>{{ $tax->tax_name }} ({{ $tax->tax_percentage }}%):</p>
-                        @endif
-                    </div>
-                @endforeach --}}
-              
-                <div class="gap-5 ">
-                    <p class="fw-bold underline mb-0">Taxes</p>
-                    @foreach ($invoice->taxes->sortBy('type') as $tax)
+            <div class="gap-5 ">
+                <p class="fw-bold underline mb-0">Taxes</p>
+                @foreach ($invoice->taxes->sortBy('type') as $tax)
                     <div class="d-flex justify-content-between mb-0">
                         <p class="mb-0">{{ $tax->tax_name }}&nbsp;({{ $tax->tax_percentage }}%) :</p>
 
-                        <p class="mb-0 fw-semibold"> {{ $company->currency ?? 'GHS' }} {{ number_format($tax->pivot->tax_amount, 2) }}</p>
+                        <p class="mb-0 fw-semibold"> {{ $company->currency ?? 'GHS' }}
+                            {{ number_format($tax->pivot->tax_amount, 2) }}</p>
                     </div>
-             
                 @endforeach
-                   
-                </div>
+
             </div>
-            @php
-                // Calculate the final total price after adding the tax
-                $finalTotalPrice = $totalPrice + $totalTax;
-            @endphp
             <div class="gap-5 d-flex justify-content-between mt-3">
                 <p class="mb-0 ">Total:</p>
-                <p><strong> {{ $company->currency ?? 'GHS' }} {{ number_format($invoice->final_total, 2) }}</strong></p>
+                <p><strong> {{ $company->currency ?? 'GHS' }} {{ number_format($invoice->final_total, 2) }}</strong>
+                </p>
 
             </div>
         </div>

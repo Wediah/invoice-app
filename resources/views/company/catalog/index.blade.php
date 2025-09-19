@@ -88,7 +88,7 @@
 
                                                     <div>
                                                         <div class="input-group">
-                                                            <span class="input-group-text">{{ $company->currency ?? 'GHC' }}</span>
+                                                            <span class="input-group-text">{{ $company->currency ?? 'GHS' }}</span>
 
                                                             <input type="number" id="form-repeater-1-1" step="0.01"
                                                                 class="form-control {{ $errors->first('stock_price') ? ' form-error' : '' }}"
@@ -233,7 +233,7 @@
                             @foreach ($companyCatalog as $catalog)
                                 <tr class="odd">
                                     <td valign="top" class="">{{ $catalog->name }}</td>
-                                    <td valign="top" class="">GH₵{{ number_format($catalog->price, 2) }}</td>
+                                    <td valign="top" class="">{{ $company->currency }}&nbsp;{{ number_format($catalog->price, 2) }}</td>
                                     <td valign="top" class="">{{ $catalog->unit_of_measurement }}</td>
                                     <td valign="top" class="">{{ $catalog->description }}</td>
                                     <td><span class="badge bg-label-primary me-1">{{ $catalog->status }}</span></td>
