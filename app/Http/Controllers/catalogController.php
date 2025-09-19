@@ -102,9 +102,6 @@ class catalogController extends Controller
             $stockData->unit_of_measurement = $unit_of_measurement;
             $stockData->price = $stock_price;
             $stockData->save();
-
-
-
         }
 
         return redirect()->intended(route('catalog.index', ['slug' => $company->slug], absolute: false));
@@ -135,44 +132,55 @@ class catalogController extends Controller
      */
     public function update(Request $request, $slug, $id): RedirectResponse
     {
+        // Validate incoming data. Use nullable fields to allow partial updates.
+        $validatedData = $request->validate([
+            'stock_name' => 'sometimes|required|max:255|string',
+            'stock_description' => 'sometimes|nullable|string|min:5|max:300',
+            'unit_of_measurement' => 'sometimes|nullable|max:255|string',
+            'stock_price' => 'sometimes|nullable|numeric',
+        ]);
 
         $company = Company::where('slug', $slug)->firstOrFail();
         $catalog = Catalog::where('id', $id)
             ->where('company_id', $company->id)
             ->firstOrFail();
-        $company_id = $catalog->company_id;
 
-        $validatedData = $request->validate([
-            'stock_name' => 'sometimes|max:255|string',
-            'stock_description' => 'sometimes|string|min:5|max:300',
-            'unit_of_measurement' => 'sometimes|max:255|string',
-            'stock_price' => 'sometimes|string',
-            //            'catalog_images.*' => 'sometimes|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
-        ]);
+     
 
-        //        $imagePaths = [];
-        //        foreach ($validatedData['catalog_images'] as $key => $image) {
-        //            $imageName = Carbon::now()->timestamp . $key . '.' . $image->extension();
-        //            $image->storeAs('catalogImages', $imageName);
-        //            $imagePaths[] = $imageName;
-        //        }
 
-        $catalogData = array(
-            'company_id' => $company_id,
-            'unit_of_measurement' => $validatedData['unit_of_measurement'] ?? $catalog->unit_of_measurement,
-            'name' => $validatedData['stock_name'] ?? $catalog->name,
-            'description' => $validatedData['stock_description'] ?? $catalog->description,
-            'price' => $validatedData['stock_price'] ?? $catalog->price,
-        );
+        // Build update data only for fields provided by the request.
+        $catalogData = [];
 
-        $catalog->update($catalogData);
+        if (array_key_exists('stock_name', $validatedData)) {
+            $catalogData['name'] = $validatedData['stock_name'];
+        }
 
-        //        foreach ($imagePaths as $imagePath) {
-        //            catalogImage::create([
-        //                'catalog_id' => $catalog->id,
-        //                'image_path' => $imagePath,
-        //            ]);
-        //        }
+        if (array_key_exists('stock_description', $validatedData)) {
+            $catalogData['description'] = $validatedData['stock_description'];
+        }
+
+        if (array_key_exists('unit_of_measurement', $validatedData)) {
+            $catalogData['unit_of_measurement'] = $validatedData['unit_of_measurement'];
+        }
+
+        if (array_key_exists('stock_price', $validatedData)) {
+            $catalogData['price'] = $validatedData['stock_price'];
+        }
+
+        // Normally company_id should not change here, but if the catalog's company differs from the route company,
+        // you can optionally ensure consistency. This only sets company_id if different.
+        if (!empty($company->id) && $company->id !== $catalog->company_id) {
+            $catalogData['company_id'] = $company->id;
+        }
+
+        // Perform update only when there's something to update.
+        if (!empty($catalogData)) {
+            $catalog->update($catalogData);
+            session()->flash('success', 'Catalog updated successfully.');
+        } else {
+            // No changes were provided; optionally set an info message.
+            session()->flash('info', 'No changes detected.');
+        }
 
         return redirect()->intended(route('catalog.index', ['slug' => $company->slug], absolute: false));
     }
