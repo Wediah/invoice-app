@@ -39,6 +39,84 @@
                 font-size: 12px;
                 display: block;
             }
+
+            /* Select2 Custom Styling */
+            .select2-container--default .select2-selection--single {
+                height: 38px;
+                border: 1px solid #d9dee3;
+                border-radius: 0.375rem;
+            }
+
+            .select2-container--default .select2-selection--single .select2-selection__rendered {
+                line-height: 36px;
+                padding-left: 12px;
+                color: #697a8d;
+            }
+
+            .select2-container--default .select2-selection--single .select2-selection__arrow {
+                height: 36px;
+                right: 8px;
+            }
+
+            .select2-container--default .select2-results__option--highlighted[aria-selected] {
+                background-color: #696cff;
+            }
+
+            .select2-result-item__title {
+                font-weight: 500;
+                color: #566a7f;
+            }
+
+            .select2-result-item__description {
+                margin-top: 2px;
+                font-size: 0.875rem;
+            }
+
+            .select2-dropdown {
+                border: 1px solid #d9dee3;
+                border-radius: 0.375rem;
+                box-shadow: 0 0.25rem 1rem rgba(165, 163, 174, 0.45);
+            }
+
+            .select2-results__option {
+                padding: 12px 16px;
+                border-bottom: 1px solid #f5f5f9;
+            }
+
+            .select2-results__option:last-child {
+                border-bottom: none;
+            }
+
+            .select2-results__option--highlighted[aria-selected] {
+                background-color: #5a8dee;
+                color: #ffffff;
+            }
+
+            .select2-results__option--highlighted[aria-selected] .text-muted {
+                color: rgba(255, 255, 255, 0.8) !important;
+            }
+
+            .select2-results__option--highlighted[aria-selected] .text-primary {
+                color: #fff !important;
+            }
+
+            .select2-result-item {
+                padding: 0;
+            }
+
+            .select2-result-item__title {
+                font-size: 0.95rem;
+                line-height: 1.4;
+            }
+
+            .select2-result-item__description {
+                font-size: 0.8rem;
+                line-height: 1.3;
+                max-width: 200px;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+            }
         </style>
     @endpush
 
@@ -54,7 +132,7 @@
                             <div class="row p-sm-3">
                                 <div class="gap-2 d-flex svg-illustration">
                                     <img src="{{ asset('storage/company_logo') }}/{{ $company->logo }}"
-                                        alt="company logo" class="w-12 h-12 rounded shadow-lg "
+                                        alt="company logo" class="w-12 h-12 rounded shadow-lg"
                                         style="width: auto; height: 50px;">
 
                                 </div>
@@ -113,8 +191,8 @@
                             </div>
 
                             <hr class="my-4 mx-n4" />
-                            <div class="col-lg-12 col-md-6 ">
-                                <div class="col-lg-12 col-md-6 ">
+                            <div class="col-lg-12 col-md-6">
+                                <div class="col-lg-12 col-md-6">
                                     @if (session('error'))
                                         <div class="error">
                                             {{ session('error') }}
@@ -227,13 +305,13 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="p-3 mt-3 ">
+                            <div class="p-3 mt-3">
                                 <!-- Information will be displayed here -->
                             </div>
                             <div class="p-0 row p-sm-3">
                                 <h5 class="pb-2">Invoice To:</h5>
 
-                                <div id="displayArea" class="mb-4 col-md-12 col-sm-5 col-12 mb-sm-0 ">
+                                <div id="displayArea" class="mb-4 col-md-12 col-sm-5 col-12 mb-sm-0">
                                     <p class="mb-1 error-2">Customer Name:</p>
                                     <p class="mb-1 error-2">Customer Email:</p>
                                     <p class="mb-1 error-2">Customer Address:</p>
@@ -249,18 +327,13 @@
                             <div class="source-item py-sm-3">
                                 <div class="mb-3" data-repeater-list="group-a">
                                     <div class="pt-0 repeater-wrapper pt-md-4" data-repeater-item>
-                                        <div class="border rounded d-flex position-relative pe-0">
+                                        <div class="rounded border d-flex position-relative pe-0">
                                             <div class="p-3 m-0 row w-100">
                                                 <div class="mb-3 col-md-4 col-12 mb-md-0 ps-md-0">
                                                     <p class="mb-2 repeater-title">Item</p>
                                                     <select  name="group-a[0][catalog_id]"
                                                         class="mb-2 catalog_id form-select item-detailsX">
-                                                        <option selected disabled>Select Item</option>
-                                                        @foreach ($catalogs as $catalog)
-                                                            <option value="{{ $catalog->id }}">
-                                                                {{ $catalog->name }}
-                                                            </option>
-                                                        @endforeach
+                                                        <option value="">Search for an item...</option>
                                                     </select>
 
                                                 </div>
@@ -271,7 +344,7 @@
                                                         <span
                                                             class="input-group-text">{{ $company->currency ?? 'GHS' }}</span>
                                                         <input type="number" name="price"
-                                                            class="form-control invoice-item-price " required
+                                                            class="form-control invoice-item-price" required
                                                             readonly />
                                                     </div>
 
@@ -369,7 +442,7 @@
 
                                     </div>
                                 </div>
-                                <div class="col-md-6 d-flex justify-content-end ">
+                                <div class="col-md-6 d-flex justify-content-end">
                                     <!-- Totals Display -->
                                     <div class="invoice-calculations">
                                         <div class="mb-2 d-flex justify-content-between">
@@ -438,7 +511,7 @@
                             <h6 class="mb-2">Taxes</h6>
                             @forelse ($taxes as $tax)
                             @empty
-                                <span class="mb-2 app-brand-text h6 fw-bold">No Taxes Added</span>
+                                <span class="mb-2 app-brand-text h6 fw-bold text-danger">No Taxes Added</span>
                             @endforelse
                             @foreach ($taxes as $tax)
                                 <div class="gap-2 mb-2 d-flex justify-content-between align-items-center">
@@ -564,6 +637,154 @@
             });
         </script>
 
+        <!-- Select2 Initialization for Searchable Item Dropdown -->
+        <script>
+            $(document).ready(function() {
+                // Initialize Select2 on existing item dropdowns
+                initializeSelect2();
+                
+                // Re-initialize Select2 when new items are added via repeater
+                $(document).on('DOMNodeInserted', '.repeater-wrapper', function() {
+                    setTimeout(() => {
+                        initializeSelect2();
+                    }, 100);
+                });
+                
+                // Also initialize Select2 when repeater shows new items
+                $(document).on('shown.bs.repeater', '.source-item', function() {
+                    setTimeout(() => {
+                        initializeSelect2();
+                    }, 100);
+                });
+            });
+
+            function initializeSelect2() {
+                $('.item-detailsX').each(function() {
+                    if (!$(this).hasClass('select2-hidden-accessible')) {
+                        $(this).select2({
+                            placeholder: 'Search or select an item...',
+                            allowClear: true,
+                            width: '100%',
+                            ajax: {
+                                url: '{{ route("catalog.search", ["slug" => $company->slug]) }}',
+                                dataType: 'json',
+                                delay: 250,
+                                data: function (params) {
+                                    return {
+                                        q: params.term || '', // search term (empty string shows all items)
+                                        page: params.page || 1
+                                    };
+                                },
+                                processResults: function (data, params) {
+                                    params.page = params.page || 1;
+                                    
+                                    return {
+                                        results: data.results.map(function(item) {
+                                            return {
+                                                id: item.id,
+                                                text: item.name + ' - ' + item.price + ' ' + '{{ $company->currency ?? "GHS" }}',
+                                                name: item.name,
+                                                price: item.price,
+                                                description: item.description,
+                                                unit: item.unit_of_measurement,
+                                                status: item.status
+                                            };
+                                        }),
+                                        pagination: {
+                                            more: data.pagination.more
+                                        }
+                                    };
+                                },
+                                cache: true
+                            },
+                            minimumInputLength: 0, // Show all items initially
+                            templateResult: formatItem,
+                            templateSelection: formatItemSelection,
+                            escapeMarkup: function (markup) {
+                                return markup;
+                            }
+                        });
+                    }
+                });
+            }
+
+            function formatItem(item) {
+                if (item.loading) {
+                    return '<div class="select2-result-item"><div class="select2-result-item__title">Loading...</div></div>';
+                }
+
+                var statusColor = '';
+                var statusText = '';
+                if (item.status) {
+                    switch(item.status) {
+                        case 'in_stock':
+                            statusColor = 'text-success';
+                            statusText = 'In Stock';
+                            break;
+                        case 'out_of_stock':
+                            statusColor = 'text-danger';
+                            statusText = 'Out of Stock';
+                            break;
+                        case 'limited':
+                            statusColor = 'text-warning';
+                            statusText = 'Limited';
+                            break;
+                        default:
+                            statusColor = 'text-muted';
+                            statusText = item.status;
+                    }
+                }
+
+                var markup = '<div class="select2-result-item d-flex justify-content-between align-items-start">' +
+                    '<div class="flex-grow-1">' +
+                        '<div class="select2-result-item__title fw-semibold">' + item.name + '</div>';
+                
+                if (item.description) {
+                    markup += '<div class="mt-1 select2-result-item__description text-muted small">' + item.description + '</div>';
+                }
+                
+                if (item.unit) {
+                    markup += '<div class="text-muted small">Unit: ' + item.unit + '</div>';
+                }
+                
+                markup += '</div>' +
+                    '<div class="text-end">' +
+                        '<div class="fw-bold text-primary">' + item.price + ' {{ $company->currency ?? "GHS" }}</div>';
+                
+                if (statusText) {
+                    markup += '<div class="small' + statusColor + '">' + statusText + '</div>';
+                }
+                
+                markup += '</div></div>';
+                return markup;
+            }
+
+            function formatItemSelection(item) {
+                return item.text || item.name;
+            }
+
+            // Handle item selection to update price - integrates with existing logic
+            $(document).on('select2:select', '.item-detailsX', function (e) {
+                var data = e.params.data;
+                var $row = $(this).closest('.repeater-wrapper');
+                var itemId = data.id;
+                
+                // Update the select value to trigger the existing change event
+                $(this).val(itemId).trigger('change');
+                
+                // Also directly update the price field for immediate feedback
+                if (data.price) {
+                    $row.find('.invoice-item-price').val(data.price);
+                    // Trigger the existing calculation functions if they exist
+                    if (typeof updateTotalPrice === 'function') {
+                        updateTotalPrice($row);
+                    }
+                    if (typeof debouncedUpdateCalculations === 'function') {
+                        debouncedUpdateCalculations();
+                    }
+                }
+            });
+        </script>
 
  @endpush
 
