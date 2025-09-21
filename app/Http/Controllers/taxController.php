@@ -137,4 +137,41 @@ class taxController extends Controller
 
         return redirect()->back()->with('success', 'Tax deleted successfully.');
     }
+
+    /**
+     * Quick add a new tax from invoice creation
+     */
+    public function quickAdd(Request $request, $slug)
+    {
+        $company = Company::where('slug', $slug)->firstOrFail();
+        
+        // Validate the request
+        $validatedData = $request->validate([
+            'tax_name' => 'required|string|max:255',
+            'tax_percentage' => 'required|numeric|min:0|max:100',
+            'tax_type' => 'required|string|in:primary,secondary',
+            'description' => 'nullable|string|max:500'
+        ]);
+
+        // Create the new tax
+        $tax = new Tax();
+        $tax->company_id = $company->id;
+        $tax->tax_name = $validatedData['tax_name'];
+        $tax->tax_percentage = $validatedData['tax_percentage'];
+        $tax->type = strtoupper($validatedData['tax_type']);
+        $tax->save();
+
+        // Return the created tax data for frontend
+        return response()->json([
+            'success' => true,
+            'message' => 'Tax added successfully!',
+            'tax' => [
+                'id' => $tax->id,
+                'tax_name' => $tax->tax_name,
+                'tax_percentage' => $tax->tax_percentage,
+                'type' => $tax->type,
+                'type_display' => ucfirst(strtolower($tax->type))
+            ]
+        ]);
+    }
 }

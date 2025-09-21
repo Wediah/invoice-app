@@ -15,10 +15,10 @@
             </div>
         </div>
 
-        <div class="mb-6 mt-4">
+        <div class="mt-4 mb-6">
             <input
                 type="submit"
-                class="bg-black text-white rounded-lg w-full py-2 px-4 hover:bg-blue-800 cursor-pointer"
+                class="px-4 py-2 w-full text-white bg-black rounded-lg cursor-pointer hover:bg-blue-800"
                 value="Submit"
             >
         </div>

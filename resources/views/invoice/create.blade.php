@@ -374,6 +374,64 @@
                                     </div>
                                 </div>
                             </div>
+
+                            <!-- Quick Add Tax Modal -->
+                            <div class="modal fade" id="quickAddTaxModal" tabindex="-1" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="quickAddTaxModalTitle">Add New Tax Component</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form id="quickAddTaxForm">
+                                                <div class="mb-3">
+                                                    <label class="form-label">Tax Name <span class="text-danger">*</span></label>
+                                                    <input type="text" class="form-control" name="tax_name" id="quickAddTaxName" required>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label class="form-label">Tax Percentage <span class="text-danger">*</span></label>
+                                                    <div class="input-group">
+                                                        <input type="number" class="form-control" name="tax_percentage" id="quickAddTaxPercentage" step="0.01" min="0" max="100" required>
+                                                        <span class="input-group-text">%</span>
+                                                    </div>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label class="form-label">Tax Type <span class="text-danger">*</span></label>
+                                                    <div class="mt-2 d-flex">
+                                                        <div class="form-check me-4">
+                                                            <input name="tax_type" class="form-check-input" type="radio" value="primary" id="quickAddPrimaryRadio" checked>
+                                                            <label class="form-check-label" for="quickAddPrimaryRadio">
+                                                                Primary
+                                                            </label>
+                                                        </div>
+                                                        <div class="form-check">
+                                                            <input name="tax_type" class="form-check-input" type="radio" value="secondary" id="quickAddSecondaryRadio">
+                                                            <label class="form-check-label" for="quickAddSecondaryRadio">
+                                                                Secondary
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label class="form-label">Description</label>
+                                                    <textarea class="form-control" name="description" id="quickAddTaxDescription" rows="3" placeholder="Optional description"></textarea>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <div class="modal-footer d-flex justify-content-between">
+                                            <button type="button" class="btn btn-label-secondary" data-bs-dismiss="modal">
+                                                Cancel
+                                            </button>
+                                            <button type="button" class="btn btn-primary" id="saveQuickAddTax">
+                                                <span class="spinner-border spinner-border-sm d-none" id="quickAddTaxSpinner"></span>
+                                                <span id="quickAddTaxButtonText">Save & Add to Invoice</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
                             <div class="p-0 row p-sm-3">
                                 <h5 class="pb-2">Invoice To:</h5>
 
@@ -574,28 +632,35 @@
                     {{-- List all taxes here and let users toggle to apply tax --}}
                     <div class="mb-5 card">
                         <div class="card-body">
-                            <h6 class="mb-2">Taxes</h6>
-                            @forelse ($taxes as $tax)
-                            @empty
-                                <span class="mb-2 app-brand-text h6 fw-bold text-danger">No Taxes Added</span>
-                            @endforelse
-                            @foreach ($taxes as $tax)
-                                <div class="gap-2 mb-2 d-flex justify-content-between align-items-center">
-                                    <label for="tax-{{ $tax->id }}"
-                                        class="mb-0 badge bg-label-{{ $tax->type === 'SECONDARY' ? 'warning' : 'primary' }} text-wrap">
-                                        {{ $tax->tax_name }} {{ $tax->tax_percentage }}%
-                                    </label>
-                                    <label class="switch switch-primary">
-                                        <input type="checkbox" class="switch-input" id="tax-{{ $tax->id }}"
-                                            name="tax_ids[]" value="{{ $tax->id }}" />
-                                        <span class="switch-toggle-slider">
-                                            <span class="switch-on"><i class="bx bx-check"></i></span>
-                                            <span class="switch-off"><i class="bx bx-x"></i></span>
-                                        </span>
-                                        <span class="switch-label"></span>
-                                    </label>
-                                </div>
-                            @endforeach
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h6 class="mb-0">Taxes</h6>
+                                <button type="button" class="btn btn-sm btn-outline-primary" id="addNewTaxBtn">
+                                    <i class="bx bx-plus me-1"></i>Add New Tax
+                                </button>
+                            </div>
+                            <div id="taxesList">
+                                @forelse ($taxes as $tax)
+                                @empty
+                                    <span class="mb-2 app-brand-text h6 fw-bold text-danger">No Taxes Added</span>
+                                @endforelse
+                                @foreach ($taxes as $tax)
+                                    <div class="gap-2 mb-2 d-flex justify-content-between align-items-center" data-tax-id="{{ $tax->id }}">
+                                        <label for="tax-{{ $tax->id }}"
+                                            class="mb-0 badge bg-label-{{ $tax->type === 'SECONDARY' ? 'warning' : 'primary' }} text-wrap">
+                                            {{ $tax->tax_name }} {{ $tax->tax_percentage }}%
+                                        </label>
+                                        <label class="switch switch-primary">
+                                            <input type="checkbox" class="switch-input" id="tax-{{ $tax->id }}"
+                                                name="tax_ids[]" value="{{ $tax->id }}" />
+                                            <span class="switch-toggle-slider">
+                                                <span class="switch-on"><i class="bx bx-check"></i></span>
+                                                <span class="switch-off"><i class="bx bx-x"></i></span>
+                                            </span>
+                                            <span class="switch-label"></span>
+                                        </label>
+                                    </div>
+                                @endforeach
+                            </div>
                         </div>
                     </div>
                     <div class="mb-4 card">
@@ -1038,6 +1103,182 @@
                 $('#quickAddForm .is-invalid').removeClass('is-invalid');
                 $('#quickAddForm .invalid-feedback').remove();
                 currentSelectElement = null;
+            });
+
+            // Tax Quick Add Functions
+            $('#addNewTaxBtn').on('click', function() {
+                openQuickAddTaxModal();
+            });
+
+            function openQuickAddTaxModal() {
+                // Clear form
+                $('#quickAddTaxForm')[0].reset();
+                $('#quickAddTaxPrimaryRadio').prop('checked', true);
+                
+                // Clear any previous error states
+                $('#quickAddTaxForm .is-invalid').removeClass('is-invalid');
+                $('#quickAddTaxForm .invalid-feedback').remove();
+                
+                // Show the modal
+                $('#quickAddTaxModal').modal('show');
+                
+                // Focus on tax name field
+                setTimeout(() => {
+                    $('#quickAddTaxName').focus();
+                }, 500);
+            }
+
+            // Handle quick add tax form submission
+            $('#saveQuickAddTax').on('click', function() {
+                var $button = $(this);
+                var $spinner = $('#quickAddTaxSpinner');
+                var $buttonText = $('#quickAddTaxButtonText');
+                
+                // Validate form
+                if (!validateQuickAddTaxForm()) {
+                    return;
+                }
+                
+                // Show loading state
+                $button.prop('disabled', true);
+                $spinner.removeClass('d-none');
+                $buttonText.text('Saving...');
+                
+                // Get company slug from URL
+                const companySlug = window.location.pathname.split('/')[1] || 'default';
+                
+                // Prepare form data
+                var formData = {
+                    tax_name: $('#quickAddTaxName').val(),
+                    tax_percentage: $('#quickAddTaxPercentage').val(),
+                    tax_type: $('input[name="tax_type"]:checked').val(),
+                    description: $('#quickAddTaxDescription').val(),
+                    _token: $('meta[name="csrf-token"]').attr('content')
+                };
+                
+                // Submit AJAX request
+                $.ajax({
+                    url: `/tax/${companySlug}/quick-add`,
+                    type: 'POST',
+                    data: formData,
+                    success: function(response) {
+                        if (response.success) {
+                            // Close modal
+                            $('#quickAddTaxModal').modal('hide');
+                            
+                            // Show success toast
+                            if (typeof window.Toast !== 'undefined') {
+                                window.Toast.success(response.message);
+                            }
+                            
+                            // Add the new tax to the taxes list and select it
+                            addTaxToInvoiceAndSelect(response.tax);
+                        }
+                    },
+                    error: function(xhr) {
+                        var errors = xhr.responseJSON?.errors || {};
+                        displayQuickAddTaxErrors(errors);
+                    },
+                    complete: function() {
+                        // Reset button state
+                        $button.prop('disabled', false);
+                        $spinner.addClass('d-none');
+                        $buttonText.text('Save & Add to Invoice');
+                    }
+                });
+            });
+
+            function validateQuickAddTaxForm() {
+                var isValid = true;
+                
+                // Clear previous errors
+                $('#quickAddTaxForm .is-invalid').removeClass('is-invalid');
+                $('#quickAddTaxForm .invalid-feedback').remove();
+                
+                // Validate tax name
+                if (!$('#quickAddTaxName').val().trim()) {
+                    showTaxFieldError('#quickAddTaxName', 'Tax name is required');
+                    isValid = false;
+                } else if ($('#quickAddTaxName').val().length > 255) {
+                    showTaxFieldError('#quickAddTaxName', 'Tax name must not exceed 255 characters');
+                    isValid = false;
+                }
+                
+                // Validate tax percentage
+                var percentage = parseFloat($('#quickAddTaxPercentage').val());
+                if (!percentage || percentage < 0 || percentage > 100) {
+                    showTaxFieldError('#quickAddTaxPercentage', 'Please enter a valid percentage (0-100)');
+                    isValid = false;
+                }
+                
+                // Validate tax type
+                if (!$('input[name="tax_type"]:checked').length) {
+                    showTaxFieldError('input[name="tax_type"]', 'Please select a tax type');
+                    isValid = false;
+                }
+                
+                return isValid;
+            }
+
+            function showTaxFieldError(fieldSelector, message) {
+                var $field = $(fieldSelector);
+                $field.addClass('is-invalid');
+                $field.after('<div class="invalid-feedback">' + message + '</div>');
+            }
+
+            function displayQuickAddTaxErrors(errors) {
+                // Clear previous errors
+                $('#quickAddTaxForm .is-invalid').removeClass('is-invalid');
+                $('#quickAddTaxForm .invalid-feedback').remove();
+                
+                // Display new errors
+                $.each(errors, function(field, messages) {
+                    var fieldSelector = '#quickAddTax' + field.charAt(0).toUpperCase() + field.slice(1);
+                    if (field === 'tax_type') {
+                        fieldSelector = 'input[name="tax_type"]';
+                    }
+                    showTaxFieldError(fieldSelector, messages[0]);
+                });
+            }
+
+            function addTaxToInvoiceAndSelect(tax) {
+                // Create new tax HTML
+                var taxHtml = `
+                    <div class="gap-2 mb-2 d-flex justify-content-between align-items-center" data-tax-id="${tax.id}">
+                        <label for="tax-${tax.id}"
+                            class="mb-0 badge bg-label-${tax.type === 'SECONDARY' ? 'warning' : 'primary'} text-wrap">
+                            ${tax.tax_name} ${tax.tax_percentage}%
+                        </label>
+                        <label class="switch switch-primary">
+                            <input type="checkbox" class="switch-input" id="tax-${tax.id}"
+                                name="tax_ids[]" value="${tax.id}" checked />
+                            <span class="switch-toggle-slider">
+                                <span class="switch-on"><i class="bx bx-check"></i></span>
+                                <span class="switch-off"><i class="bx bx-x"></i></span>
+                            </span>
+                            <span class="switch-label"></span>
+                        </label>
+                    </div>
+                `;
+                
+                // Remove "No Taxes Added" message if it exists
+                $('#taxesList .text-danger').remove();
+                
+                // Add the new tax to the list
+                $('#taxesList').append(taxHtml);
+                
+                // Trigger tax calculations if the function exists
+                if (typeof calculateTotal === 'function') {
+                    calculateTotal();
+                }
+            }
+
+            // Reset tax modal when closed
+            $('#quickAddTaxModal').on('hidden.bs.modal', function() {
+                $('#quickAddTaxForm')[0].reset();
+                $('#quickAddTaxPrimaryRadio').prop('checked', true);
+                $('#quickAddTaxForm .is-invalid').removeClass('is-invalid');
+                $('#quickAddTaxForm .invalid-feedback').remove();
             });
         </script>
 
