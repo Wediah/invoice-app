@@ -54,6 +54,7 @@ Route::middleware('auth')->group(function () {
     Route::patch('/catalog/{slug}/status/instock/{id}', [catalogController::class, 'instock'])->name('catalog.instock');
     Route::patch('/catalog/{slug}/status/outofstock/{id}', [catalogController::class, 'outstock'])->name('catalog.outstock');
     Route::patch('/catalog/{slug}/status/limited/{id}', [catalogController::class, 'limitedstock'])->name('catalog.limited');
+    Route::get('/catalog/{slug}/search', [catalogController::class, 'search'])->name('catalog.search');
 
     //invoice
     Route::get('/{slug}/all-invoices', [InvoiceController::class, 'index'])->name('invoice.index');

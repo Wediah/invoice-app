@@ -107,6 +107,15 @@ $(function () {
         tooltipTriggerList.map(function (tooltipTriggerEl) {
           return new bootstrap.Tooltip(tooltipTriggerEl);
         });
+        
+        // Initialize Select2 on the new row's item dropdown
+        setTimeout(() => {
+          const $newRow = $(this);
+          const $itemSelect = $newRow.find('.item-detailsX');
+          if ($itemSelect.length && !$itemSelect.hasClass('select2-hidden-accessible')) {
+            initializeSelect2ForElement($itemSelect);
+          }
+        }, 100);
       },
       hide: function (deleteElement) {
         $(this).slideUp(deleteElement);
@@ -390,3 +399,142 @@ $(document).ready(function () {
   // Trigger the input event on page load to set initial state
   $('.quantity').trigger('input');
 });
+
+// Handle Select2 item selection for price updates
+$(document).on('select2:select', '.item-detailsX', function (e) {
+  var data = e.params.data;
+  var $row = $(this).closest('.repeater-wrapper');
+  var itemId = data.id;
+  
+  // Update the select value to trigger the existing change event
+  $(this).val(itemId).trigger('change');
+  
+  // Also directly update the price field for immediate feedback
+  if (data.price) {
+    $row.find('.invoice-item-price').val(data.price);
+    // Trigger the existing calculation functions if they exist
+    if (typeof updateTotalPrice === 'function') {
+      updateTotalPrice($row);
+    }
+    if (typeof debouncedUpdateCalculations === 'function') {
+      debouncedUpdateCalculations();
+    }
+  }
+});
+
+// Function to initialize Select2 for a specific element
+function initializeSelect2ForElement($element) {
+  if ($element.length && !$element.hasClass('select2-hidden-accessible')) {
+    // Get the company slug from the current page URL or a global variable
+    const companySlug = window.location.pathname.split('/')[1] || 'default';
+    
+    $element.select2({
+      placeholder: 'Search or select an item...',
+      allowClear: true,
+      width: '100%',
+      ajax: {
+        url: `/catalog/${companySlug}/search`,
+        dataType: 'json',
+        delay: 300,
+        data: function (params) {
+          return {
+            q: params.term || '',
+            page: params.page || 1
+          };
+        },
+        processResults: function (data, params) {
+          params.page = params.page || 1;
+          
+          return {
+            results: data.results.map(function(item) {
+              return {
+                id: item.id,
+                text: item.name + ' - ' + item.price + ' GHS',
+                name: item.name,
+                price: item.price,
+                description: item.description,
+                unit: item.unit_of_measurement,
+                status: item.status
+              };
+            }),
+            pagination: {
+              more: data.pagination.more
+            }
+          };
+        },
+        cache: true
+      },
+      minimumInputLength: 0,
+      templateResult: formatItemForSelect2,
+      templateSelection: function(item) {
+        return item.text || item.name;
+      },
+      escapeMarkup: function (markup) {
+        return markup;
+      },
+      language: {
+        inputTooShort: function () {
+          return 'Type to search or browse all items';
+        },
+        noResults: function () {
+          return 'No items found';
+        },
+        searching: function () {
+          return 'Searching...';
+        }
+      }
+    });
+  }
+}
+
+// Function to format items for Select2 display
+function formatItemForSelect2(item) {
+  if (item.loading) {
+    return '<div class="select2-result-item"><div class="select2-result-item__title">Loading...</div></div>';
+  }
+
+  var statusColor = '';
+  var statusText = '';
+  if (item.status) {
+    switch(item.status) {
+      case 'in_stock':
+        statusColor = 'text-success';
+        statusText = 'In Stock';
+        break;
+      case 'out_of_stock':
+        statusColor = 'text-danger';
+        statusText = 'Out of Stock';
+        break;
+      case 'limited':
+        statusColor = 'text-warning';
+        statusText = 'Limited';
+        break;
+      default:
+        statusColor = 'text-muted';
+        statusText = item.status;
+    }
+  }
+
+  var markup = '<div class="select2-result-item d-flex justify-content-between align-items-start">' +
+    '<div class="flex-grow-1">' +
+      '<div class="select2-result-item__title fw-semibold">' + item.name + '</div>';
+  
+  if (item.description) {
+    markup += '<div class="mt-1 select2-result-item__description text-muted small">' + item.description + '</div>';
+  }
+  
+  if (item.unit) {
+    markup += '<div class="text-muted small">Unit: ' + item.unit + '</div>';
+  }
+  
+  markup += '</div>' +
+    '<div class="text-end">' +
+      '<div class="fw-bold text-primary">' + item.price + ' GHS</div>';
+  
+  if (statusText) {
+    markup += '<div class="small' + statusColor + '">' + statusText + '</div>';
+  }
+  
+  markup += '</div></div>';
+  return markup;
+}

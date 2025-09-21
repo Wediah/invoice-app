@@ -248,4 +248,38 @@ class catalogController extends Controller
 
         return redirect()->back()->with('success', "Catalog item {$catalog->name} is now limited stock!");
     }
+
+    /**
+     * Search catalog items for Select2 AJAX
+     */
+    public function search($slug)
+    {
+        $company = Company::where('slug', $slug)->firstOrFail();
+        $query = request('q');
+        $page = request('page', 1);
+        $perPage = 10;
+
+        $catalogs = $company->catalogs()
+            ->where('name', 'like', "%{$query}%")
+            ->orWhere('description', 'like', "%{$query}%")
+            ->paginate($perPage, ['*'], 'page', $page);
+
+        $results = $catalogs->map(function ($catalog) {
+            return [
+                'id' => $catalog->id,
+                'name' => $catalog->name,
+                'price' => number_format($catalog->price, 2),
+                'description' => $catalog->description,
+                'unit_of_measurement' => $catalog->unit_of_measurement,
+                'status' => $catalog->status
+            ];
+        });
+
+        return response()->json([
+            'results' => $results,
+            'pagination' => [
+                'more' => $catalogs->hasMorePages()
+            ]
+        ]);
+    }
 }
