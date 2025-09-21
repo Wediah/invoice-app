@@ -88,6 +88,7 @@ class catalogController extends Controller
         $company_id = $company->id;
 
 
+        $addedCount = 0;
         foreach ($data as $prop) {
             $stock_name = $prop['stock_name'];
             $stock_price = $prop['stock_price'];
@@ -102,9 +103,15 @@ class catalogController extends Controller
             $stockData->unit_of_measurement = $unit_of_measurement;
             $stockData->price = $stock_price;
             $stockData->save();
+            $addedCount++;
         }
 
-        return redirect()->intended(route('catalog.index', ['slug' => $company->slug], absolute: false));
+        $message = $addedCount === 1 
+            ? 'Catalog item added successfully!' 
+            : "{$addedCount} catalog items added successfully!";
+        
+        return redirect()->intended(route('catalog.index', ['slug' => $company->slug], absolute: false))
+            ->with('success', $message);
     }
 
     /**
@@ -176,13 +183,13 @@ class catalogController extends Controller
         // Perform update only when there's something to update.
         if (!empty($catalogData)) {
             $catalog->update($catalogData);
-            session()->flash('success', 'Catalog updated successfully.');
+            return redirect()->intended(route('catalog.index', ['slug' => $company->slug], absolute: false))
+                ->with('success', "Catalog item '{$catalog->name}' updated successfully!");
         } else {
             // No changes were provided; optionally set an info message.
-            session()->flash('info', 'No changes detected.');
+            return redirect()->intended(route('catalog.index', ['slug' => $company->slug], absolute: false))
+                ->with('info', 'No changes detected.');
         }
-
-        return redirect()->intended(route('catalog.index', ['slug' => $company->slug], absolute: false));
     }
 
     /**
@@ -195,11 +202,12 @@ class catalogController extends Controller
             ->where('company_id', $company->id)
             ->firstOrFail();
 
+        $catalogName = $catalog->name;
         $catalog->delete();
 
         usleep(500000);
 
-        return redirect()->back();
+        return redirect()->back()->with('success', "Catalog item {$catalogName} deleted successfully!");
     }
 
     public function instock($slug, $id): RedirectResponse
@@ -212,7 +220,7 @@ class catalogController extends Controller
         $catalog->status = itemStatus::INSTOCK->value;
         $catalog->save();
 
-        return redirect()->back();
+        return redirect()->back()->with('success', "Catalog item {$catalog->name} is now in stock!");
     }
 
     public function outstock($slug, $id): RedirectResponse
@@ -225,7 +233,7 @@ class catalogController extends Controller
         $catalog->status = itemStatus::OUTOFSTOCK->value;
         $catalog->save();
 
-        return redirect()->back();
+        return redirect()->back()->with('success', "Catalog item {$catalog->name} is now out of stock!");
     }
 
     public function limitedstock($slug, $id): RedirectResponse
@@ -238,6 +246,6 @@ class catalogController extends Controller
         $catalog->status = itemStatus::LIMITED->value;
         $catalog->save();
 
-        return redirect()->back();
+        return redirect()->back()->with('success', "Catalog item {$catalog->name} is now limited stock!");
     }
 }

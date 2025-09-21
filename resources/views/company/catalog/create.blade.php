@@ -44,7 +44,7 @@
                                 <label class="form-label" for="stock_name">Stock Name</label>
                                 <div class="input-group">
                                     <input type="text" name="stock_name" class="form-control" placeholder="Enter the name of your item/service"
-                                        aria-label="Enter the name of your item/service" aria-describedby="basic-addon11"  value=""  />
+                                        aria-label="Enter the name of your item/service" aria-describedby="basic-addon11"  value="{{ old('stock_name') }}"  />
                                 </div>
                                 @error('stock_name')
                                 <p class="error">{{ $message }}</p>
@@ -55,7 +55,7 @@
                                 <div class="input-group">
                                     <span class="input-group-text">GHC</span>
                                     <input type="number" class="form-control" placeholder="Enter your price" name="stock_price"
-                                        aria-label="Amount (to the nearest Cedi)" value=""  />
+                                        aria-label="Amount (to the nearest Cedi)" value="{{ old('stock_price') }}"  />
 
 
                                 </div>

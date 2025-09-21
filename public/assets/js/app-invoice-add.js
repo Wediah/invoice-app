@@ -293,7 +293,7 @@ $(document).ready(function () {
     $taxList.empty();
     primaryTaxes.forEach(tax => {
       $taxList.append(`
-              <div class="d-flex justify-content-between mb-2">
+              <div class="mb-2 d-flex justify-content-between">
                   <span class="me-5">${tax.name}</span>
                   <span>${tax.amount.toFixed(2)}</span>
               </div>
@@ -301,7 +301,7 @@ $(document).ready(function () {
     });
     secondaryTaxes.forEach(tax => {
       $taxList.append(`
-              <div class="d-flex justify-content-between mb-2">
+              <div class="mb-2 d-flex justify-content-between">
                   <span class="me-5">${tax.name}</span>
                   <span>${tax.amount.toFixed(2)}</span>
               </div>

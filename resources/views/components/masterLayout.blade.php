@@ -144,6 +144,8 @@
     <script src="{{ asset('assets/js/pages-auth.js') }}"></script>
     @stack('scripts')
 
+    <!-- Toast Notifications -->
+    <x-toast-notifications />
 
 </body>
 

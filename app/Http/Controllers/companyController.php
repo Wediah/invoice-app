@@ -117,7 +117,7 @@ class companyController extends Controller
 
         $company->update($validatedAttributes);
 
-        return redirect()->back();
+        return redirect()->back()->with('success', 'Advanced information updated successfully!');
     }
 
     //financial data
@@ -152,7 +152,7 @@ class companyController extends Controller
 
         $company->update($financialData);
 
-        return redirect()->back();
+        return redirect()->back()->with('success', 'Financial information updated successfully!');
     }
 
     //preference data
@@ -174,14 +174,18 @@ class companyController extends Controller
 
         $company->update($validatedData);
 
-        return redirect()->back();
+        return redirect()->back()->with('success', 'Settings and preferences updated successfully!');
     }
 
     public function profile($slug): Factory|Application|View|\Illuminate\Contracts\Foundation\Application
     {
         $company = Company::where('slug', $slug)->first();
         $categories = companyCategory::all();
-        return view('company.companyProfileForms.index', compact('company', 'categories'));
+        
+        // Get profile completion data
+        $completionData = $company->getProfileCompletionData();
+        
+        return view('company.companyProfileForms.index', compact('company', 'categories', 'completionData'));
     }
 
     // public function update(Request $request,$slug): RedirectResponse
@@ -262,7 +266,7 @@ class companyController extends Controller
 
         try {
             $company->update($updateData);
-            return redirect()->route('company.show', $company->slug)->with('success', 'Company updated successfully');
+            return redirect()->back()->with('success', 'Basic information updated successfully!');
         } catch (\Exception $e) {
             return redirect()->back()->withInput()->with('error', 'Failed to update company: ' . $e->getMessage());
         }

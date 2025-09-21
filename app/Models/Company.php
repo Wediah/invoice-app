@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Models\Tax;
 use App\Models\Invoice;
 use App\Models\CompanyCategory;
+use App\Services\ProfileCompletionService;
 use Illuminate\Database\Eloquent\Model;
 use Cviebrock\EloquentSluggable\Sluggable;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -63,6 +64,60 @@ class Company extends Model
     public function category(): BelongsTo
     {
         return $this->belongsTo(CompanyCategory::class, 'company_category_id');
+    }
+
+    /**
+     * Get profile completion data
+     */
+    public function getProfileCompletionData()
+    {
+        $service = new ProfileCompletionService($this);
+        return $service->getProfileCompletionData();
+    }
+
+    /**
+     * Get basic information completion
+     */
+    public function getBasicInfoCompletion()
+    {
+        $service = new ProfileCompletionService($this);
+        return $service->getProfileCompletionData()['basic_info'];
+    }
+
+    /**
+     * Get advanced information completion
+     */
+    public function getAdvancedInfoCompletion()
+    {
+        $service = new ProfileCompletionService($this);
+        return $service->getProfileCompletionData()['advanced_info'];
+    }
+
+    /**
+     * Get financial information completion
+     */
+    public function getFinancialInfoCompletion()
+    {
+        $service = new ProfileCompletionService($this);
+        return $service->getProfileCompletionData()['financial_info'];
+    }
+
+    /**
+     * Get settings and preferences completion
+     */
+    public function getSettingsPreferencesCompletion()
+    {
+        $service = new ProfileCompletionService($this);
+        return $service->getProfileCompletionData()['settings_preferences'];
+    }
+
+    /**
+     * Get overall completion percentage
+     */
+    public function getOverallCompletion()
+    {
+        $service = new ProfileCompletionService($this);
+        return $service->getProfileCompletionData()['overall'];
     }
 
 }
