@@ -2,6 +2,10 @@
 
 
     <div class="authentication-inner row m-0">
+        {{-- session messsge --}}
+        @if (session('status'))
+                        <x-auth-session-status class="mb-4" :status="session('status')" />
+        @endif
         <!-- /Left Text -->
         <div class="d-none d-lg-flex col-lg-7 col-xl-8 align-items-center">
             <div class="flex-row text-center mx-auto">

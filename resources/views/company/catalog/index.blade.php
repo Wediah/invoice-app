@@ -32,14 +32,19 @@
         <div class="col-12">
             <div class="card">
                 <h5 class="card-header">Add New Stock</h5>
+                
+                <!-- Validation Errors (keep these as inline alerts for form validation) -->
                 @if ($errors->any())
-                    <span class="error">
-                        <ol>
+                    <div class="mx-3 mt-3 alert alert-danger alert-dismissible fade show" role="alert">
+                        <i class="bx bx-error-circle me-2"></i>
+                        <strong>Please fix the following errors:</strong>
+                        <ul class="mt-2 mb-0">
                             @foreach ($errors->all() as $error)
                                 <li>{{ $error }}</li>
                             @endforeach
-                        </ol>
-                    </span>
+                        </ul>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
                 @endif
                 <div class="card-body">
                     <form method="POST" action="{{ route('catalog.store', ['company_id' => $company->id]) }}"
@@ -74,7 +79,7 @@
                                                         <input type="text" id="form-repeater-1-1"
                                                             class="form-control {{ $errors->first('stock_name') ? ' form-error' : '' }}"
                                                             placeholder="Enter the name of your item/service"
-                                                            name="stock_name"  />
+                                                            name="stock_name" value="{{ old('stock_name') }}" />
                                                     </div>
 
 
@@ -84,7 +89,7 @@
 
                                                 </td>
 
-                                                <td class="mb-3 ">
+                                                <td class="mb-3">
 
                                                     <div>
                                                         <div class="input-group">
@@ -93,7 +98,7 @@
                                                             <input type="number" id="form-repeater-1-1" step="0.01"
                                                                 class="form-control {{ $errors->first('stock_price') ? ' form-error' : '' }}"
                                                                 placeholder="Enter the price of your item/service"
-                                                                name="stock_price"  />
+                                                                name="stock_price" value="{{ old('stock_price') }}"  />
 
                                                         </div>
                                                     </div>
@@ -103,7 +108,7 @@
                                                     @enderror
                                                 </td>
 
-                                                <td class="mb-3 ">
+                                                <td class="mb-3">
 
                                                     <div>
                                                         <div class="input-group">
@@ -200,7 +205,7 @@
                                         aria-controls="DataTables_Table_0"></label></div>
                         </div>
                     </div>
-                    <table class="table datatables-basic table-bordered dataTable no-footer dtr-column "
+                    <table class="table datatables-basic table-bordered dataTable no-footer dtr-column"
                         id="DataTables_Table_0" role="grid" aria-describedby="DataTables_Table_0_info"
                         style="width: 1382px;">
                         <thead>
@@ -236,7 +241,25 @@
                                     <td valign="top" class="">{{ $company->currency }}&nbsp;{{ number_format($catalog->price, 2) }}</td>
                                     <td valign="top" class="">{{ $catalog->unit_of_measurement }}</td>
                                     <td valign="top" class="">{{ $catalog->description }}</td>
-                                    <td><span class="badge bg-label-primary me-1">{{ $catalog->status }}</span></td>
+                                    <td>
+                                        @if ($catalog->status === 'instock')
+                                        <span class="badge bg-label-success me-1">
+                                            {{ $catalog->status }}
+
+                                        </span>
+                                        @elseif ($catalog->status === 'outofstock')
+                                        <span class="badge bg-label-danger me-1">
+                                            {{ $catalog->status }}
+
+                                        </span>
+                                        @elseif ($catalog->status === 'limited')
+                                        <span class="badge bg-label-warning me-1">
+                                            {{ $catalog->status }}
+
+                                        </span> 
+                                        @endif
+                                        
+                                    </td>
 
 
                                     {{-- <td valign="top"  class=""></td> --}}
@@ -263,7 +286,7 @@
                                                     @csrf
                                                     @method('PATCH')
                                                     <button class="dropdown-item" type="submit">
-                                                        <i class="bx bx-trash me-1"></i>
+                                                        <i class="bx bx-check-circle me-1 text-success"></i>
                                                         In Stock
                                                     </button>
                                                 </form>
@@ -273,7 +296,7 @@
                                                     @csrf
                                                     @method('PATCH')
                                                     <button class="dropdown-item" type="submit">
-                                                        <i class="bx bx-trash me-1"></i>
+                                                        <i class="bx bx-x-circle me-1 text-danger"></i>
                                                         Out of Stock
                                                     </button>
                                                 </form>
@@ -283,7 +306,7 @@
                                                     @csrf
                                                     @method('PATCH')
                                                     <button class="dropdown-item" type="submit">
-                                                        <i class="bx bx-trash me-1"></i>
+                                                        <i class="fa-solid fa-exclamation-triangle me-1 text-warning"></i>
                                                         Limited
                                                     </button>
                                                 </form>
@@ -296,7 +319,7 @@
                                                     @csrf
                                                     @method('DELETE')
                                                     <button class="dropdown-item deleteItem" type="submit">
-                                                        <i class="bx bx-trash me-1"></i>
+                                                        <i class="bx bx-trash me-1 text-danger"></i>
                                                         Delete
                                                     </button>
                                                 </form>
