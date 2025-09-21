@@ -453,7 +453,7 @@
                                     <div class="pt-0 repeater-wrapper pt-md-4" data-repeater-item>
                                         <div class="rounded border d-flex position-relative pe-0">
                                             <div class="p-3 m-0 row w-100">
-                                                <div class="mb-3 col-md-4 col-12 mb-md-0 ps-md-0">
+                                                <div class="mb-3 col-md-5 col-12 mb-md-0 ps-md-0">
                                                     <p class="mb-2 repeater-title">Item</p>
                                                     <select  name="group-a[0][catalog_id]"
                                                         class="mb-2 catalog_id form-select item-detailsX">
@@ -462,7 +462,7 @@
 
                                                 </div>
 
-                                                <div class="col-md-3 col-12 pe-0">
+                                                <div class="col-md-2 col-12 pe-0">
                                                     <p class="mb-2 repeater-title">Unit Cost</p>
                                                     <div class="input-group">
                                                         <span
@@ -632,7 +632,7 @@
                     {{-- List all taxes here and let users toggle to apply tax --}}
                     <div class="mb-5 card">
                         <div class="card-body">
-                            <div class="d-flex justify-content-between align-items-center mb-3">
+                            <div class="mb-3 d-flex justify-content-between align-items-center">
                                 <h6 class="mb-0">Taxes</h6>
                                 <button type="button" class="btn btn-sm btn-outline-primary" id="addNewTaxBtn">
                                     <i class="bx bx-plus me-1"></i>Add New Tax
