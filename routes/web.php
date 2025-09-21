@@ -88,6 +88,7 @@ Route::middleware('auth')->group(function () {
     Route::get('tax/{slug}/edit/{id}', [taxController::class, 'edit'])->name('tax.edit');
     Route::patch('/tax/{slug}/update/{id}', [taxController::class, 'update'])->name('tax.update');
     Route::delete('/tax/{slug}/delete/{id}', [taxController::class, 'destroy'])->name('tax.delete');
+    Route::post('/tax/{slug}/quick-add', [taxController::class, 'quickAdd'])->name('tax.quickAdd');
 
     //download Invoice
     Route::get('/invoice/{id}/download-pdf', [invoiceController::class, 'downloadPDF'])->name('invoice.download');
