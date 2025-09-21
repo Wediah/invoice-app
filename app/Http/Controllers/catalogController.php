@@ -282,4 +282,45 @@ class catalogController extends Controller
             ]
         ]);
     }
+
+    /**
+     * Quick add a new catalog item from invoice creation
+     */
+    public function quickAdd(Request $request, $slug)
+    {
+        $company = Company::where('slug', $slug)->firstOrFail();
+        
+        // Validate the request
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255',
+            'price' => 'required|numeric|min:0',
+            'description' => 'nullable|string|max:300',
+            'unit_of_measurement' => 'nullable|string|max:255',
+            'status' => 'nullable|string|in:in_stock,out_of_stock,limited'
+        ]);
+
+        // Create the new catalog item
+        $catalog = new Catalog();
+        $catalog->company_id = $company->id;
+        $catalog->name = $validatedData['name'];
+        $catalog->price = $validatedData['price'];
+        $catalog->description = $validatedData['description'] ?? 'Added from invoice';
+        $catalog->unit_of_measurement = $validatedData['unit_of_measurement'] ?? 'pcs';
+        $catalog->status = $validatedData['status'] ?? 'in_stock';
+        $catalog->save();
+
+        // Return the created item data for Select2
+        return response()->json([
+            'success' => true,
+            'message' => 'Item added successfully!',
+            'item' => [
+                'id' => $catalog->id,
+                'name' => $catalog->name,
+                'price' => number_format($catalog->price, 2),
+                'description' => $catalog->description,
+                'unit_of_measurement' => $catalog->unit_of_measurement,
+                'status' => $catalog->status
+            ]
+        ]);
+    }
 }

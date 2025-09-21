@@ -406,6 +406,12 @@ $(document).on('select2:select', '.item-detailsX', function (e) {
   var $row = $(this).closest('.repeater-wrapper');
   var itemId = data.id;
   
+  // Handle "Add New Item" selection
+  if (data.isAddNew) {
+    openQuickAddModalForRepeater(data.searchTerm, $(this));
+    return;
+  }
+  
   // Update the select value to trigger the existing change event
   $(this).val(itemId).trigger('change');
   
@@ -445,18 +451,30 @@ function initializeSelect2ForElement($element) {
         processResults: function (data, params) {
           params.page = params.page || 1;
           
+          var results = data.results.map(function(item) {
+            return {
+              id: item.id,
+              text: item.name + ' - ' + item.price + ' GHS',
+              name: item.name,
+              price: item.price,
+              description: item.description,
+              unit: item.unit_of_measurement,
+              status: item.status
+            };
+          });
+          
+          // Add "Add New Item" option when no results and user has typed something
+          if (results.length === 0 && params.term && params.term.trim().length > 0) {
+            results.push({
+              id: 'add_new',
+              text: '+ Add "' + params.term + '" as new item',
+              isAddNew: true,
+              searchTerm: params.term
+            });
+          }
+          
           return {
-            results: data.results.map(function(item) {
-              return {
-                id: item.id,
-                text: item.name + ' - ' + item.price + ' GHS',
-                name: item.name,
-                price: item.price,
-                description: item.description,
-                unit: item.unit_of_measurement,
-                status: item.status
-              };
-            }),
+            results: results,
             pagination: {
               more: data.pagination.more
             }
@@ -491,6 +509,19 @@ function initializeSelect2ForElement($element) {
 function formatItemForSelect2(item) {
   if (item.loading) {
     return '<div class="select2-result-item"><div class="select2-result-item__title">Loading...</div></div>';
+  }
+
+  // Handle "Add New Item" option
+  if (item.isAddNew) {
+    return '<div class="select2-result-item d-flex align-items-center">' +
+      '<div class="flex-grow-1">' +
+        '<div class="select2-result-item__title fw-semibold text-primary">' + item.text + '</div>' +
+        '<div class="text-muted small">Click to add this item to your catalog</div>' +
+      '</div>' +
+      '<div class="text-end">' +
+        '<i class="bx bx-plus-circle text-primary"></i>' +
+      '</div>' +
+    '</div>';
   }
 
   var statusColor = '';
@@ -538,3 +569,164 @@ function formatItemForSelect2(item) {
   markup += '</div></div>';
   return markup;
 }
+
+// Quick Add Modal Functions for Repeater
+var currentRepeaterSelectElement = null;
+
+function openQuickAddModalForRepeater(searchTerm, $selectElement) {
+  currentRepeaterSelectElement = $selectElement;
+  
+  // Pre-fill the name field with search term
+  $('#quickAddName').val(searchTerm);
+  $('#quickAddPrice').val('');
+  $('#quickAddDescription').val('');
+  $('#quickAddUnit').val('pcs');
+  $('#quickAddStatus').val('in_stock');
+  
+  // Clear any previous error states
+  $('#quickAddForm .is-invalid').removeClass('is-invalid');
+  $('#quickAddForm .invalid-feedback').remove();
+  
+  // Show the modal
+  $('#quickAddModal').modal('show');
+  
+  // Focus on price field
+  setTimeout(() => {
+    $('#quickAddPrice').focus();
+  }, 500);
+}
+
+// Handle quick add form submission for repeater
+$(document).on('click', '#saveQuickAdd', function() {
+  var $button = $(this);
+  var $spinner = $('#quickAddSpinner');
+  var $buttonText = $('#quickAddButtonText');
+  
+  // Validate form
+  if (!validateQuickAddFormForRepeater()) {
+    return;
+  }
+  
+  // Show loading state
+  $button.prop('disabled', true);
+  $spinner.removeClass('d-none');
+  $buttonText.text('Saving...');
+  
+  // Get company slug from URL
+  const companySlug = window.location.pathname.split('/')[1] || 'default';
+  
+  // Prepare form data
+  var formData = {
+    name: $('#quickAddName').val(),
+    price: $('#quickAddPrice').val(),
+    description: $('#quickAddDescription').val(),
+    unit_of_measurement: $('#quickAddUnit').val(),
+    status: $('#quickAddStatus').val(),
+    _token: $('meta[name="csrf-token"]').attr('content')
+  };
+  
+  // Submit AJAX request
+  $.ajax({
+    url: `/catalog/${companySlug}/quick-add`,
+    type: 'POST',
+    data: formData,
+    success: function(response) {
+      if (response.success) {
+        // Close modal
+        $('#quickAddModal').modal('hide');
+        
+        // Show success toast
+        if (typeof window.Toast !== 'undefined') {
+          window.Toast.success(response.message);
+        }
+        
+        // Add the new item to Select2 and select it
+        addItemToSelect2AndSelectForRepeater(response.item, currentRepeaterSelectElement);
+      }
+    },
+    error: function(xhr) {
+      var errors = xhr.responseJSON?.errors || {};
+      displayQuickAddErrorsForRepeater(errors);
+    },
+    complete: function() {
+      // Reset button state
+      $button.prop('disabled', false);
+      $spinner.addClass('d-none');
+      $buttonText.text('Save & Add to Invoice');
+    }
+  });
+});
+
+function validateQuickAddFormForRepeater() {
+  var isValid = true;
+  
+  // Clear previous errors
+  $('#quickAddForm .is-invalid').removeClass('is-invalid');
+  $('#quickAddForm .invalid-feedback').remove();
+  
+  // Validate name
+  if (!$('#quickAddName').val().trim()) {
+    showFieldErrorForRepeater('#quickAddName', 'Item name is required');
+    isValid = false;
+  }
+  
+  // Validate price
+  var price = parseFloat($('#quickAddPrice').val());
+  if (!price || price < 0) {
+    showFieldErrorForRepeater('#quickAddPrice', 'Please enter a valid price');
+    isValid = false;
+  }
+  
+  return isValid;
+}
+
+function showFieldErrorForRepeater(fieldSelector, message) {
+  var $field = $(fieldSelector);
+  $field.addClass('is-invalid');
+  $field.after('<div class="invalid-feedback">' + message + '</div>');
+}
+
+function displayQuickAddErrorsForRepeater(errors) {
+  // Clear previous errors
+  $('#quickAddForm .is-invalid').removeClass('is-invalid');
+  $('#quickAddForm .invalid-feedback').remove();
+  
+  // Display new errors
+  $.each(errors, function(field, messages) {
+    var fieldSelector = '#quickAdd' + field.charAt(0).toUpperCase() + field.slice(1);
+    showFieldErrorForRepeater(fieldSelector, messages[0]);
+  });
+}
+
+function addItemToSelect2AndSelectForRepeater(item, $selectElement) {
+  // Create new option
+  var newOption = new Option(
+    item.name + ' - ' + item.price + ' GHS',
+    item.id,
+    true,
+    true
+  );
+  
+  // Add option to select
+  $selectElement.append(newOption).trigger('change');
+  
+  // Update price field
+  var $row = $selectElement.closest('.repeater-wrapper');
+  $row.find('.invoice-item-price').val(item.price);
+  
+  // Trigger calculations
+  if (typeof updateTotalPrice === 'function') {
+    updateTotalPrice($row);
+  }
+  if (typeof debouncedUpdateCalculations === 'function') {
+    debouncedUpdateCalculations();
+  }
+}
+
+// Reset modal when closed
+$(document).on('hidden.bs.modal', '#quickAddModal', function() {
+  $('#quickAddForm')[0].reset();
+  $('#quickAddForm .is-invalid').removeClass('is-invalid');
+  $('#quickAddForm .invalid-feedback').remove();
+  currentRepeaterSelectElement = null;
+});

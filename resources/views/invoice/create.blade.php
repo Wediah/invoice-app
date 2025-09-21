@@ -308,6 +308,72 @@
                             <div class="p-3 mt-3">
                                 <!-- Information will be displayed here -->
                             </div>
+
+                            <!-- Quick Add Item Modal -->
+                            <div class="modal fade" id="quickAddModal" tabindex="-1" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered" role="document">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="quickAddModalTitle">Add New Item to Catalog</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form id="quickAddForm">
+                                                <div class="mb-3">
+                                                    <label class="form-label">Item Name <span class="text-danger">*</span></label>
+                                                    <input type="text" class="form-control" name="name" id="quickAddName" required>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label class="form-label">Price <span class="text-danger">*</span></label>
+                                                    <div class="input-group">
+                                                        <input type="number" class="form-control" name="price" id="quickAddPrice" step="0.01" min="0" required>
+                                                        <span class="input-group-text">{{ $company->currency ?? 'GHS' }}</span>
+                                                    </div>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label class="form-label">Description</label>
+                                                    <textarea class="form-control" name="description" id="quickAddDescription" rows="3" placeholder="Optional description"></textarea>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label class="form-label">Unit of Measurement</label>
+                                                    <select class="form-select" name="unit_of_measurement" id="quickAddUnit">
+                                                        <option value="pcs">Pieces (pcs)</option>
+                                                        <option value="kg">Kilograms (kg)</option>
+                                                        <option value="g">Grams (g)</option>
+                                                        <option value="l">Liters (l)</option>
+                                                        <option value="ml">Milliliters (ml)</option>
+                                                        <option value="m">Meters (m)</option>
+                                                        <option value="cm">Centimeters (cm)</option>
+                                                        <option value="box">Box</option>
+                                                        <option value="pack">Pack</option>
+                                                        <option value="set">Set</option>
+                                                        <option value="pair">Pair</option>
+                                                        <option value="dozen">Dozen</option>
+                                                        <option value="other">Other</option>
+                                                    </select>
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label class="form-label">Status</label>
+                                                    <select class="form-select" name="status" id="quickAddStatus">
+                                                        <option value="in_stock">In Stock</option>
+                                                        <option value="out_of_stock">Out of Stock</option>
+                                                        <option value="limited">Limited</option>
+                                                    </select>
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <div class="modal-footer d-flex justify-content-between">
+                                            <button type="button" class="btn btn-label-secondary" data-bs-dismiss="modal">
+                                                Cancel
+                                            </button>
+                                            <button type="button" class="btn btn-primary" id="saveQuickAdd">
+                                                <span class="spinner-border spinner-border-sm d-none" id="quickAddSpinner"></span>
+                                                <span id="quickAddButtonText">Save & Add to Invoice</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                             <div class="p-0 row p-sm-3">
                                 <h5 class="pb-2">Invoice To:</h5>
 
@@ -678,18 +744,30 @@
                                 processResults: function (data, params) {
                                     params.page = params.page || 1;
                                     
+                                    var results = data.results.map(function(item) {
+                                        return {
+                                            id: item.id,
+                                            text: item.name + ' - ' + item.price + ' ' + '{{ $company->currency ?? "GHS" }}',
+                                            name: item.name,
+                                            price: item.price,
+                                            description: item.description,
+                                            unit: item.unit_of_measurement,
+                                            status: item.status
+                                        };
+                                    });
+                                    
+                                    // Add "Add New Item" option when no results and user has typed something
+                                    if (results.length === 0 && params.term && params.term.trim().length > 0) {
+                                        results.push({
+                                            id: 'add_new',
+                                            text: '+ Add "' + params.term + '" as new item',
+                                            isAddNew: true,
+                                            searchTerm: params.term
+                                        });
+                                    }
+                                    
                                     return {
-                                        results: data.results.map(function(item) {
-                                            return {
-                                                id: item.id,
-                                                text: item.name + ' - ' + item.price + ' ' + '{{ $company->currency ?? "GHS" }}',
-                                                name: item.name,
-                                                price: item.price,
-                                                description: item.description,
-                                                unit: item.unit_of_measurement,
-                                                status: item.status
-                                            };
-                                        }),
+                                        results: results,
                                         pagination: {
                                             more: data.pagination.more
                                         }
@@ -711,6 +789,19 @@
             function formatItem(item) {
                 if (item.loading) {
                     return '<div class="select2-result-item"><div class="select2-result-item__title">Loading...</div></div>';
+                }
+
+                // Handle "Add New Item" option
+                if (item.isAddNew) {
+                    return '<div class="select2-result-item d-flex align-items-center">' +
+                        '<div class="flex-grow-1">' +
+                            '<div class="select2-result-item__title fw-semibold text-primary">' + item.text + '</div>' +
+                            '<div class="text-muted small">Click to add this item to your catalog</div>' +
+                        '</div>' +
+                        '<div class="text-end">' +
+                            '<i class="bx bx-plus-circle text-primary"></i>' +
+                        '</div>' +
+                    '</div>';
                 }
 
                 var statusColor = '';
@@ -769,6 +860,12 @@
                 var $row = $(this).closest('.repeater-wrapper');
                 var itemId = data.id;
                 
+                // Handle "Add New Item" selection
+                if (data.isAddNew) {
+                    openQuickAddModal(data.searchTerm, $(this));
+                    return;
+                }
+                
                 // Update the select value to trigger the existing change event
                 $(this).val(itemId).trigger('change');
                 
@@ -783,6 +880,164 @@
                         debouncedUpdateCalculations();
                     }
                 }
+            });
+
+            // Quick Add Modal Functions
+            var currentSelectElement = null;
+
+            function openQuickAddModal(searchTerm, $selectElement) {
+                currentSelectElement = $selectElement;
+                
+                // Pre-fill the name field with search term
+                $('#quickAddName').val(searchTerm);
+                $('#quickAddPrice').val('');
+                $('#quickAddDescription').val('');
+                $('#quickAddUnit').val('pcs');
+                $('#quickAddStatus').val('in_stock');
+                
+                // Clear any previous error states
+                $('#quickAddForm .is-invalid').removeClass('is-invalid');
+                $('#quickAddForm .invalid-feedback').remove();
+                
+                // Show the modal
+                $('#quickAddModal').modal('show');
+                
+                // Focus on price field
+                setTimeout(() => {
+                    $('#quickAddPrice').focus();
+                }, 500);
+            }
+
+            // Handle quick add form submission
+            $('#saveQuickAdd').on('click', function() {
+                var $button = $(this);
+                var $spinner = $('#quickAddSpinner');
+                var $buttonText = $('#quickAddButtonText');
+                
+                // Validate form
+                if (!validateQuickAddForm()) {
+                    return;
+                }
+                
+                // Show loading state
+                $button.prop('disabled', true);
+                $spinner.removeClass('d-none');
+                $buttonText.text('Saving...');
+                
+                // Prepare form data
+                var formData = {
+                    name: $('#quickAddName').val(),
+                    price: $('#quickAddPrice').val(),
+                    description: $('#quickAddDescription').val(),
+                    unit_of_measurement: $('#quickAddUnit').val(),
+                    status: $('#quickAddStatus').val(),
+                    _token: $('meta[name="csrf-token"]').attr('content')
+                };
+                
+                // Submit AJAX request
+                $.ajax({
+                    url: '{{ route("catalog.quickAdd", ["slug" => $company->slug]) }}',
+                    type: 'POST',
+                    data: formData,
+                    success: function(response) {
+                        if (response.success) {
+                            // Close modal
+                            $('#quickAddModal').modal('hide');
+                            
+                            // Show success toast
+                            if (typeof window.Toast !== 'undefined') {
+                                window.Toast.success(response.message);
+                            }
+                            
+                            // Add the new item to Select2 and select it
+                            addItemToSelect2AndSelect(response.item, currentSelectElement);
+                        }
+                    },
+                    error: function(xhr) {
+                        var errors = xhr.responseJSON?.errors || {};
+                        displayQuickAddErrors(errors);
+                    },
+                    complete: function() {
+                        // Reset button state
+                        $button.prop('disabled', false);
+                        $spinner.addClass('d-none');
+                        $buttonText.text('Save & Add to Invoice');
+                    }
+                });
+            });
+
+            function validateQuickAddForm() {
+                var isValid = true;
+                
+                // Clear previous errors
+                $('#quickAddForm .is-invalid').removeClass('is-invalid');
+                $('#quickAddForm .invalid-feedback').remove();
+                
+                // Validate name
+                if (!$('#quickAddName').val().trim()) {
+                    showFieldError('#quickAddName', 'Item name is required');
+                    isValid = false;
+                }
+                
+                // Validate price
+                var price = parseFloat($('#quickAddPrice').val());
+                if (!price || price < 0) {
+                    showFieldError('#quickAddPrice', 'Please enter a valid price');
+                    isValid = false;
+                }
+                
+                return isValid;
+            }
+
+            function showFieldError(fieldSelector, message) {
+                var $field = $(fieldSelector);
+                $field.addClass('is-invalid');
+                $field.after('<div class="invalid-feedback">' + message + '</div>');
+            }
+
+            function displayQuickAddErrors(errors) {
+                // Clear previous errors
+                $('#quickAddForm .is-invalid').removeClass('is-invalid');
+                $('#quickAddForm .invalid-feedback').remove();
+                
+                // Display new errors
+                $.each(errors, function(field, messages) {
+                    var fieldSelector = '#quickAdd' + field.charAt(0).toUpperCase() + field.slice(1);
+                    showFieldError(fieldSelector, messages[0]);
+                });
+            }
+
+            function addItemToSelect2AndSelect(item, $selectElement) {
+                // Create new option
+                var newOption = new Option(
+                    item.name + ' - ' + item.price + ' {{ $company->currency ?? "GHS" }}',
+                    item.id,
+                    true,
+                    true
+                );
+                
+                // Add option to select
+                $selectElement.append(newOption).trigger('change');
+                
+                // Update price field
+                var $row = $selectElement.closest('.repeater-wrapper');
+                $row.find('.invoice-item-price').val(item.price);
+                
+                // Trigger calculations
+                if (typeof updateTotalPrice === 'function') {
+                    updateTotalPrice($row);
+                }
+                if (typeof debouncedUpdateCalculations === 'function') {
+                    debouncedUpdateCalculations();
+                }
+            }
+
+            // Reset modal when closed
+            $('#quickAddModal').on('hidden.bs.modal', function() {
+                $('#quickAddForm')[0].reset();
+                $('#quickAddForm .is-invalid').removeClass('is-invalid');
+                $('#quickAddForm .invalid-feedback').remove();
+                currentSelectElement = null;
             });
         </script>
 
