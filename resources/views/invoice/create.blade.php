@@ -995,40 +995,35 @@
                     price: $('#quickAddPrice').val(),
                     description: $('#quickAddDescription').val(),
                     unit_of_measurement: $('#quickAddUnit').val(),
-                    status: $('#quickAddStatus').val(),
-                    _token: $('meta[name="csrf-token"]').attr('content')
+                    status: $('#quickAddStatus').val()
                 };
                 
-                // Submit AJAX request
-                $.ajax({
-                    url: '{{ route("catalog.quickAdd", ["slug" => $company->slug]) }}',
-                    type: 'POST',
-                    data: formData,
-                    success: function(response) {
-                        if (response.success) {
+                // Submit AJAX request using axios (with automatic CSRF handling)
+                axios.post('{{ route("catalog.quickAdd", ["slug" => $company->slug]) }}', formData)
+                    .then(function(response) {
+                        if (response.data.success) {
                             // Close modal
                             $('#quickAddModal').modal('hide');
                             
                             // Show success toast
                             if (typeof window.Toast !== 'undefined') {
-                                window.Toast.success(response.message);
+                                window.Toast.success(response.data.message);
                             }
                             
                             // Add the new item to Select2 and select it
-                            addItemToSelect2AndSelect(response.item, currentSelectElement);
+                            addItemToSelect2AndSelect(response.data.item, currentSelectElement);
                         }
-                    },
-                    error: function(xhr) {
-                        var errors = xhr.responseJSON?.errors || {};
+                    })
+                    .catch(function(error) {
+                        var errors = error.response?.data?.errors || {};
                         displayQuickAddErrors(errors);
-                    },
-                    complete: function() {
+                    })
+                    .finally(function() {
                         // Reset button state
                         $button.prop('disabled', false);
                         $spinner.addClass('d-none');
                         $buttonText.text('Save & Add to Invoice');
-                    }
-                });
+                    });
             });
 
             function validateQuickAddForm() {
@@ -1152,40 +1147,35 @@
                     tax_name: $('#quickAddTaxName').val(),
                     tax_percentage: $('#quickAddTaxPercentage').val(),
                     tax_type: $('input[name="tax_type"]:checked').val(),
-                    description: $('#quickAddTaxDescription').val(),
-                    _token: $('meta[name="csrf-token"]').attr('content')
+                    description: $('#quickAddTaxDescription').val()
                 };
                 
-                // Submit AJAX request
-                $.ajax({
-                    url: `/tax/${companySlug}/quick-add`,
-                    type: 'POST',
-                    data: formData,
-                    success: function(response) {
-                        if (response.success) {
+                // Submit AJAX request using axios (with automatic CSRF handling)
+                axios.post(`/tax/${companySlug}/quick-add`, formData)
+                    .then(function(response) {
+                        if (response.data.success) {
                             // Close modal
                             $('#quickAddTaxModal').modal('hide');
                             
                             // Show success toast
                             if (typeof window.Toast !== 'undefined') {
-                                window.Toast.success(response.message);
+                                window.Toast.success(response.data.message);
                             }
                             
                             // Add the new tax to the taxes list and select it
-                            addTaxToInvoiceAndSelect(response.tax);
+                            addTaxToInvoiceAndSelect(response.data.tax);
                         }
-                    },
-                    error: function(xhr) {
-                        var errors = xhr.responseJSON?.errors || {};
+                    })
+                    .catch(function(error) {
+                        var errors = error.response?.data?.errors || {};
                         displayQuickAddTaxErrors(errors);
-                    },
-                    complete: function() {
+                    })
+                    .finally(function() {
                         // Reset button state
                         $button.prop('disabled', false);
                         $spinner.addClass('d-none');
                         $buttonText.text('Save & Add to Invoice');
-                    }
-                });
+                    });
             });
 
             function validateQuickAddTaxForm() {

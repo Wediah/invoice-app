@@ -75,6 +75,9 @@
                 @include('sections.nav')
                 <!-- / Navbar -->
                 <div class="content-wrapper">
+                    <!-- CSRF Error Messages -->
+                    <x-csrf-error />
+                    
                     {{ $slot }}
                 </div>
 

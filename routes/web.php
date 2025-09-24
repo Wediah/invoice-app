@@ -13,6 +13,13 @@ Route::get('/', function () {
     return redirect()->route('dashboard');
 });
 
+// CSRF Token refresh route
+Route::get('/csrf-token', function () {
+    return response()->json([
+        'csrf_token' => csrf_token()
+    ]);
+})->name('csrf.token');
+
 //Route::get('/dashboard', function () {
 //    return view('dashboard');
 //})->middleware(['auth', 'verified'])->name('dashboard');
