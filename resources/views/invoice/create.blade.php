@@ -973,18 +973,6 @@
                 }, 500);
             }
 
-            // Debug function to check if required libraries are loaded
-            function debugLibraries() {
-                console.log('jQuery loaded:', typeof $ !== 'undefined');
-                console.log('Axios loaded:', typeof axios !== 'undefined');
-                console.log('CSRF token:', $('meta[name="csrf-token"]').attr('content'));
-                console.log('Current URL:', window.location.href);
-            }
-            
-            // Call debug function on page load
-            $(document).ready(function() {
-                debugLibraries();
-            });
 
             // Handle quick add form submission
             $('#saveQuickAdd').on('click', function() {
@@ -1014,10 +1002,6 @@
                 // Add CSRF token to form data
                 formData._token = $('meta[name="csrf-token"]').attr('content');
                 
-                // Debug: Log the request data
-                console.log('Sending quick add request:', formData);
-                console.log('Request URL:', '{{ route("catalog.quickAdd", ["slug" => $company->slug]) }}');
-                
                 // Submit AJAX request using jQuery (more reliable)
                 $.ajax({
                     url: '{{ route("catalog.quickAdd", ["slug" => $company->slug]) }}',
@@ -1025,7 +1009,6 @@
                     data: formData,
                     dataType: 'json',
                     success: function(response) {
-                        console.log('Quick add response:', response);
                         if (response.success) {
                             // Close modal
                             $('#quickAddModal').modal('hide');
@@ -1042,9 +1025,6 @@
                         }
                     },
                     error: function(xhr, status, error) {
-                        console.error('Quick add error:', xhr.responseText);
-                        console.error('Status:', status, 'Error:', error);
-                        
                         var errors = {};
                         if (xhr.responseJSON && xhr.responseJSON.errors) {
                             errors = xhr.responseJSON.errors;
@@ -1191,10 +1171,6 @@
                 // Add CSRF token to form data
                 formData._token = $('meta[name="csrf-token"]').attr('content');
                 
-                // Debug: Log the request data
-                console.log('Sending quick add tax request:', formData);
-                console.log('Request URL:', `/tax/${companySlug}/quick-add`);
-                
                 // Submit AJAX request using jQuery (more reliable)
                 $.ajax({
                     url: `/tax/${companySlug}/quick-add`,
@@ -1202,7 +1178,6 @@
                     data: formData,
                     dataType: 'json',
                     success: function(response) {
-                        console.log('Quick add tax response:', response);
                         if (response.success) {
                             // Close modal
                             $('#quickAddTaxModal').modal('hide');
@@ -1219,9 +1194,6 @@
                         }
                     },
                     error: function(xhr, status, error) {
-                        console.error('Quick add tax error:', xhr.responseText);
-                        console.error('Status:', status, 'Error:', error);
-                        
                         var errors = {};
                         if (xhr.responseJSON && xhr.responseJSON.errors) {
                             errors = xhr.responseJSON.errors;
