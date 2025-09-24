@@ -48,7 +48,7 @@ class CSRFHandler {
                 return data.csrf_token;
             }
         } catch (error) {
-            console.error('Failed to refresh CSRF token:', error);
+            // Silently handle CSRF token refresh failure
         }
         return null;
     }
@@ -75,7 +75,7 @@ class CSRFHandler {
             (response) => response,
             async (error) => {
                 if (error.response && error.response.status === 419) {
-                    console.warn('CSRF token mismatch detected, attempting to refresh...');
+                    // CSRF token mismatch detected, attempting to refresh
                     
                     // Try to refresh the token
                     const newToken = await this.refreshToken();

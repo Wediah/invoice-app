@@ -39,10 +39,32 @@
             <div class="col-6 form-group">
                 <label class="form-label" for="phone">Company Phone</label>
                 <div class="input-group">
-                    <input type="text" name="phone" class="form-control" placeholder="" aria-label=""
+                    <select class="form-select" name="country_code" style="max-width: 200px;">
+                        @php
+                            $popularCountries = \App\Services\CountryCodeService::getPopularCountriesForDropdown();
+                            $allCountries = \App\Services\CountryCodeService::getCountriesForDropdown();
+                        @endphp
+                        @foreach($popularCountries as $code => $country)
+                            <option value="{{ $code }}" {{ old('country_code', $company->country_code ?? 'GH') == $code ? 'selected' : '' }}>
+                                {{ $country }}
+                            </option>
+                        @endforeach
+                        <option disabled>──────────────</option>
+                        @foreach($allCountries as $code => $country)
+                            @if(!array_key_exists($code, $popularCountries))
+                                <option value="{{ $code }}" {{ old('country_code', $company->country_code) == $code ? 'selected' : '' }}>
+                                    {{ $country }}
+                                </option>
+                            @endif
+                        @endforeach
+                    </select>
+                    <input type="tel" name="phone" class="form-control" placeholder="" aria-label=""
                         aria-describedby="basic-addon11" value="{{ $company->phone }}" />
                 </div>
                 @error('phone')
+                    <p class="error">{{ $message }}</p>
+                @enderror
+                @error('country_code')
                     <p class="error">{{ $message }}</p>
                 @enderror
             </div>

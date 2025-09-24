@@ -17,6 +17,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log;
 use Cviebrock\EloquentSluggable\Services\SlugService;
 
 class companyController extends Controller
@@ -54,13 +55,46 @@ class companyController extends Controller
             'name' => 'required|string|unique:companies,name',
             'email' => 'required|string|unique:companies,email',
             'phone' => 'required|string',
+            'country_code' => 'required|string|max:5',
+            'phone2' => 'nullable|string',
+            'phone2_country_code' => 'nullable|string|max:5',
+            'phone3' => 'nullable|string',
+            'phone3_country_code' => 'nullable|string|max:5',
             'address' => 'required|string',
             'gps_address' => 'required|string',
-            'logo' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'company_category_id' => 'nullable|integer',
             'description' => 'required|string|max:255',
             'website' => 'required|string',
         ]);
+
+        // Ensure country codes are valid country codes, not phone codes
+        if (isset($validated['country_code']) && str_starts_with($validated['country_code'], '+')) {
+            $validated['country_code'] = 'GH'; // Default to Ghana
+        }
+        if (isset($validated['phone2_country_code']) && str_starts_with($validated['phone2_country_code'], '+')) {
+            $validated['phone2_country_code'] = 'GH';
+        }
+        if (isset($validated['phone3_country_code']) && str_starts_with($validated['phone3_country_code'], '+')) {
+            $validated['phone3_country_code'] = 'GH';
+        }
+
+        // Custom validation for phone numbers and country codes
+        if (!empty($validated['phone2_country_code']) && empty($validated['phone2'])) {
+            return redirect()->back()->withErrors(['phone2' => 'Phone number is required when country code is selected.'])->withInput();
+        }
+        
+        if (!empty($validated['phone3_country_code']) && empty($validated['phone3'])) {
+            return redirect()->back()->withErrors(['phone3' => 'Phone number is required when country code is selected.'])->withInput();
+        }
+        
+        if (!empty($validated['phone2']) && empty($validated['phone2_country_code'])) {
+            return redirect()->back()->withErrors(['phone2_country_code' => 'Country code is required when phone number is provided.'])->withInput();
+        }
+        
+        if (!empty($validated['phone3']) && empty($validated['phone3_country_code'])) {
+            return redirect()->back()->withErrors(['phone3_country_code' => 'Country code is required when phone number is provided.'])->withInput();
+        }
 
         $companyData = [
             'user_id' => Auth::id(),
@@ -68,11 +102,17 @@ class companyController extends Controller
             'slug' => SlugService::createSlug(Company::class, 'slug', request('name')),
             'email' => $validated['email'],
             'phone' => $validated['phone'],
+            'country_code' => $validated['country_code'],
+            'phone2' => !empty($validated['phone2']) ? $validated['phone2'] : null,
+            'phone2_country_code' => !empty($validated['phone2']) ? $validated['phone2_country_code'] : null,
+            'phone3' => !empty($validated['phone3']) ? $validated['phone3'] : null,
+            'phone3_country_code' => !empty($validated['phone3']) ? $validated['phone3_country_code'] : null,
             'address' => $validated['address'],
             'gps_address' => $validated['gps_address'],
             'company_category_id' => $validated['company_category_id'] ?: null,
             'description' => $validated['description'],
             'website' => $validated['website'],
+            'logo' => 'apollo-invoice-default-logo.png', // Default logo
         ];
 
         if ($request->hasFile('logo')) {
@@ -81,11 +121,21 @@ class companyController extends Controller
             $logo->storeAs('public/company_logo', $filename);
             $companyData['logo'] = $filename;
         }
+        // If no logo uploaded, keep the default Apollo Invoice logo
 
 
-        Company::firstOrCreate($companyData);
-
-        return redirect()->intended(route('dashboard', absolute: false));
+        try {
+            $company = Company::create($companyData);
+            Log::info('Company created successfully', ['company_id' => $company->id, 'user_id' => Auth::id()]);
+            return redirect()->intended(route('dashboard', absolute: false));
+        } catch (\Exception $e) {
+            Log::error('Failed to create company', [
+                'user_id' => Auth::id(),
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+            return redirect()->back()->withInput()->with('error', 'Failed to create company. Please try again.');
+        }
     }
 
     //company info
@@ -235,16 +285,43 @@ class companyController extends Controller
             'name' => 'sometimes|nullable|string|max:255',
             'email' => 'sometimes|nullable|email|max:255',
             'phone' => 'sometimes|nullable|string|max:20',
+            'country_code' => 'sometimes|nullable|string|max:5',
+            'phone2' => 'sometimes|nullable|string|max:20',
+            'phone2_country_code' => 'sometimes|nullable|string|max:5',
+            'phone3' => 'sometimes|nullable|string|max:20',
+            'phone3_country_code' => 'sometimes|nullable|string|max:5',
             'address' => 'sometimes|nullable|string|max:255',
             'logo' => 'sometimes|nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'category' => 'sometimes|nullable|exists:company_categories,id',
         ]);
+
+        // Custom validation for phone numbers and country codes
+        if (!empty($validatedData['phone2_country_code']) && empty($validatedData['phone2'])) {
+            return redirect()->back()->withErrors(['phone2' => 'Phone number is required when country code is selected.'])->withInput();
+        }
+        
+        if (!empty($validatedData['phone3_country_code']) && empty($validatedData['phone3'])) {
+            return redirect()->back()->withErrors(['phone3' => 'Phone number is required when country code is selected.'])->withInput();
+        }
+        
+        if (!empty($validatedData['phone2']) && empty($validatedData['phone2_country_code'])) {
+            return redirect()->back()->withErrors(['phone2_country_code' => 'Country code is required when phone number is provided.'])->withInput();
+        }
+        
+        if (!empty($validatedData['phone3']) && empty($validatedData['phone3_country_code'])) {
+            return redirect()->back()->withErrors(['phone3_country_code' => 'Country code is required when phone number is provided.'])->withInput();
+        }
 
         $updateData = [
             'user_id' => Auth::id(),
             'name' => $validatedData['name'] ?? $company->name,
             'email' => $validatedData['email'] ?? $company->email,
             'phone' => $validatedData['phone'] ?? $company->phone,
+            'country_code' => $validatedData['country_code'] ?? $company->country_code,
+            'phone2' => !empty($validatedData['phone2']) ? $validatedData['phone2'] : null,
+            'phone2_country_code' => !empty($validatedData['phone2']) ? $validatedData['phone2_country_code'] : null,
+            'phone3' => !empty($validatedData['phone3']) ? $validatedData['phone3'] : null,
+            'phone3_country_code' => !empty($validatedData['phone3']) ? $validatedData['phone3_country_code'] : null,
             'address' => $validatedData['address'] ?? $company->address,
             'company_category_id' => $validatedData['category'] ?? $company->company_category_id,
         ];
@@ -266,9 +343,16 @@ class companyController extends Controller
 
         try {
             $company->update($updateData);
+            Log::info('Company updated successfully', ['company_id' => $company->id, 'user_id' => Auth::id()]);
             return redirect()->back()->with('success', 'Basic information updated successfully!');
         } catch (\Exception $e) {
-            return redirect()->back()->withInput()->with('error', 'Failed to update company: ' . $e->getMessage());
+            Log::error('Failed to update company', [
+                'company_id' => $company->id,
+                'user_id' => Auth::id(),
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+            return redirect()->back()->withInput()->with('error', 'Failed to update company. Please try again.');
         }
     }
 

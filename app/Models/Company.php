@@ -120,4 +120,85 @@ class Company extends Model
         return $service->getProfileCompletionData()['overall'];
     }
 
+    /**
+     * Get formatted phone number with country code
+     */
+    public function getFormattedPhoneAttribute()
+    {
+        if (!$this->phone) {
+            return null;
+        }
+
+        // Handle existing data gracefully - if country_code doesn't exist, assume Ghana
+        $countryCode = $this->country_code ?? 'GH';
+        
+        // For backward compatibility, if country_code is a phone code (like +233), convert to country code
+        if (str_starts_with($countryCode, '+')) {
+            $countryCode = 'GH'; // Default to Ghana for existing data
+        }
+        
+        $countries = \App\Services\CountryCodeService::getAllCountries();
+        $code = $countries[$countryCode]['code'] ?? '+233';
+        
+        return $code . ' ' . $this->phone;
+    }
+
+    /**
+     * Get formatted phone2 with country code
+     */
+    public function getFormattedPhone2Attribute()
+    {
+        if (!$this->phone2) {
+            return null;
+        }
+
+        // Handle existing data gracefully
+        $countryCode = $this->phone2_country_code ?? 'GH';
+        
+        // For backward compatibility
+        if (str_starts_with($countryCode, '+')) {
+            $countryCode = 'GH';
+        }
+        
+        $countries = \App\Services\CountryCodeService::getAllCountries();
+        $code = $countries[$countryCode]['code'] ?? '+233';
+        
+        return $code . ' ' . $this->phone2;
+    }
+
+    /**
+     * Get formatted phone3 with country code
+     */
+    public function getFormattedPhone3Attribute()
+    {
+        if (!$this->phone3) {
+            return null;
+        }
+
+        // Handle existing data gracefully
+        $countryCode = $this->phone3_country_code ?? 'GH';
+        
+        // For backward compatibility
+        if (str_starts_with($countryCode, '+')) {
+            $countryCode = 'GH';
+        }
+        
+        $countries = \App\Services\CountryCodeService::getAllCountries();
+        $code = $countries[$countryCode]['code'] ?? '+233';
+        
+        return $code . ' ' . $this->phone3;
+    }
+
+    /**
+     * Get the logo URL with fallback to default
+     */
+    public function getLogoUrlAttribute()
+    {
+        if ($this->logo && $this->logo !== 'apollo-invoice-default-logo.png') {
+            return asset('storage/company_logo/' . $this->logo);
+        }
+        
+        return asset('assets/img/pages/logo.png');
+    }
+
 }
