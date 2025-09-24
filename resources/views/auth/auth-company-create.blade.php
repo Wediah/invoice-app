@@ -458,16 +458,14 @@
                             method="POST" enctype="multipart/form-data">
                             @csrf
                             <div class="gap-4 mb-4 d-flex align-items-start align-items-sm-center">
-                                <img src="" alt="user-avatar" class="rounded d-block" height="100"
-                                    width="100" id="uploadedAvatar"
-                                    onerror="this.onerror=null; this.src='{{ asset('assets/img/avatars/logo-placeholder.png') }}';" />
+                                <img src="{{ asset('assets/img/pages/logo.png') }}" alt="Apollo Invoice Logo" class="rounded d-block" height="100"
+                                    width="100" id="uploadedAvatar" />
                                 <div class="button-wrapper">
                                     <label for="upload" class="mb-4 btn btn-primary me-2" tabindex="0">
                                         <span class="d-none d-sm-block">Upload new photo</span>
                                         <i class="bx bx-upload d-block d-sm-none"></i>
                                         <input type="file" id="upload" class="account-file-input" hidden
-                                            accept="image/png, image/jpeg" name="logo" value="{{ old('logo') }}"
-                                            required />
+                                            accept="image/png, image/jpeg" name="logo" value="{{ old('logo') }}" />
                                     </label>
                                     <button type="button" class="mb-4 btn btn-label-secondary account-image-reset">
                                         <i class="bx bx-reset d-block d-sm-none"></i>
@@ -475,6 +473,7 @@
                                     </button>
     
                                     <p class="mb-0">Allowed JPG, GIF or PNG. Max size of 800K</p>
+                                    <p class="mb-0 text-muted">Apollo Invoice logo will be used if no logo is uploaded</p>
                                     @error('logo')
                                         <p class="error">{{ $message }}</p>
                                     @enderror
@@ -498,15 +497,35 @@
                                     <p class="error ">{{ $message }}</p>
                                 @enderror
                             </div>
-                            <div class="mb-3 ">
+                            <div class="mb-3">
                                 <label class="form-label" for="phone">Company Phone</label>
                                 <div class="input-group input-group-merge">
-                                    <span class="input-group-text">
-                                        <i class="fi fi-gh fis rounded-circle fs-3 me-1"></i> &nbsp;
-                                        (+233)</span> <input type="text" id="phone" name="phone"
-                                        class="form-control" placeholder="202 555 0111" value="{{ old('phone') }}" />
+                                    <select class="form-select" id="country_code" name="country_code" style="max-width: 200px;">
+                                        @php
+                                            $popularCountries = \App\Services\CountryCodeService::getPopularCountriesForDropdown();
+                                            $allCountries = \App\Services\CountryCodeService::getCountriesForDropdown();
+                                        @endphp
+                                        @foreach($popularCountries as $code => $country)
+                                            <option value="{{ $code }}" {{ old('country_code', 'GH') == $code ? 'selected' : '' }}>
+                                                {{ $country }}
+                                            </option>
+                                        @endforeach
+                                        <option disabled>──────────────</option>
+                                        @foreach($allCountries as $code => $country)
+                                            @if(!array_key_exists($code, $popularCountries))
+                                                <option value="{{ $code }}" {{ old('country_code') == $code ? 'selected' : '' }}>
+                                                    {{ $country }}
+                                                </option>
+                                            @endif
+                                        @endforeach
+                                    </select>
+                                    <input type="tel" id="phone" name="phone"
+                                        class="form-control" placeholder="202 555 0111" value="{{ old('phone') }}" required />
                                 </div>
                                 @error('phone')
+                                    <p class="error">{{ $message }}</p>
+                                @enderror
+                                @error('country_code')
                                     <p class="error">{{ $message }}</p>
                                 @enderror
                             </div>
@@ -607,7 +626,7 @@
             resetFileInput = document.querySelector('.account-image-reset');
 
         if (accountUserImage) {
-            const resetImage = accountUserImage.src;
+            const defaultImage = "{{ asset('assets/img/pages/logo.png') }}";
             fileInput.onchange = () => {
                 if (fileInput.files[0]) {
                     accountUserImage.src = window.URL.createObjectURL(fileInput.files[0]);
@@ -615,7 +634,7 @@
             };
             resetFileInput.onclick = () => {
                 fileInput.value = '';
-                accountUserImage.src = resetImage;
+                accountUserImage.src = defaultImage;
             };
         }
     </script>

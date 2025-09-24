@@ -1,14 +1,14 @@
 <x-guest-layout>
 
 
-    <div class="authentication-inner row m-0">
+    <div class="m-0 authentication-inner row">
         {{-- session messsge --}}
         @if (session('status'))
                         <x-auth-session-status class="mb-4" :status="session('status')" />
         @endif
         <!-- /Left Text -->
         <div class="d-none d-lg-flex col-lg-7 col-xl-8 align-items-center">
-            <div class="flex-row text-center mx-auto">
+            <div class="flex-row mx-auto text-center">
                 <img src="{{ asset('assets/img/pages/spalshIMG2.png') }}" alt="Auth Cover Bg color" width="520"
                     class="img-fluid authentication-cover-img" data-app-light-img="pages/spalshIMG2.png"
                     data-app-dark-img="pages/login-dark.png" />
@@ -25,11 +25,11 @@
         <!-- /Left Text -->
 
         <!-- Login -->
-        <div class="d-flex col-12 col-lg-5 col-xl-4 align-items-center authentication-bg p-sm-5 p-4">
-            <div class="w-px-400 mx-auto">
+        <div class="p-4 d-flex col-12 col-lg-5 col-xl-4 align-items-center authentication-bg p-sm-5">
+            <div class="mx-auto w-px-400">
                 <!-- Logo -->
-                <div class="app-brand mb-3">
-                    <a href="#" class="app-brand-link gap-2 mb-2">
+                <div class="mb-3 app-brand">
+                    <a href="#" class="gap-2 mb-2 app-brand-link">
 
                         {{-- <span class="app-brand-logo demo">
                             <svg width="26px" height="26px" viewBox="0 0 26 26" version="1.1"
@@ -71,7 +71,7 @@
                         </span> --}}
                         <img src="{{ asset('assets/img/pages/logo.png') }}" alt="logo logo" width="20%">
 
-                        <span class="app-brand-text demo h3 mb-0 fw-bold">Apollo Invoice</span>
+                        <span class="mb-0 app-brand-text demo h3 fw-bold">Apollo Invoice</span>
                     </a>
                 </div>
                 <!-- /Logo -->
@@ -103,7 +103,7 @@
                             <input type="password" id="password" class="form-control" name="password"
                                 placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
                                 aria-describedby="password"  value="{{ old('password') }}"/>
-                            <span class="input-group-text cursor-pointer"><i class="bx bx-hide"></i></span>
+                            <span class="cursor-pointer input-group-text"><i class="bx bx-hide"></i></span>
                         </div>
 
                     </div>
@@ -123,7 +123,7 @@
                     </a>
                 </p>
 
-                {{-- <div class="divider my-4">
+                {{-- <div class="my-4 divider">
                     <div class="divider-text">or</div>
                 </div>
 

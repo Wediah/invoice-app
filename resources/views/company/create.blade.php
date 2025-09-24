@@ -34,10 +34,9 @@
 
                     <div class="card-body">
                         <div class="gap-4 d-flex align-items-start align-items-sm-center">
-                            <img src="" alt="user-avatar"
+                            <img src="{{ asset('assets/img/pages/logo.png') }}" alt="Apollo Invoice Logo"
                                 class="h-auto d-block ms-0 ms-sm-4 rounded-3 user-profile-img" height="100"
-                                width="100" id="uploadedAvatar" name="company_logo_path"
-                                onerror="this.onerror=null; this.src='{{ asset('assets/img/avatars/logo-placeholder.png') }}';" />
+                                width="100" id="uploadedAvatar" name="company_logo_path" />
                             <div class="button-wrapper">
                                 <label for="logo" class="mb-4 btn btn-primary me-2" tabindex="0">
                                     <span class="d-none d-sm-block">Upload Logo</span>
@@ -46,14 +45,13 @@
                                         accept="image/png, image/jpeg" name="logo" value="" />
                                 </label>
 
-                                {{-- <button type="button" class="mb-4 btn btn-label-secondary account-image-reset"
-                                  onclick="document.getElementById('upload').value = null; return false;">
-                                      <i class="bx bx-reset d-block d-sm-none"></i>
-                                      <span class="d-none d-sm-block">Reset</span>
-                                  </button> --}}
+                                <button type="button" class="mb-4 btn btn-label-secondary account-image-reset">
+                                    <i class="bx bx-reset d-block d-sm-none"></i>
+                                    <span class="d-none d-sm-block">Reset</span>
+                                </button>
 
-                                {{-- <p class="mb-0">{{ $laboratories->company_logo_path }}</p> --}}
                                 <p class="mb-0">Allowed JPG, GIF or PNG. Max size of 800K</p>
+                                <p class="mb-0 text-muted">Apollo Invoice logo will be used if no logo is uploaded</p>
                                 @error('logo')
                                     <p class="error">{{ $message }}</p>
                                 @enderror
@@ -67,7 +65,7 @@
                             <div class="card-body">
                                 <div class="row">
                                     <div class="mb-4 col-md-6">
-                                        <label for="name" class="form-label blabel ">Company Name</label>
+                                        <label for="name" class="form-label blabel">Company Name</label>
                                         <input type="text" id="name" name="name" class="form-control"
                                             value="{{ old('name') }}" placeholder="Enter Company Name" />
                                         @error('name')
@@ -79,7 +77,7 @@
                                         <input class="form-control" type="email" id="email" name="email"
                                             value="{{ old('email') }}" placeholder="Enter Company Email" />
                                         @error('email')
-                                            <p class="error ">{{ $message }}</p>
+                                            <p class="error">{{ $message }}</p>
                                         @enderror
                                     </div>
                                     <div class="col-md-12">
@@ -87,14 +85,33 @@
                                             <div class="mb-2 col-sm-4">
                                                 <label for="phone" class="form-label blabel">Company Phone</label>
                                                 <div class="input-group input-group-merge">
-                                                    <span class="input-group-text">
-                                                        <i class="fi fi-gh fis rounded-circle fs-3 me-1"></i> &nbsp
-                                                        (+233)</span>
+                                                    <select class="form-select" name="country_code" style="max-width: 120px;">
+                                                        @php
+                                                            $popularCountries = \App\Services\CountryCodeService::getPopularCountriesForDropdown();
+                                                            $allCountries = \App\Services\CountryCodeService::getCountriesForDropdown();
+                                                        @endphp
+                                                        @foreach($popularCountries as $code => $country)
+                                                            <option value="{{ $code }}" {{ old('country_code', 'GH') == $code ? 'selected' : '' }}>
+                                                                {{ $country }}
+                                                            </option>
+                                                        @endforeach
+                                                        <option disabled>──────────────</option>
+                                                        @foreach($allCountries as $code => $country)
+                                                            @if(!array_key_exists($code, $popularCountries))
+                                                                <option value="{{ $code }}" {{ old('country_code') == $code ? 'selected' : '' }}>
+                                                                    {{ $country }}
+                                                                </option>
+                                                            @endif
+                                                        @endforeach
+                                                    </select>
                                                     <input class="form-control mobile-number" type="tel"
                                                         id="phone" name="phone" placeholder="202 555 0111"
                                                         value="{{ old('phone') }}" />
                                                 </div>
                                                 @error('phone')
+                                                    <p class="error">{{ $message }}</p>
+                                                @enderror
+                                                @error('country_code')
                                                     <p class="error">{{ $message }}</p>
                                                 @enderror
                                             </div>
@@ -106,14 +123,30 @@
                                             <div class="mb-4 col-sm-4">
                                                 <label for="phone2" class="form-label blabel">Phone 2</label>
                                                 <div class="input-group input-group-merge">
-                                                    <span class="input-group-text">
-                                                        <i class="fi fi-gh fis rounded-circle fs-3 me-1"></i> &nbsp
-                                                        (+233)</span>
+                                                    <select class="form-select" name="phone2_country_code" style="max-width: 120px;">
+                                                        <option value="">Select Country</option>
+                                                        @foreach($popularCountries as $code => $country)
+                                                            <option value="{{ $code }}" {{ old('phone2_country_code') == $code ? 'selected' : '' }}>
+                                                                {{ $country }}
+                                                            </option>
+                                                        @endforeach
+                                                        <option disabled>──────────────</option>
+                                                        @foreach($allCountries as $code => $country)
+                                                            @if(!array_key_exists($code, $popularCountries))
+                                                                <option value="{{ $code }}" {{ old('phone2_country_code') == $code ? 'selected' : '' }}>
+                                                                    {{ $country }}
+                                                                </option>
+                                                            @endif
+                                                        @endforeach
+                                                    </select>
                                                     <input class="form-control mobile-number" type="tel"
                                                         id="phone2" name="phone2" placeholder="202 555 0111"
                                                         value="{{ old('phone2') }}" />
                                                 </div>
                                                 @error('phone2')
+                                                    <p class="error">{{ $message }}</p>
+                                                @enderror
+                                                @error('phone2_country_code')
                                                     <p class="error">{{ $message }}</p>
                                                 @enderror
                                             </div>
@@ -123,14 +156,30 @@
                                             <div class="mb-4 col-sm-4">
                                                 <label for="phone3" class="form-label blabel">Phone 3</label>
                                                 <div class="input-group input-group-merge">
-                                                    <span class="input-group-text">
-                                                        <i class="fi fi-gh fis rounded-circle fs-3 me-1"></i> &nbsp
-                                                        (+233)</span>
+                                                    <select class="form-select" name="phone3_country_code" style="max-width: 120px;">
+                                                        <option value="">Select Country</option>
+                                                        @foreach($popularCountries as $code => $country)
+                                                            <option value="{{ $code }}" {{ old('phone3_country_code') == $code ? 'selected' : '' }}>
+                                                                {{ $country }}
+                                                            </option>
+                                                        @endforeach
+                                                        <option disabled>──────────────</option>
+                                                        @foreach($allCountries as $code => $country)
+                                                            @if(!array_key_exists($code, $popularCountries))
+                                                                <option value="{{ $code }}" {{ old('phone3_country_code') == $code ? 'selected' : '' }}>
+                                                                    {{ $country }}
+                                                                </option>
+                                                            @endif
+                                                        @endforeach
+                                                    </select>
                                                     <input class="form-control mobile-number" type="tel"
                                                         id="phone3" name="phone3" placeholder="202 555 0111"
                                                         value="{{ old('phone3') }}" />
                                                 </div>
                                                 @error('phone3')
+                                                    <p class="error">{{ $message }}</p>
+                                                @enderror
+                                                @error('phone3_country_code')
                                                     <p class="error">{{ $message }}</p>
                                                 @enderror
                                             </div>
@@ -246,7 +295,7 @@
             resetFileInput = document.querySelector('.account-image-reset');
 
         if (accountUserImage) {
-            const resetImage = accountUserImage.src;
+            const defaultImage = "{{ asset('assets/img/pages/logo.png') }}";
             fileInput.onchange = () => {
                 if (fileInput.files[0]) {
                     accountUserImage.src = window.URL.createObjectURL(fileInput.files[0]);
@@ -254,7 +303,7 @@
             };
             resetFileInput.onclick = () => {
                 fileInput.value = '';
-                accountUserImage.src = resetImage;
+                accountUserImage.src = defaultImage;
             };
         }
     </script>

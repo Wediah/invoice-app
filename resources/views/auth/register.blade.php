@@ -103,21 +103,38 @@
                             <p class="error">{{ $message }}</p>
                         @enderror
                     </div>
-                    <div class="mb-3 ">
-                        <label class="phone" for="phone_number">Phone Number</label>
-                        <div class="input-group input-group-merge ">
-                            <span class="input-group-text">
-                                <i class="fi fi-gh fis rounded-circle fs-3 me-1"></i> &nbsp;
-                                (+233)</span>
-                            <input class="form-control mobile-number" type="number" id="phone_number"
+                    <div class="mb-3">
+                        <label class="form-label" for="phone_number">Phone Number</label>
+                        <div class="input-group input-group-merge">
+                            <select class="form-select" id="country_code" name="country_code" style="max-width: 200px;">
+                                @php
+                                    $popularCountries = \App\Services\CountryCodeService::getPopularCountriesForDropdown();
+                                    $allCountries = \App\Services\CountryCodeService::getCountriesForDropdown();
+                                @endphp
+                                @foreach($popularCountries as $code => $country)
+                                    <option value="{{ $code }}" {{ old('country_code', 'GH') == $code ? 'selected' : '' }}>
+                                        {{ $country }}
+                                    </option>
+                                @endforeach
+                                <option disabled>──────────────</option>
+                                @foreach($allCountries as $code => $country)
+                                    @if(!array_key_exists($code, $popularCountries))
+                                        <option value="{{ $code }}" {{ old('country_code') == $code ? 'selected' : '' }}>
+                                            {{ $country }}
+                                        </option>
+                                    @endif
+                                @endforeach
+                            </select>
+                            <input class="form-control mobile-number" type="tel" id="phone_number"
                                    name="phone_number"
-                                placeholder="202 555 0111" min="9" max="10" value="{{ old('phone_number') }}"  required>
-
+                                placeholder="202 555 0111" value="{{ old('phone_number') }}" required>
                         </div>
                         @error('phone_number')
                             <p class="error">{{ $message }}</p>
                         @enderror
-
+                        @error('country_code')
+                            <p class="error">{{ $message }}</p>
+                        @enderror
                     </div>
                     <div class="mb-3">
                         <label for="email" class="form-label">Email</label>
