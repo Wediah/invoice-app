@@ -309,73 +309,7 @@
                                 <!-- Information will be displayed here -->
                             </div>
 
-                            <!-- Quick Add Item Modal -->
-                            <div class="modal fade" id="quickAddModal" tabindex="-1" aria-hidden="true">
-                                <div class="modal-dialog modal-dialog-centered" role="document">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="quickAddModalTitle">Add New Item to Catalog</h5>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <form id="quickAddForm">
-                                                <div class="mb-3">
-                                                    <label class="form-label">Item Name <span class="text-danger">*</span></label>
-                                                    <input type="text" class="form-control" name="name" id="quickAddName" required>
-                                                </div>
-                                                <div class="mb-3">
-                                                    <label class="form-label">Price <span class="text-danger">*</span></label>
-                                                    <div class="input-group">
-                                                        <input type="number" class="form-control" name="price" id="quickAddPrice" step="0.01" min="0" required>
-                                                        <span class="input-group-text">{{ $company->currency ?? 'GHS' }}</span>
-                                                    </div>
-                                                </div>
-                                                <div class="mb-3">
-                                                    <label class="form-label">Description</label>
-                                                    <textarea class="form-control" name="description" id="quickAddDescription" rows="3" placeholder="Optional description"></textarea>
-                                                </div>
-                                                <div class="mb-3">
-                                                    <label class="form-label">Unit of Measurement</label>
-                                                    <select class="form-select" name="unit_of_measurement" id="quickAddUnit">
-                                                        <option value="pcs">Pieces (pcs)</option>
-                                                        <option value="kg">Kilograms (kg)</option>
-                                                        <option value="g">Grams (g)</option>
-                                                        <option value="l">Liters (l)</option>
-                                                        <option value="ml">Milliliters (ml)</option>
-                                                        <option value="m">Meters (m)</option>
-                                                        <option value="cm">Centimeters (cm)</option>
-                                                        <option value="box">Box</option>
-                                                        <option value="pack">Pack</option>
-                                                        <option value="set">Set</option>
-                                                        <option value="pair">Pair</option>
-                                                        <option value="dozen">Dozen</option>
-                                                        <option value="other">Other</option>
-                                                    </select>
-                                                </div>
-                                                <div class="mb-3">
-                                                    <label class="form-label">Status</label>
-                                                    <select class="form-select" name="status" id="quickAddStatus">
-                                                        <option value="in_stock">In Stock</option>
-                                                        <option value="out_of_stock">Out of Stock</option>
-                                                        <option value="limited">Limited</option>
-                                                    </select>
-                                                </div>
-                                            </form>
-                                        </div>
-                                        <div class="modal-footer d-flex justify-content-between">
-                                            <button type="button" class="btn btn-label-secondary" data-bs-dismiss="modal">
-                                                Cancel
-                                            </button>
-                                            <button type="button" class="btn btn-primary" id="saveQuickAdd">
-                                                <span class="spinner-border spinner-border-sm d-none" id="quickAddSpinner"></span>
-                                                <span id="quickAddButtonText">Save & Add to Invoice</span>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
 
-                            <!-- Quick Add Tax Modal -->
                             <div class="modal fade" id="quickAddTaxModal" tabindex="-1" aria-hidden="true">
                                 <div class="modal-dialog modal-dialog-centered" role="document">
                                     <div class="modal-content">
@@ -384,18 +318,18 @@
                                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                         </div>
                                         <div class="modal-body">
-                                            <form id="quickAddTaxForm">
-                                                <div class="mb-3">
-                                                    <label class="form-label">Tax Name <span class="text-danger">*</span></label>
-                                                    <input type="text" class="form-control" name="tax_name" id="quickAddTaxName" required>
-                                                </div>
-                                                <div class="mb-3">
-                                                    <label class="form-label">Tax Percentage <span class="text-danger">*</span></label>
-                                                    <div class="input-group">
-                                                        <input type="number" class="form-control" name="tax_percentage" id="quickAddTaxPercentage" step="0.01" min="0" max="100" required>
-                                                        <span class="input-group-text">%</span>
-                                                    </div>
-                                                </div>
+                                            <form id="quickAddTaxForm" class="no-validation">
+                        <div class="mb-3">
+                            <label class="form-label">Tax Name <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" name="tax_name" id="quickAddTaxName">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Tax Percentage <span class="text-danger">*</span></label>
+                            <div class="input-group">
+                                <input type="number" class="form-control" name="tax_percentage" id="quickAddTaxPercentage" step="0.01" min="0" max="100">
+                                <span class="input-group-text">%</span>
+                            </div>
+                        </div>
                                                 <div class="mb-3">
                                                     <label class="form-label">Tax Type <span class="text-danger">*</span></label>
                                                     <div class="mt-2 d-flex">
@@ -682,9 +616,75 @@
             <!-- /Invoice Actions -->
         </form>
 
-
-
     </div>
+
+    <!-- Quick Add Item Modal -->
+    <div class="modal fade" id="quickAddModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="quickAddModalTitle">Add New Item to Catalog</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="quickAddForm" class="no-validation">
+                        <div class="mb-3">
+                            <label class="form-label">Item Name <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" name="name" id="quickAddName">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Price <span class="text-danger">*</span></label>
+                            <div class="input-group">
+                                <input type="number" class="form-control" name="price" id="quickAddPrice" step="0.01" min="0">
+                                <span class="input-group-text">{{ $company->currency ?? 'GHS' }}</span>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Description</label>
+                            <textarea class="form-control" name="description" id="quickAddDescription" rows="3" placeholder="Optional description"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Unit of Measurement</label>
+                            <select class="form-select" name="unit_of_measurement" id="quickAddUnit">
+                                <option value="pcs">Pieces (pcs)</option>
+                                <option value="kg">Kilograms (kg)</option>
+                                <option value="g">Grams (g)</option>
+                                <option value="l">Liters (l)</option>
+                                <option value="ml">Milliliters (ml)</option>
+                                <option value="m">Meters (m)</option>
+                                <option value="cm">Centimeters (cm)</option>
+                                <option value="box">Box</option>
+                                <option value="pack">Pack</option>
+                                <option value="set">Set</option>
+                                <option value="pair">Pair</option>
+                                <option value="dozen">Dozen</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Status</label>
+                            <select class="form-select" name="status" id="quickAddStatus">
+                                <option value="in_stock">In Stock</option>
+                                <option value="out_of_stock">Out of Stock</option>
+                                <option value="limited">Limited</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer d-flex justify-content-between">
+                    <button type="button" class="btn btn-label-secondary" data-bs-dismiss="modal">
+                        Cancel
+                    </button>
+                    <button type="button" class="btn btn-primary" id="saveQuickAdd">
+                        <span class="spinner-border spinner-border-sm d-none" id="quickAddSpinner"></span>
+                        <span id="quickAddButtonText">Save & Add to Invoice</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Add Tax Modal -->
 
     <!-- Offcanvas -->
     <!-- Send Invoice Sidebar -->
