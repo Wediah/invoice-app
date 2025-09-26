@@ -100,6 +100,7 @@ class invoiceController extends Controller
      */
     public function store(Request $request, $slug)
     {
+      
         $company = Company::where('slug', $slug)->firstOrFail();
         $validatedData = $request->validate([
             'customer_name' => 'required|string|max:255',
