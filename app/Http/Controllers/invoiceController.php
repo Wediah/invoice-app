@@ -100,7 +100,7 @@ class invoiceController extends Controller
      */
     public function store(Request $request, $slug)
     {
-      
+
         $company = Company::where('slug', $slug)->firstOrFail();
         $validatedData = $request->validate([
             'customer_name' => 'required|string|max:255',
@@ -146,7 +146,7 @@ class invoiceController extends Controller
                     'final_total' => $validatedData['total'],
                     'salesperson' => $validatedData['salesperson'],
                 ]);
-                
+
                 if (!$invoice) {
                     throw new \Exception('Failed to create invoice');
                 }
@@ -173,9 +173,9 @@ class invoiceController extends Controller
         }
         catch (\Exception $e) {
             Log::error('Error creating invoice: ' . $e->getMessage());
-        
+
             $userFriendlyMessage = $this->parseSqlException($e);
-        
+
             return redirect()->back()
                 ->withInput()
                 ->with('error', $userFriendlyMessage);
@@ -199,41 +199,23 @@ class invoiceController extends Controller
             ];
         }
 
-
         $invoice->catalogs()->attach($processedItems);
-
-        $primaryTaxTotal = 0;
-        $secondaryTaxes = [];
 
         $taxIds = $request->input('tax_ids', []);
         if (is_array($taxIds)) {
-            // First pass: Calculate primary taxes
+            // All taxes are now calculated on the same base: subtotalAfterDiscount
             foreach ($taxIds as $taxId) {
                 $tax = Tax::find($taxId);
-                if ($tax && $tax->type == 'PRIMARY') {
+                if ($tax) {
+                    // Calculate tax amount based on subtotal after discount
                     $taxAmount = $invoice->subtotalAfterDiscount * ($tax->tax_percentage / 100);
-                    $primaryTaxTotal += $taxAmount;
 
                     $invoice->taxes()->attach($taxId, [
-                        'tax_type' => $tax->type,
+                        'tax_type' => $tax->type, // Keeping the type if needed for reporting
                         'tax_percentage' => $tax->tax_percentage,
                         'tax_amount' => $taxAmount
                     ]);
-                } elseif ($tax && $tax->type == 'SECONDARY') {
-                    $secondaryTaxes[] = $tax;
                 }
-            }
-
-            // Second pass: Calculate and attach secondary taxes
-            $baseForSecondary = $invoice->subtotalAfterDiscount + $primaryTaxTotal;
-            foreach ($secondaryTaxes as $tax) {
-                $taxAmount = $baseForSecondary * ($tax->tax_percentage / 100);
-
-                $invoice->taxes()->attach($tax->id, [
-                    'tax_type' => $tax->type,
-                    'tax_percentage' => $tax->tax_percentage,
-                    'tax_amount' => $taxAmount
-                ]);
             }
         }
     }
