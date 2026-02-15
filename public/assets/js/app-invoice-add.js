@@ -273,7 +273,7 @@ $(document).ready(function () {
     $('input[name="tax_ids[]"]:checked').each(function () {
       const $taxLabel = $(this).closest('.d-flex').find('label');
       const taxName = $taxLabel.clone().children().remove().end().text().trim();
-      const taxRate = parseFloat($taxLabel.text().match(/(\d+)%/)[1]);
+      const taxRate = parseFloat($taxLabel.text().match(/([\d.]+)%/)[1]);
       const isSecondary = $taxLabel.hasClass('bg-label-warning');
 
       if (!isSecondary) {
@@ -289,7 +289,7 @@ $(document).ready(function () {
     $('input[name="tax_ids[]"]:checked').each(function () {
       const $taxLabel = $(this).closest('.d-flex').find('label');
       const taxName = $taxLabel.clone().children().remove().end().text().trim();
-      const taxRate = parseFloat($taxLabel.text().match(/(\d+)%/)[1]);
+      const taxRate = parseFloat($taxLabel.text().match(/([\d.]+)%/)[1]);
       const isSecondary = $taxLabel.hasClass('bg-label-warning');
 
       if (isSecondary) {

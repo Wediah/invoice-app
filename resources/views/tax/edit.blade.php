@@ -38,7 +38,7 @@
                         @csrf
                         @method('PATCH')
                         <x-form.input name="tax_name" value="{{ $tax->tax_name }}"/>
-                        <x-form.input name="tax_percentage" value="{{ $tax->tax_percentage }}"/>
+                        <x-form.input name="tax_percentage" value="{{ $tax->tax_percentage }}" type="number" step="0.01" min="0" max="100"/>
                         <div>
                             <label>Type:</label>
                             <div>
